@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_height="80dp"
+        android:layout_width="80dp"
+        android:src="@color/colorAccent"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="IMMORTAL"/>
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:maxLines="3"
+            android:ellipsize="end"
+            tools:text="В экспедиции Рин видит на горе и в своих снах силуэт мужчины в черных мешковатых одеяниях. Зайдя в храм Волов, та обнаруживает письмена, прочитав которые, она сама становится частью древней истории."
+        />
+
+        <TextView
+            android:id="@+id/last_updated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            tools:text="Последний выпуск: 4 часа назад"
+        />
+    </LinearLayout>
+</LinearLayout>

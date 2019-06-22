@@ -1,11 +1,15 @@
 package ru.anarkh.acomics.catalog.repository
 
+import androidx.annotation.WorkerThread
+import ru.anarkh.acomics.catalog.model.CatalogComicsItem
+
 /**
  * На всякий случай контракт, вдруг API появится?
  */
 interface CatalogRepository {
 	/**
-	 * [currentItemsAmount] количество элементов в каталоге для ленивой подгрузки
+	 * [catalogPageIndex] количество элементов в каталоге для ленивой подгрузки
 	 */
-	fun getCatalog(currentItemsAmount: Int = 0): List<CatalogComicsItem>
+	@WorkerThread
+	fun getCatalogPage(catalogPageIndex: Int) : List<CatalogComicsItem>
 }

@@ -5,27 +5,43 @@ import android.util.Log
 import androidx.annotation.WorkerThread
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import ru.anarkh.acomics.catalog.model.CatalogComicsItem
+import java.text.ParseException
 
 private const val CATALOG_URL = "https://acomics.ru/comics"
 private const val CATALOG_SKIP_QUERY_PARAM = "skip" //todo По кол-ву подписчиков отфильтровать
 // , а то капец часто обновляется по дате.
+private const val ACOMICS_DEFAULT_PAGINATION_OFFSET = 10 // Не умеет страничка иначе, поэтому не кастомизируем
 
 //https://acomics.ru/comics?categories=&ratings%5B%5D=2&ratings%5B%5D=3&ratings%5B%5D=4&ratings%5B%5D=5&type=trans&updatable=0&issue_count=2&sort=last_update
 
 class Repository(
 	private val httpClient: OkHttpClient,
-	private val catalogParser: CatalogHTMLParser
+	private val catalogParser: CatalogHTMLParser,
+	private val catalogPagesLocalCache: CatalogCache
 ) : CatalogRepository {
 
 	@WorkerThread
-	override fun getCatalog(currentItemsAmount: Int): List<CatalogComicsItem> {
+	override fun getCatalogPage(catalogPageIndex: Int): List<CatalogComicsItem> {
+		val cached = catalogPagesLocalCache.getPage(catalogPageIndex)
+		if (cached != null) {
+			return cached
+		}
+		val itemsAmountToSkip = catalogPageIndex * ACOMICS_DEFAULT_PAGINATION_OFFSET
+		val newPage = retrieveFromServer(itemsAmountToSkip)
+		catalogPagesLocalCache.putPage(catalogPageIndex, newPage)
+		return newPage
+	}
+
+	private fun retrieveFromServer(itemsAmountToSkip: Int) : List<CatalogComicsItem> {
 		try {
 			val uri = Uri.Builder()
 				.encodedPath(CATALOG_URL)
-				.appendQueryParameter(CATALOG_SKIP_QUERY_PARAM, currentItemsAmount.toString())
+				.appendQueryParameter(
+					CATALOG_SKIP_QUERY_PARAM,
+					itemsAmountToSkip.toString()
+				)
 				.build()
-			Log.d("12345", "uri is : $uri")
-
 			val request = Request.Builder()
 				.url(uri.toString())
 				.build()
@@ -38,10 +54,8 @@ class Repository(
 			list.forEach {
 				Log.d("12345", it)
 			}
-
 			return catalogParser.parse(body)
-
-		} catch (e: Throwable) {
+		} catch (e: ParseException) {
 			e.printStackTrace()
 			return emptyList()
 		}

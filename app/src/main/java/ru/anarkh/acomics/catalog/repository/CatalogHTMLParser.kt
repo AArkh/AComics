@@ -2,6 +2,10 @@ package ru.anarkh.acomics.catalog.repository
 
 import android.util.Log
 import org.jsoup.Jsoup
+import ru.anarkh.acomics.catalog.model.CatalogComicsItem
+import ru.anarkh.acomics.catalog.model.MPAARating
+import ru.anarkh.acomics.catalog.model.Title
+import java.text.ParseException
 
 private const val CATALOG_TABLE_ELEMENT_CLASS_NAME = "catalog-elem list-loadable"
 private const val CATALOG_ELEMENT_PREVIEW_IMAGE_CLASS_NAME = "catdata1"
@@ -11,9 +15,13 @@ private const val CATALOG_ELEMENT_SUBSCRIBERS_CLASS_NAME = "catdata4"
 
 class CatalogHTMLParser {
 
+	@Throws(ParseException::class)
 	fun parse(html: String): List<CatalogComicsItem> {
 		val doc = Jsoup.parse(html)
 		val elements = doc.getElementsByClass(CATALOG_TABLE_ELEMENT_CLASS_NAME)
+		if (elements.isEmpty()) {
+			throw ParseException("no elements in a list!", 0)
+		}
 		Log.d("12345", "elements size is ${elements.size}")
 
 		val catalogList = ArrayList<CatalogComicsItem>(elements.size)
