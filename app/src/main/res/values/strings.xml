@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">AComics</string>
+	<string name="app_name">AComics</string>
+	<string name="catalog_item_rating">Рейтинг:</string>
+	<string name="catalog_item_no_updates">Нет выпусков</string>
+
+	<plurals name="catalog_item_updates">
+		<item quantity="zero">Нет выпусков</item>
+		<item quantity="one">%d выпуск</item>
+		<item quantity="few">%d выпуска</item>
+		<item quantity="many">%d выпусков</item>
+		<item quantity="other">%d выпусков</item>
+	</plurals>
 </resources>

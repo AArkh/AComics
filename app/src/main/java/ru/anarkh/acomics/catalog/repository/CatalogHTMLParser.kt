@@ -12,6 +12,7 @@ private const val CATALOG_ELEMENT_PREVIEW_IMAGE_CLASS_NAME = "catdata1"
 private const val CATALOG_ELEMENT_DESCRIPTION_CLASS_NAME = "catdata2"
 private const val CATALOG_ELEMENT_ACTIVITY_CLASS_NAME = "catdata3"
 private const val CATALOG_ELEMENT_SUBSCRIBERS_CLASS_NAME = "catdata4"
+private const val BASE_ACOMICS_URL = "https://acomics.ru"
 
 class CatalogHTMLParser {
 
@@ -32,8 +33,9 @@ class CatalogHTMLParser {
 				.first()
 				.child(0)
 			val comicLink = previewElement.attr("href")
-			val imageLink = previewElement.getElementsByTag("img")
+			val imageLinkPostfix = previewElement.getElementsByTag("img")
 				.attr("src")
+			val imageLink = BASE_ACOMICS_URL + imageLinkPostfix
 
 			val descriptionElement = htmlString.getElementsByClass(CATALOG_ELEMENT_DESCRIPTION_CLASS_NAME)
 				.first()

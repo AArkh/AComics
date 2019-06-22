@@ -1,10 +1,11 @@
 package ru.anarkh.acomics.catalog.model
 
+import androidx.annotation.ColorRes
 import java.io.Serializable
 
 data class CatalogComicsItem(
 	val hyperLink: String,
-	val previewImage: String, // todo может быть гифкой, проверить как с фреской работает
+	val previewImage: String,
 	val title: Title,
 	val description: String,
 	val rating: MPAARating,
@@ -24,8 +25,16 @@ enum class Icon : Serializable {
     //todo Добавить drawableRes в конструктор
 }
 
-enum class MPAARating {
-    UNDEFINED, G, PG, PG_13, R, NC_17;
+enum class MPAARating(
+	val text: String,
+	@ColorRes val colorRes: Int
+) {
+    UNDEFINED("NR", ru.anarkh.acomics.R.color.rating_undef),
+	G("G", ru.anarkh.acomics.R.color.rating_g),
+	PG("PG", ru.anarkh.acomics.R.color.rating_pg),
+	PG_13("PG-13", ru.anarkh.acomics.R.color.rating_pg13),
+	R("R", ru.anarkh.acomics.R.color.rating_r),
+	NC_17("NC-17", ru.anarkh.acomics.R.color.rating_nc17);
 
 	companion object {
 		fun fromString(rating: String?) : MPAARating {

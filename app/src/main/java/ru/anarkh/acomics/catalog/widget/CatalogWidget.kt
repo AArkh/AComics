@@ -4,12 +4,14 @@ import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.anarkh.acomics.catalog.model.CatalogComicsItem
+import ru.anarkh.acomics.catalog.util.FixedLocaleQuantityStringParser
 
 class CatalogWidget(
-	list: RecyclerView
+	list: RecyclerView,
+	quantityStringParser: FixedLocaleQuantityStringParser
 ) {
 
-	private val adapter = CatalogAdapter()
+	private val adapter = CatalogAdapter(quantityStringParser)
 
 	init {
 		list.layoutManager = LinearLayoutManager(list.context, RecyclerView.VERTICAL, false)
@@ -18,5 +20,9 @@ class CatalogWidget(
 
 	fun updateList(pagedList: PagedList<CatalogComicsItem>) {
 		adapter.submitList(pagedList)
+	}
+
+	fun onComicsClick(listener: (link: String) -> Unit) {
+		adapter.onItemClickListener = listener
 	}
 }

@@ -11,6 +11,7 @@ import ru.anarkh.acomics.catalog.repository.CatalogCache
 import ru.anarkh.acomics.catalog.repository.CatalogDataSource
 import ru.anarkh.acomics.catalog.repository.CatalogHTMLParser
 import ru.anarkh.acomics.catalog.repository.Repository
+import ru.anarkh.acomics.catalog.util.FixedLocaleQuantityStringParser
 import ru.anarkh.acomics.catalog.widget.CatalogWidget
 
 class MainActivity : AppCompatActivity() {
@@ -24,7 +25,8 @@ class MainActivity : AppCompatActivity() {
             .get(CatalogCache::class.java)
         val repo = Repository(OkHttpClient(), CatalogHTMLParser(), localCache)
 
-        val widget = CatalogWidget(findViewById(R.id.list))
+        val parser = FixedLocaleQuantityStringParser(this)
+        val widget = CatalogWidget(findViewById(R.id.list), parser)
         val controller = CatalogController(
             widget,
             this,

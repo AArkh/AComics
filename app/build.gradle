@@ -48,6 +48,10 @@ dependencies {
     implementation "androidx.paging:paging-runtime:2.1.0"
     kapt "androidx.lifecycle:lifecycle-compiler:2.2.0-alpha01"
 
+    //fresco
+    implementation 'com.facebook.fresco:fresco:2.0.0'
+    implementation 'com.facebook.fresco:animated-gif:2.0.0'
+
     // test
     testImplementation 'junit:junit:4.12'
 

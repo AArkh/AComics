@@ -3,4 +3,14 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="black">#000000</color>
+    <color name="cream">#A5A5A5</color>
+    <color name="gray">#8b8b8b</color>
+
+    <color name="rating_g">#4a6cbc</color>
+    <color name="rating_pg">#39b54a</color>
+    <color name="rating_pg13">#efa821</color>
+    <color name="rating_r">#d00026</color>
+    <color name="rating_nc17">#111</color>
+    <color name="rating_undef">#aaa</color>
 </resources>
