@@ -5,11 +5,13 @@ import androidx.lifecycle.Observer
 import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import ru.anarkh.acomics.catalog.CatalogRouter
 import ru.anarkh.acomics.catalog.model.CatalogComicsItem
 import ru.anarkh.acomics.catalog.widget.CatalogWidget
 import java.util.concurrent.Executors
 
 class CatalogController(
+	private val router: CatalogRouter,
 	private val widget: CatalogWidget,
 	lifecycleOwner: LifecycleOwner,
 	dataSourceFactory : DataSource.Factory<Int, CatalogComicsItem>
@@ -29,5 +31,7 @@ class CatalogController(
 			lifecycleOwner,
 			Observer<PagedList<CatalogComicsItem>> { widget.updateList(it) }
 		)
+
+		widget.onComicsClick { link: String -> router.openComicsPage(link) }
 	}
 }

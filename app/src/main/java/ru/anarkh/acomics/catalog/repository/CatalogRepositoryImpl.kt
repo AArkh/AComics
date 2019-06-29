@@ -1,7 +1,6 @@
 package ru.anarkh.acomics.catalog.repository
 
 import android.net.Uri
-import android.util.Log
 import androidx.annotation.WorkerThread
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -15,7 +14,7 @@ private const val ACOMICS_DEFAULT_PAGINATION_OFFSET = 10 // Не умеет ст
 
 //https://acomics.ru/comics?categories=&ratings%5B%5D=2&ratings%5B%5D=3&ratings%5B%5D=4&ratings%5B%5D=5&type=trans&updatable=0&issue_count=2&sort=last_update
 
-class Repository(
+class CatalogRepositoryImpl(
 	private val httpClient: OkHttpClient,
 	private val catalogParser: CatalogHTMLParser,
 	private val catalogPagesLocalCache: CatalogCache
@@ -50,10 +49,10 @@ class Repository(
 				"response body is null for request: $uri"
 			)
 
-			val list = body.split("\n".toRegex())
-			list.forEach {
-				Log.d("12345", it)
-			}
+			//val list = body.split("\n".toRegex())
+			//list.forEach {
+			//	Log.d("12345", it)
+			//}
 			return catalogParser.parse(body)
 		} catch (e: ParseException) {
 			e.printStackTrace()
