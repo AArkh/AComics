@@ -5,10 +5,9 @@ import androidx.lifecycle.Observer
 import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import ru.anarkh.acomics.catalog.model.CatalogComicsItem
 import ru.anarkh.acomics.catalog.widget.CatalogWidget
+import java.util.concurrent.Executors
 
 class CatalogController(
 	private val widget: CatalogWidget,
@@ -23,7 +22,7 @@ class CatalogController(
 			.build()
 		val livePagedList = LivePagedListBuilder<Int, CatalogComicsItem>(dataSourceFactory, pagedListConfig)
 			.setInitialLoadKey(0)
-			.setFetchExecutor { GlobalScope.launch { it?.run() } }
+			.setFetchExecutor(Executors.newSingleThreadExecutor())
 			.build()
 
 		livePagedList.observe(

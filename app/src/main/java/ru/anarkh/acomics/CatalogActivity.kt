@@ -14,7 +14,7 @@ import ru.anarkh.acomics.catalog.repository.Repository
 import ru.anarkh.acomics.catalog.util.FixedLocaleQuantityStringParser
 import ru.anarkh.acomics.catalog.widget.CatalogWidget
 
-class MainActivity : AppCompatActivity() {
+class CatalogActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
 
         val parser = FixedLocaleQuantityStringParser(this)
         val widget = CatalogWidget(findViewById(R.id.list), parser)
+        //todo Придумать механизм сохранения состояния через бандл и хранить позицию списка
+        // Позицию прокинуть в loadInitial дата сурца
         val controller = CatalogController(
             widget,
             this,

@@ -18,7 +18,7 @@
 		tools:ignore="GoogleAppIndexingWarning"
 		>
 
-		<activity android:name=".MainActivity">
+		<activity android:name=".CatalogActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
