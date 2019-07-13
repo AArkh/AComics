@@ -1,18 +1,33 @@
 package ru.anarkh.acomics.comics.widget
 
-import android.net.Uri
-import com.github.piasy.biv.view.BigImageView
-import ru.anarkh.acomics.comics.model.ComicsPage
+import androidx.viewpager2.widget.ViewPager2
+import ru.anarkh.acomics.comics.model.ComicsPageData
 
 class ComicsWidget(
-	private val zoomableView : BigImageView
+	private val viewPager: ViewPager2,
+	pagesCount: Int
 ) {
 
+	private val adapter = ComicsPageAdapter(pagesCount)
+
 	init {
-		zoomableView.setProgressIndicator(CustomProgressBar())
+		viewPager.adapter = adapter
 	}
 
-	fun setImage(model: ComicsPage) {
-		zoomableView.showImage(Uri.parse(model.imageUrl))
+	fun setPage(pageIndex: Int, model: ComicsPageData) {
+		adapter.putPage(pageIndex - 1, model)
+	}
+
+	fun setCurrentIndex(currentIndex: Int) {
+		viewPager.currentItem = currentIndex
+	}
+
+	fun setOnPageChangeListener(listener: (position: Int) -> Unit) {
+		viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+			override fun onPageSelected(position: Int) {
+				super.onPageSelected(position)
+				listener.invoke(position)
+			}
+		})
 	}
 }

@@ -32,6 +32,6 @@ class CatalogController(
 			Observer<PagedList<CatalogComicsItem>> { widget.updateList(it) }
 		)
 
-		widget.onComicsClick { link: String -> router.openComicsPage(link) }
+		widget.onComicsClick { link: String, pagesAmount: Int -> router.openComicsPage(link, pagesAmount) }
 	}
 }

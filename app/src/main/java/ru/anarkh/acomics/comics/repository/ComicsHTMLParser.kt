@@ -1,7 +1,7 @@
 package ru.anarkh.acomics.comics.repository
 
 import org.jsoup.Jsoup
-import ru.anarkh.acomics.comics.model.ComicsPage
+import ru.anarkh.acomics.comics.model.ComicsPageData
 import java.text.ParseException
 
 private const val CONTENT = "content"
@@ -17,7 +17,7 @@ private const val BASE_ACOMICS_URL = "https://acomics.ru"
 class ComicsHTMLParser {
 
 	@Throws(ParseException::class)
-	fun parse(html: String) : ComicsPage {
+	fun parse(html: String) : ComicsPageData {
 		val doc = Jsoup.parse(html)
 		val issueContainer = doc.getElementById(CONTENT)
 
@@ -41,7 +41,7 @@ class ComicsHTMLParser {
 			.attr("src")
 		val imageLink = BASE_ACOMICS_URL + imagePostfix
 
-		return ComicsPage(
+		return ComicsPageData(
 			imageLink,
 			issueName,
 			issueNumber,

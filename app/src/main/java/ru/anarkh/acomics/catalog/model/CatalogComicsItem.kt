@@ -10,7 +10,7 @@ data class CatalogComicsItem(
 	val description: String,
 	val rating: MPAARating,
 	val lastUpdated: Long, // Эта штука приходит в формате 15241. о_о
-	val totalPages: String,
+	val totalPages: String, // формата "232 выпуска"
 	val ongoningRate: Double, // Коэффициент(выпуска в месяц?) странный, приходит в формате 4.778
 	val totalSubscribers: Int
 ) : Serializable

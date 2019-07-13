@@ -15,13 +15,14 @@ import ru.anarkh.acomics.R
 import ru.anarkh.acomics.catalog.controller.CatalogItemsDiffsValidator
 import ru.anarkh.acomics.catalog.model.CatalogComicsItem
 import ru.anarkh.acomics.catalog.util.FixedLocaleQuantityStringParser
+import java.util.regex.Pattern
 
 
 class CatalogAdapter(
     private val quantityStringParser: FixedLocaleQuantityStringParser
 ): PagedListAdapter<CatalogComicsItem, CatalogViewHolder>(CatalogItemsDiffsValidator()) {
 
-    var onItemClickListener: ((link: String) -> Unit)? = null
+    var onItemClickListener: ((link: String, pagesAmount: Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatalogViewHolder = CatalogViewHolder(parent)
 
@@ -30,7 +31,14 @@ class CatalogAdapter(
         val model = getItem(position) as CatalogComicsItem
         val context = holder.itemView.context
 
-        holder.itemView.container.setOnClickListener { onItemClickListener?.invoke(model.hyperLink) }
+        holder.itemView.container.setOnClickListener {
+			// костыльный и быстрый способ выяснить, сколько там страниц.
+			// fixme По факту в парсер перенести бы
+            val matcher = Pattern.compile("\\d+").matcher(model.totalPages)
+            matcher.find()
+            val totalPages = Integer.valueOf(matcher.group())
+            onItemClickListener?.invoke(model.hyperLink, totalPages)
+        }
         val frescoDraweeController = Fresco.newDraweeControllerBuilder()
             .setOldController(holder.itemView.image.controller)
             .setAutoPlayAnimations(false)
@@ -59,7 +67,7 @@ class CatalogAdapter(
 
     private fun formSubscribersCount(model: CatalogComicsItem, context: Context): String {
         return if (model.totalSubscribers > 0) quantityStringParser.formatQuantityString(
-            R.plurals.catalog_item_updates,
+            R.plurals.catalog_item_subscribers,
             model.totalSubscribers,
             model.totalSubscribers
         ) else context.getText(R.string.catalog_item_no_updates) as String

@@ -22,7 +22,7 @@ class CatalogWidget(
 		adapter.submitList(pagedList)
 	}
 
-	fun onComicsClick(listener: (link: String) -> Unit) {
+	fun onComicsClick(listener: (link: String, pagesAmount: Int) -> Unit) {
 		adapter.onItemClickListener = listener
 	}
 }
