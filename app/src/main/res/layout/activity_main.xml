@@ -2,16 +2,24 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
+	android:orientation="vertical"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	tools:context=".catalog.CatalogActivity"
-	>
+	android:layout_height="match_parent">
 
-	<androidx.recyclerview.widget.RecyclerView
-		android:id="@+id/list"
+	<include layout="@layout/toolbar"/>
+
+	<FrameLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:scrollbars="vertical"
-		/>
+		tools:context=".catalog.CatalogActivity"
+		android:background="@drawable/tile_background"
+		>
 
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/list"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:scrollbars="vertical"
+			/>
+	</FrameLayout>
 </LinearLayout>
