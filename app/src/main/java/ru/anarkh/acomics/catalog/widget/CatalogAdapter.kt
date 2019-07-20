@@ -15,7 +15,6 @@ import ru.anarkh.acomics.R
 import ru.anarkh.acomics.catalog.controller.CatalogItemsDiffsValidator
 import ru.anarkh.acomics.catalog.model.CatalogComicsItem
 import ru.anarkh.acomics.catalog.util.FixedLocaleQuantityStringParser
-import java.util.regex.Pattern
 
 
 class CatalogAdapter(
@@ -32,12 +31,7 @@ class CatalogAdapter(
         val context = holder.itemView.context
 
         holder.itemView.container.setOnClickListener {
-			// костыльный и быстрый способ выяснить, сколько там страниц.
-			// fixme По факту в парсер перенести бы
-            val matcher = Pattern.compile("\\d+").matcher(model.totalPages)
-            matcher.find()
-            val totalPages = Integer.valueOf(matcher.group())
-            onItemClickListener?.invoke(model.hyperLink, totalPages)
+            onItemClickListener?.invoke(model.hyperLink, model.totalPages)
         }
         val frescoDraweeController = Fresco.newDraweeControllerBuilder()
             .setOldController(holder.itemView.image.controller)
@@ -47,7 +41,7 @@ class CatalogAdapter(
         holder.itemView.image.controller = frescoDraweeController
         holder.itemView.title.text = model.title.comicsTitle
         holder.itemView.rating.text = formRatingText(context, model)
-        holder.itemView.updates_count.text = model.totalPages
+        holder.itemView.updates_count.text = model.formattedTotalPages
         holder.itemView.subscribers_count.text = formSubscribersCount(model, context)
         holder.itemView.description.text = model.description
         holder.itemView.last_updated.text = "Последнее обновление ${model.lastUpdated}"

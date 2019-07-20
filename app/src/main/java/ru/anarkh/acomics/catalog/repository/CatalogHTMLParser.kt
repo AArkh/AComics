@@ -6,6 +6,7 @@ import ru.anarkh.acomics.catalog.model.CatalogComicsItem
 import ru.anarkh.acomics.catalog.model.MPAARating
 import ru.anarkh.acomics.catalog.model.Title
 import java.text.ParseException
+import java.util.regex.Pattern
 
 private const val CATALOG_TABLE_ELEMENT_CLASS_NAME = "catalog-elem list-loadable"
 private const val CATALOG_ELEMENT_PREVIEW_IMAGE_CLASS_NAME = "catdata1"
@@ -59,7 +60,7 @@ class CatalogHTMLParser {
 				.text()
 				.replace("=", "")
 				.toLong()
-			val totalPages = activityElement.getElementsByClass("total")
+			val formattedTotalPages = activityElement.getElementsByClass("total")
 				.first()
 				.text()
 
@@ -71,6 +72,10 @@ class CatalogHTMLParser {
 				.text()
 				.toInt()
 
+			val matcher = Pattern.compile("\\d+").matcher(formattedTotalPages)
+			matcher.find()
+			val totalPages = Integer.valueOf(matcher.group())
+
 			val catalogItem = CatalogComicsItem(
 				comicLink,
 				imageLink,
@@ -79,6 +84,7 @@ class CatalogHTMLParser {
 				MPAARating.fromString(rating),
 				lastUpdate,
 				totalPages,
+				formattedTotalPages,
 				0.0,
 				subsCount
 			)

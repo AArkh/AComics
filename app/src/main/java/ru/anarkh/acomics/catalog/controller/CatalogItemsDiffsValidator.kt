@@ -15,7 +15,7 @@ class CatalogItemsDiffsValidator : DiffUtil.ItemCallback<CatalogComicsItem>() {
 
 	private fun CatalogComicsItem.isUIEqual(other: CatalogComicsItem) : Boolean {
 		// Некоторые поля меняются ну больно часто, поэтому сравниваем только важные элементы
-		if (totalPages != other.totalPages) return false
+		if (formattedTotalPages != other.formattedTotalPages) return false
 		if (lastUpdated != other.lastUpdated) return false
 		if (title != other.title) return false
 		if (description != other.description) return false
