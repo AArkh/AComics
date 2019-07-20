@@ -6,7 +6,6 @@ import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import ru.anarkh.acomics.catalog.CatalogRouter
-import ru.anarkh.acomics.catalog.model.CatalogComicsItem
 import ru.anarkh.acomics.catalog.widget.CatalogWidget
 import java.util.concurrent.Executors
 
@@ -14,7 +13,7 @@ class CatalogController(
 	private val router: CatalogRouter,
 	private val widget: CatalogWidget,
 	lifecycleOwner: LifecycleOwner,
-	dataSourceFactory : DataSource.Factory<Int, CatalogComicsItem>
+	dataSourceFactory : DataSource.Factory<Int, Any>
 ) {
 
 	init {
@@ -22,14 +21,14 @@ class CatalogController(
 			.setEnablePlaceholders(false)
 			.setPageSize(10)
 			.build()
-		val livePagedList = LivePagedListBuilder<Int, CatalogComicsItem>(dataSourceFactory, pagedListConfig)
+		val livePagedList = LivePagedListBuilder<Int, Any>(dataSourceFactory, pagedListConfig)
 			.setInitialLoadKey(0)
 			.setFetchExecutor(Executors.newSingleThreadExecutor())
 			.build()
 
 		livePagedList.observe(
 			lifecycleOwner,
-			Observer<PagedList<CatalogComicsItem>> { widget.updateList(it) }
+			Observer<PagedList<Any>> { widget.updateList(it) }
 		)
 
 		widget.onComicsClick { link: String, pagesAmount: Int -> router.openComicsPage(link, pagesAmount) }

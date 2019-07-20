@@ -5,6 +5,7 @@ import androidx.annotation.WorkerThread
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import ru.anarkh.acomics.catalog.model.CatalogComicsItem
+import java.io.InterruptedIOException
 import java.text.ParseException
 
 private const val CATALOG_URL = "https://acomics.ru/comics"
@@ -20,7 +21,12 @@ class CatalogRepositoryImpl(
 	private val catalogPagesLocalCache: CatalogCache
 ) : CatalogRepository {
 
+	/**
+	 * @throws InterruptedIOException ежели нет сети,
+	 * @throws ParseException если сломался парсинг.
+	 */
 	@WorkerThread
+	@Throws(InterruptedIOException::class, ParseException::class)
 	override fun getCatalogPage(catalogPageIndex: Int): List<CatalogComicsItem> {
 		val cached = catalogPagesLocalCache.getPage(catalogPageIndex)
 		if (cached != null) {
@@ -33,30 +39,20 @@ class CatalogRepositoryImpl(
 	}
 
 	private fun retrieveFromServer(itemsAmountToSkip: Int) : List<CatalogComicsItem> {
-		try {
-			val uri = Uri.Builder()
-				.encodedPath(CATALOG_URL)
-				.appendQueryParameter(
-					CATALOG_SKIP_QUERY_PARAM,
-					itemsAmountToSkip.toString()
-				)
-				.build()
-			val request = Request.Builder()
-				.url(uri.toString())
-				.build()
-			val response = httpClient.newCall(request).execute()
-			val body = response.body()?.string() ?: throw IllegalStateException(
-				"response body is null for request: $uri"
+		val uri = Uri.Builder()
+			.encodedPath(CATALOG_URL)
+			.appendQueryParameter(
+				CATALOG_SKIP_QUERY_PARAM,
+				itemsAmountToSkip.toString()
 			)
-
-			//val list = body.split("\n".toRegex())
-			//list.forEach {
-			//	Log.d("12345", it)
-			//}
-			return catalogParser.parse(body)
-		} catch (e: ParseException) {
-			e.printStackTrace()
-			return emptyList()
-		}
+			.build()
+		val request = Request.Builder()
+			.url(uri.toString())
+			.build()
+		val response = httpClient.newCall(request).execute()
+		val body = response.body()?.string() ?: throw IllegalStateException(
+			"response body is null for request: $uri"
+		)
+		return catalogParser.parse(body)
 	}
 }

@@ -12,7 +12,6 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		tools:context=".catalog.CatalogActivity"
-		android:background="@drawable/tile_background"
 		>
 
 		<androidx.recyclerview.widget.RecyclerView
@@ -20,6 +19,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:scrollbars="vertical"
+			android:background="@color/white"
 			/>
 	</FrameLayout>
 </LinearLayout>

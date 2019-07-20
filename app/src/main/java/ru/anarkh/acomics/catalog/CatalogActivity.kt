@@ -9,7 +9,6 @@ import androidx.paging.DataSource
 import okhttp3.OkHttpClient
 import ru.anarkh.acomics.R
 import ru.anarkh.acomics.catalog.controller.CatalogController
-import ru.anarkh.acomics.catalog.model.CatalogComicsItem
 import ru.anarkh.acomics.catalog.repository.CatalogCache
 import ru.anarkh.acomics.catalog.repository.CatalogDataSource
 import ru.anarkh.acomics.catalog.repository.CatalogHTMLParser
@@ -34,14 +33,12 @@ class CatalogActivity : AppCompatActivity() {
 
         val parser = FixedLocaleQuantityStringParser(this)
         val widget = CatalogWidget(findViewById(R.id.list), parser)
-        //todo Придумать механизм сохранения состояния через бандл и хранить позицию списка
-        // Позицию прокинуть в loadInitial дата сурца
         CatalogController(
             CatalogRouter(this),
             widget,
             this,
-            object : DataSource.Factory<Int, CatalogComicsItem>() {
-                override fun create(): DataSource<Int, CatalogComicsItem> = CatalogDataSource(repo)
+            object : DataSource.Factory<Int, Any>() {
+                override fun create(): DataSource<Int, Any> = CatalogDataSource(repo)
             }
         )
     }
