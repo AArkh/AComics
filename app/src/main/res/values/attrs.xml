@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<declare-styleable name="VectorFriendlyTextView">
+		<attr name="vectorDrawableLeft" format="reference"/>
+		<attr name="vectorDrawableRight" format="reference"/>
+		<attr name="vectorDrawableTop" format="reference"/>
+		<attr name="vectorDrawableBottom" format="reference"/>
+	</declare-styleable>
+</resources>

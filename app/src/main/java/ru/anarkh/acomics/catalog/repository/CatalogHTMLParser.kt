@@ -2,18 +2,28 @@ package ru.anarkh.acomics.catalog.repository
 
 import android.util.Log
 import org.jsoup.Jsoup
+import ru.anarkh.acomics.catalog.model.CatalogComicsItem
+import ru.anarkh.acomics.catalog.model.MPAARating
+import ru.anarkh.acomics.catalog.model.Title
+import java.text.ParseException
+import java.util.regex.Pattern
 
 private const val CATALOG_TABLE_ELEMENT_CLASS_NAME = "catalog-elem list-loadable"
 private const val CATALOG_ELEMENT_PREVIEW_IMAGE_CLASS_NAME = "catdata1"
 private const val CATALOG_ELEMENT_DESCRIPTION_CLASS_NAME = "catdata2"
 private const val CATALOG_ELEMENT_ACTIVITY_CLASS_NAME = "catdata3"
 private const val CATALOG_ELEMENT_SUBSCRIBERS_CLASS_NAME = "catdata4"
+private const val BASE_ACOMICS_URL = "https://acomics.ru"
 
 class CatalogHTMLParser {
 
+	@Throws(ParseException::class)
 	fun parse(html: String): List<CatalogComicsItem> {
 		val doc = Jsoup.parse(html)
 		val elements = doc.getElementsByClass(CATALOG_TABLE_ELEMENT_CLASS_NAME)
+		if (elements.isEmpty()) {
+			throw ParseException("no elements in a list!", 0)
+		}
 		Log.d("12345", "elements size is ${elements.size}")
 
 		val catalogList = ArrayList<CatalogComicsItem>(elements.size)
@@ -24,8 +34,9 @@ class CatalogHTMLParser {
 				.first()
 				.child(0)
 			val comicLink = previewElement.attr("href")
-			val imageLink = previewElement.getElementsByTag("img")
+			val imageLinkPostfix = previewElement.getElementsByTag("img")
 				.attr("src")
+			val imageLink = BASE_ACOMICS_URL + imageLinkPostfix
 
 			val descriptionElement = htmlString.getElementsByClass(CATALOG_ELEMENT_DESCRIPTION_CLASS_NAME)
 				.first()
@@ -49,7 +60,7 @@ class CatalogHTMLParser {
 				.text()
 				.replace("=", "")
 				.toLong()
-			val totalPages = activityElement.getElementsByClass("total")
+			val formattedTotalPages = activityElement.getElementsByClass("total")
 				.first()
 				.text()
 
@@ -61,6 +72,10 @@ class CatalogHTMLParser {
 				.text()
 				.toInt()
 
+			val matcher = Pattern.compile("\\d+").matcher(formattedTotalPages)
+			matcher.find()
+			val totalPages = Integer.valueOf(matcher.group())
+
 			val catalogItem = CatalogComicsItem(
 				comicLink,
 				imageLink,
@@ -69,6 +84,7 @@ class CatalogHTMLParser {
 				MPAARating.fromString(rating),
 				lastUpdate,
 				totalPages,
+				formattedTotalPages,
 				0.0,
 				subsCount
 			)

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:padding="16dp"
+	tools:ignore="KeyboardInaccessibleWidget"
+	android:background="@color/white"
+	>
+	
+	<ru.anarkh.acomics.core.view.VectorFriendlyTextView
+		android:id="@+id/sort_dialog_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/catalog_sort_dialog_title"
+		android:padding="16dp"
+		android:textStyle="bold"
+		android:drawableBottom="@drawable/shadow_bottom"
+		/>
+
+	<TextView
+		android:id="@+id/by_date"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/catalog_sort_dialog_sort_by_date"
+		android:padding="16dp"
+		android:clickable="true"
+		/>
+
+	<TextView
+		android:id="@+id/by_subs"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/catalog_sort_dialog_sort_by_subs"
+		android:padding="16dp"
+		android:clickable="true"
+		/>
+
+	<TextView
+		android:id="@+id/by_issue"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/catalog_sort_dialog_sort_by_issues"
+		android:padding="16dp"
+		android:clickable="true"
+		/>
+
+	<TextView
+		android:id="@+id/by_alphabet"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/catalog_sort_dialog_sort_by_alphabet"
+		android:padding="16dp"
+		android:clickable="true"
+		/>
+</LinearLayout>

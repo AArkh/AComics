@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	xmlns:fresco="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:paddingTop="12dp"
+	android:paddingRight="16dp"
+	android:paddingLeft="16dp"
+	android:gravity="center_vertical"
+	>
+
+	<LinearLayout
+		android:id="@+id/container"
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="16dp"
+		>
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:paddingTop="4dp"
+			android:orientation="vertical"
+			>
+
+			<com.facebook.drawee.view.SimpleDraweeView
+				android:id="@+id/image"
+				android:layout_height="72dp"
+				android:layout_width="128dp"
+				fresco:roundedCornerRadius="4dp"
+				tools:background="@color/colorAccent"
+				/>
+
+			<TextView
+				android:id="@+id/rating"
+				android:layout_marginTop="6dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textColor="@color/gray"
+				android:textSize="10sp"
+				tools:text="Рейтинг: PG-13"
+				/>
+
+			<TextView
+				android:id="@+id/subscribers_count"
+				android:layout_marginTop="4dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize="10sp"
+				tools:text="подписчиков: 28"
+				/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:paddingLeft="16dp"
+			android:orientation="vertical"
+			>
+
+			<TextView
+				android:id="@+id/title"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize="16sp"
+				android:maxLines="1"
+				android:textStyle="bold"
+				android:ellipsize="end"
+				tools:text="IMMORTAL"
+				/>
+
+			<TextView
+				android:id="@+id/description"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="6dp"
+				android:textSize="12sp"
+				android:maxLines="3"
+				android:ellipsize="end"
+				tools:text="В экспедиции Рин видит на горе и в своих снах силуэт мужчины в черных мешковатых одеяниях. Зайдя в храм Волов, та обнаруживает письмена, прочитав которые, она сама становится частью древней истории."
+				/>
+
+			<TextView
+				android:id="@+id/updates_count"
+				android:layout_marginTop="4dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize="10sp"
+				tools:text="164 выпуска"
+				/>
+
+			<TextView
+				android:id="@+id/last_updated"
+				android:layout_marginTop="4dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize="10sp"
+				tools:text="Последний выпуск: 4 часа назад"
+				/>
+		</LinearLayout>
+	</LinearLayout>
+
+	<View
+		android:layout_gravity="bottom"
+		android:layout_width="match_parent"
+		android:layout_height="0.5dp"
+		android:background="@drawable/shadow_bottom"
+		android:backgroundTint="@color/cream"
+		/>
+</FrameLayout>
