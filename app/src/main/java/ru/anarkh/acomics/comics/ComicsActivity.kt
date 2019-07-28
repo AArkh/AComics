@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import okhttp3.OkHttpClient
 import ru.anarkh.acomics.R
@@ -14,8 +13,9 @@ import ru.anarkh.acomics.comics.repository.ComicsHTMLParser
 import ru.anarkh.acomics.comics.repository.ComicsRepositoryImpl
 import ru.anarkh.acomics.comics.repository.ComicsSessionCache
 import ru.anarkh.acomics.comics.widget.ComicsWidget
+import ru.anarkh.acomics.core.DefaultActivity
 
-class ComicsActivity : AppCompatActivity() {
+class ComicsActivity : DefaultActivity() {
 
 	companion object {
 		private const val COMICS_LINK_EXTRA = "comics_link_extra"

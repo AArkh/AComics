@@ -2,7 +2,6 @@ package ru.anarkh.acomics.catalog
 
 import android.os.Bundle
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.DataSource
@@ -15,8 +14,9 @@ import ru.anarkh.acomics.catalog.repository.CatalogHTMLParser
 import ru.anarkh.acomics.catalog.repository.CatalogRepositoryImpl
 import ru.anarkh.acomics.catalog.util.FixedLocaleQuantityStringParser
 import ru.anarkh.acomics.catalog.widget.CatalogWidget
+import ru.anarkh.acomics.core.DefaultActivity
 
-class CatalogActivity : AppCompatActivity() {
+class CatalogActivity : DefaultActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
