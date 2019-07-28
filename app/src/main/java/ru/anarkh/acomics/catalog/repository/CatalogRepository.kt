@@ -12,4 +12,6 @@ interface CatalogRepository {
 	 */
 	@WorkerThread
 	fun getCatalogPage(catalogPageIndex: Int) : List<CatalogComicsItem>
+
+	fun invalidateCache()
 }

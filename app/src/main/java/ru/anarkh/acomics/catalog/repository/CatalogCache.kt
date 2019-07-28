@@ -18,4 +18,8 @@ class CatalogCache : ViewModel() {
 			cachedCatalogPages[pageIndex]
 		} else null
 	}
+
+	fun invalidateCache() {
+		cachedCatalogPages.clear()
+	}
 }

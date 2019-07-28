@@ -9,8 +9,7 @@ import java.io.InterruptedIOException
 import java.text.ParseException
 
 private const val CATALOG_URL = "https://acomics.ru/comics"
-private const val CATALOG_SKIP_QUERY_PARAM = "skip" //todo По кол-ву подписчиков отфильтровать
-// , а то капец часто обновляется по дате.
+private const val CATALOG_SKIP_QUERY_PARAM = "skip"
 private const val ACOMICS_DEFAULT_PAGINATION_OFFSET = 10 // Не умеет страничка иначе, поэтому не кастомизируем
 
 //https://acomics.ru/comics?categories=&ratings%5B%5D=2&ratings%5B%5D=3&ratings%5B%5D=4&ratings%5B%5D=5&type=trans&updatable=0&issue_count=2&sort=last_update
@@ -18,7 +17,8 @@ private const val ACOMICS_DEFAULT_PAGINATION_OFFSET = 10 // Не умеет ст
 class CatalogRepositoryImpl(
 	private val httpClient: OkHttpClient,
 	private val catalogParser: CatalogHTMLParser,
-	private val catalogPagesLocalCache: CatalogCache
+	private val catalogPagesLocalCache: CatalogCache,
+	private var catalogSortConfigRepository: CatalogSortConfigRepository
 ) : CatalogRepository {
 
 	/**
@@ -36,6 +36,9 @@ class CatalogRepositoryImpl(
 		val newPage = retrieveFromServer(itemsAmountToSkip)
 		catalogPagesLocalCache.putPage(catalogPageIndex, newPage)
 		return newPage
+	}
+	override fun invalidateCache() {
+		catalogPagesLocalCache.invalidateCache()
 	}
 
 	private fun retrieveFromServer(itemsAmountToSkip: Int) : List<CatalogComicsItem> {

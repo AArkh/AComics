@@ -2,14 +2,14 @@ package ru.anarkh.acomics.catalog.controller
 
 import androidx.recyclerview.widget.DiffUtil
 import ru.anarkh.acomics.catalog.model.CatalogComicsItem
-import ru.anarkh.acomics.catalog.model.CatalogSortModel
+import ru.anarkh.acomics.catalog.model.CatalogSortConfig
 
 class CatalogItemsDiffsValidator : DiffUtil.ItemCallback<Any>() {
 
 	override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
 		return if (oldItem is CatalogComicsItem && newItem is CatalogComicsItem) {
 			return oldItem.hyperLink == newItem.hyperLink
-		} else if (oldItem is CatalogSortModel && newItem is CatalogSortModel) {
+		} else if (oldItem is CatalogSortConfig && newItem is CatalogSortConfig) {
 			return true
 		} else false
 	}
@@ -17,8 +17,8 @@ class CatalogItemsDiffsValidator : DiffUtil.ItemCallback<Any>() {
 	override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
 		return if (oldItem is CatalogComicsItem && newItem is CatalogComicsItem) {
 			return oldItem.isUIEqual(newItem)
-		} else if (oldItem is CatalogSortModel && newItem is CatalogSortModel) {
-			return oldItem.x == newItem.x
+		} else if (oldItem is CatalogSortConfig && newItem is CatalogSortConfig) {
+			return oldItem.sorting == newItem.sorting
 		} else false
 	}
 

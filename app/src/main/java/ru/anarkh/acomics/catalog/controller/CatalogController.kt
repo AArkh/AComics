@@ -6,14 +6,21 @@ import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import ru.anarkh.acomics.catalog.CatalogRouter
+import ru.anarkh.acomics.catalog.model.CatalogSortingBy
+import ru.anarkh.acomics.catalog.repository.CatalogRepository
+import ru.anarkh.acomics.catalog.repository.CatalogSortConfigRepository
 import ru.anarkh.acomics.catalog.widget.CatalogWidget
+import ru.anarkh.acomics.catalog.widget.SortDialogWidget
 import java.util.concurrent.Executors
 
 class CatalogController(
 	private val router: CatalogRouter,
 	private val widget: CatalogWidget,
+	private val sortDialogWidget: SortDialogWidget,
 	lifecycleOwner: LifecycleOwner,
-	dataSourceFactory : DataSource.Factory<Int, Any>
+	dataSourceFactory : DataSource.Factory<Int, Any>,
+	private val catalogRepository: CatalogRepository,
+	private val sortConfigRepository: CatalogSortConfigRepository
 ) {
 
 	init {
@@ -31,6 +38,19 @@ class CatalogController(
 			Observer<PagedList<Any>> { widget.updateList(it) }
 		)
 
-		widget.onComicsClick { link: String, pagesAmount: Int -> router.openComicsPage(link, pagesAmount) }
+		widget.onComicsClick { link: String, pagesAmount: Int ->
+			router.openComicsPage(link, pagesAmount)
+		}
+		widget.onSortIconClick {
+			sortDialogWidget.show()
+		}
+
+		sortDialogWidget.onSortingItemClick = { pickedSort: CatalogSortingBy ->
+			val currentCatalogConfig = sortConfigRepository.getActualSortingConfig()
+			currentCatalogConfig.sorting = pickedSort
+			sortConfigRepository.updateSortingConfig(currentCatalogConfig)
+			catalogRepository.invalidateCache()
+			livePagedList.value?.dataSource?.invalidate()
+		}
 	}
 }
