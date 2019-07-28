@@ -2,7 +2,7 @@ package ru.anarkh.acomics.catalog.widget
 
 import android.view.ViewGroup
 import ru.anarkh.acomics.R
-import ru.anarkh.acomics.core.BaseViewHolder
+import ru.anarkh.acomics.core.list.BaseViewHolder
 
 class CatalogSortItemViewHolder(
 	parent: ViewGroup

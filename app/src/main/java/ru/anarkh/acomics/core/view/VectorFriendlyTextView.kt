@@ -1,4 +1,4 @@
-package ru.anarkh.acomics.core
+package ru.anarkh.acomics.core.view
 
 import android.content.Context
 import android.graphics.drawable.Drawable

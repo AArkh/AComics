@@ -1,4 +1,4 @@
-package ru.anarkh.acomics.core
+package ru.anarkh.acomics.core.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

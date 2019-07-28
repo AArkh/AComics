@@ -1,14 +1,9 @@
-package ru.anarkh.acomics.core
+package ru.anarkh.acomics.core.list
 
 import android.view.ViewGroup
 
-abstract class BaseListElement<MODEL, HOLDER: BaseViewHolder>(
-	private val modelClass : Class<MODEL>,
-	private val holderClass: Class<HOLDER>
-) {
+abstract class BaseListElement<MODEL, HOLDER: BaseViewHolder> {
 
-	fun getModelType() : Class<MODEL> = modelClass
-	fun getHolderType() : Class<HOLDER> = holderClass
 	fun <H, M> onBindViewHolder(holder: H, position: Int, model: M) {
 		onBind(holder as HOLDER, position, model as MODEL)
 	}

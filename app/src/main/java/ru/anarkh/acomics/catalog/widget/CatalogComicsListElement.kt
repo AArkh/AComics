@@ -12,14 +12,11 @@ import kotlinx.android.synthetic.main.catalog_item.view.*
 import ru.anarkh.acomics.R
 import ru.anarkh.acomics.catalog.model.CatalogComicsItem
 import ru.anarkh.acomics.catalog.util.FixedLocaleQuantityStringParser
-import ru.anarkh.acomics.core.BaseListElement
+import ru.anarkh.acomics.core.list.BaseListElement
 
 class CatalogComicsListElement(
 	private val quantityStringParser: FixedLocaleQuantityStringParser
-) : BaseListElement<CatalogComicsItem, CatalogViewHolder>(
-	CatalogComicsItem::class.java,
-	CatalogViewHolder::class.java
-) {
+) : BaseListElement<CatalogComicsItem, CatalogViewHolder>() {
 
 	var onItemClickListener: ((link: String, pagesAmount: Int) -> Unit)? = null
 

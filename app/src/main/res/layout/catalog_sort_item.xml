@@ -9,7 +9,7 @@
 	android:background="@color/gray_light"
 	>
 
-	<ru.anarkh.acomics.core.VectorFriendlyTextView
+	<ru.anarkh.acomics.core.view.VectorFriendlyTextView
 		android:id="@+id/sort_order_spinner"
 		android:paddingLeft="16dp"
 		android:textColor="@color/gray"

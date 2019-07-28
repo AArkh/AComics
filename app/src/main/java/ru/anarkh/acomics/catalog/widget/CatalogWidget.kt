@@ -4,9 +4,11 @@ import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.anarkh.acomics.catalog.controller.CatalogItemsDiffsValidator
+import ru.anarkh.acomics.catalog.model.CatalogComicsItem
+import ru.anarkh.acomics.catalog.model.CatalogSortModel
 import ru.anarkh.acomics.catalog.util.FixedLocaleQuantityStringParser
-import ru.anarkh.acomics.core.LoadingElement
-import ru.anarkh.acomics.core.MultipleVHPagedListAdapter
+import ru.anarkh.acomics.core.list.ListMapper
+import ru.anarkh.acomics.core.list.MultipleVHPagedListAdapter
 
 class CatalogWidget(
 	list: RecyclerView,
@@ -15,11 +17,13 @@ class CatalogWidget(
 
 	private val comicsListElement = CatalogComicsListElement(quantityStringParser)
 	private val sortItem = CatalogComicsSortListElement()
+	private val adapterMapper = ListMapper(
+		Triple(comicsListElement, CatalogViewHolder::class.java, CatalogComicsItem::class.java),
+		Triple(sortItem, CatalogSortItemViewHolder::class.java, CatalogSortModel::class.java)
+	)
 	private val adapter = MultipleVHPagedListAdapter(
 		CatalogItemsDiffsValidator(),
-		comicsListElement,
-		sortItem,
-		LoadingElement()
+		adapterMapper
 	)
 
 	init {
