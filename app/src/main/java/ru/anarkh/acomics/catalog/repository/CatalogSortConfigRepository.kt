@@ -6,13 +6,10 @@ import com.google.gson.Gson
 import ru.anarkh.acomics.catalog.model.CatalogSortConfig
 import ru.anarkh.acomics.catalog.model.CatalogSortingBy
 
+private const val EXTRA_SORT_CONFIG = "sort_config"
 class CatalogSortConfigRepository(
 	context: Context
 ) {
-
-	companion object {
-		const val EXTRA_SORT_CONFIG = "sort_config"
-	}
 
 	private val sharedPreferences = context.getSharedPreferences(EXTRA_SORT_CONFIG, MODE_PRIVATE)
 	private val gson = Gson()

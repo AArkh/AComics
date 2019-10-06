@@ -22,9 +22,9 @@ class CatalogHTMLParser {
 		val doc = Jsoup.parse(html)
 		val elements = doc.getElementsByClass(CATALOG_TABLE_ELEMENT_CLASS_NAME)
 		if (elements.isEmpty()) {
+			Log.e("12345", html)
 			throw ParseException("no elements in a list!", 0)
 		}
-		Log.d("12345", "elements size is ${elements.size}")
 
 		val catalogList = ArrayList<CatalogComicsItem>(elements.size)
 
