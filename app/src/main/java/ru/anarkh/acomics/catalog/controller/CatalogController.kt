@@ -28,7 +28,7 @@ class CatalogController(
 			.setEnablePlaceholders(false)
 			.setPageSize(10)
 			.build()
-		val livePagedList = LivePagedListBuilder<Int, Any>(dataSourceFactory, pagedListConfig)
+		val livePagedList = LivePagedListBuilder(dataSourceFactory, pagedListConfig)
 			.setInitialLoadKey(0)
 			.setFetchExecutor(Executors.newSingleThreadExecutor())
 			.build()
@@ -45,6 +45,9 @@ class CatalogController(
 			sortDialogWidget.show()
 		}
 
+		sortDialogWidget.currentlyPickedSortingProvider = {
+			sortConfigRepository.getActualSortingConfig().sorting
+		}
 		sortDialogWidget.onSortingItemClick = { pickedSort: CatalogSortingBy ->
 			val currentCatalogConfig = sortConfigRepository.getActualSortingConfig()
 			currentCatalogConfig.sorting = pickedSort
@@ -52,5 +55,6 @@ class CatalogController(
 			catalogRepository.invalidateCache()
 			livePagedList.value?.dataSource?.invalidate()
 		}
+		sortDialogWidget.riseFromTheDead()
 	}
 }

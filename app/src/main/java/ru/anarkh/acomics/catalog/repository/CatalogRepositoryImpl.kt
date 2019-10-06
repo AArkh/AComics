@@ -10,6 +10,7 @@ import java.text.ParseException
 
 private const val CATALOG_URL = "https://acomics.ru/comics"
 private const val CATALOG_SKIP_QUERY_PARAM = "skip"
+private const val CATALOG_SORT_QUERY_PARAM = "sort"
 private const val ACOMICS_DEFAULT_PAGINATION_OFFSET = 10 // Не умеет страничка иначе, поэтому не кастомизируем
 
 //https://acomics.ru/comics?categories=&ratings%5B%5D=2&ratings%5B%5D=3&ratings%5B%5D=4&ratings%5B%5D=5&type=trans&updatable=0&issue_count=2&sort=last_update
@@ -26,7 +27,7 @@ class CatalogRepositoryImpl(
 	 * @throws ParseException если сломался парсинг.
 	 */
 	@WorkerThread
-	@Throws(InterruptedIOException::class, ParseException::class)
+	@Throws(InterruptedIOException::class, ParseException::class, IllegalStateException::class)
 	override fun getCatalogPage(catalogPageIndex: Int): List<CatalogComicsItem> {
 		val cached = catalogPagesLocalCache.getPage(catalogPageIndex)
 		if (cached != null) {
@@ -42,8 +43,13 @@ class CatalogRepositoryImpl(
 	}
 
 	private fun retrieveFromServer(itemsAmountToSkip: Int) : List<CatalogComicsItem> {
+		val sortConfig = catalogSortConfigRepository.getActualSortingConfig()
 		val uri = Uri.Builder()
 			.encodedPath(CATALOG_URL)
+			.appendQueryParameter(
+				CATALOG_SORT_QUERY_PARAM,
+				sortConfig.sorting.queryParam
+			)
 			.appendQueryParameter(
 				CATALOG_SKIP_QUERY_PARAM,
 				itemsAmountToSkip.toString()
