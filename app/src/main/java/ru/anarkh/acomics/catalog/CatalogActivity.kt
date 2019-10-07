@@ -5,7 +5,6 @@ import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.DataSource
-import okhttp3.OkHttpClient
 import ru.anarkh.acomics.R
 import ru.anarkh.acomics.catalog.controller.CatalogController
 import ru.anarkh.acomics.catalog.repository.*
@@ -13,6 +12,7 @@ import ru.anarkh.acomics.catalog.util.FixedLocaleQuantityStringParser
 import ru.anarkh.acomics.catalog.widget.CatalogWidget
 import ru.anarkh.acomics.catalog.widget.SortDialogWidget
 import ru.anarkh.acomics.core.DefaultActivity
+import ru.anarkh.acomics.core.web.HttpClientProvider
 
 class CatalogActivity : DefaultActivity() {
 
@@ -29,7 +29,7 @@ class CatalogActivity : DefaultActivity() {
             .of(this)
             .get(CatalogCache::class.java)
         val repo = CatalogRepositoryImpl(
-            OkHttpClient(),
+            HttpClientProvider.getHttpClient(),
             CatalogHTMLParser(),
             localCache,
             sortConfigRepository
