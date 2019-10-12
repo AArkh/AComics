@@ -11,9 +11,9 @@ import java.text.ParseException
 private const val CATALOG_URL = "https://acomics.ru/comics"
 private const val CATALOG_SKIP_QUERY_PARAM = "skip"
 private const val CATALOG_SORT_QUERY_PARAM = "sort"
+private const val CATALOG_TRANSLATION_TYPE_QUERY_PARAM = "type"
+private const val CATALOG_RATING_QUERY_PARAM = "ratings"
 private const val ACOMICS_DEFAULT_PAGINATION_OFFSET = 10 // Не умеет страничка иначе, поэтому не кастомизируем
-
-//https://acomics.ru/comics?categories=&ratings%5B%5D=2&ratings%5B%5D=3&ratings%5B%5D=4&ratings%5B%5D=5&type=trans&updatable=0&issue_count=2&sort=last_update
 
 class CatalogRepositoryImpl(
 	private val httpClient: OkHttpClient,
@@ -46,9 +46,17 @@ class CatalogRepositoryImpl(
 		val sortConfig = catalogSortConfigRepository.getActualSortingConfig()
 		val uri = Uri.Builder()
 			.encodedPath(CATALOG_URL)
+			.appendQueryParameterArray(
+				CATALOG_RATING_QUERY_PARAM,
+				sortConfig.rating.map { it.queryParamValue }
+			)
+			.appendQueryParameter(
+				CATALOG_TRANSLATION_TYPE_QUERY_PARAM,
+				sortConfig.translationType.queryParam
+			)
 			.appendQueryParameter(
 				CATALOG_SORT_QUERY_PARAM,
-				sortConfig.sorting.queryParam
+				sortConfig.sorting.queryParamValue
 			)
 			.appendQueryParameter(
 				CATALOG_SKIP_QUERY_PARAM,
@@ -63,5 +71,12 @@ class CatalogRepositoryImpl(
 			"response body is null for request: $uri"
 		)
 		return catalogParser.parse(body)
+	}
+
+	private fun Uri.Builder.appendQueryParameterArray(key: String, values: Iterable<String>): Uri.Builder {
+		values.forEach {
+			appendQueryParameter("$key[]", it)
+		}
+		return this
 	}
 }

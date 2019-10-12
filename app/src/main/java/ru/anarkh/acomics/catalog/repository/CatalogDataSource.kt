@@ -1,6 +1,5 @@
 package ru.anarkh.acomics.catalog.repository
 
-import android.util.Log
 import androidx.paging.PageKeyedDataSource
 import ru.anarkh.acomics.core.state.SavedInt
 import ru.arkharov.statemachine.StateRegistry
@@ -19,8 +18,6 @@ class CatalogDataSource(
 
 	override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Any>) {
 		var initialList: List<Any> = repository.getCatalogPage(savedPosition.value)
-		Log.d("12345", "load initial")
-		Log.d("12345", "saved position is ${savedPosition.value}")
 		if (savedPosition.value == 0) {
 			initialList = addConfigItem(initialList)
 		}

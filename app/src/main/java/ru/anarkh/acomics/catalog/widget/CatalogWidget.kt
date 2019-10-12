@@ -42,4 +42,8 @@ class CatalogWidget(
 	fun onSortIconClick(listener: (() -> Unit)) {
 		sortItem.onSortIconClickListener = listener
 	}
+
+	fun onFilteritemClick(listener: (() -> Unit)) {
+		sortItem.onFilterItemClickListener = listener
+	}
 }

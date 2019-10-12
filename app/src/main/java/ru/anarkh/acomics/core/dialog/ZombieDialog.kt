@@ -9,17 +9,21 @@ import androidx.lifecycle.OnLifecycleEvent
 import ru.arkharov.statemachine.SavedBoolean
 import ru.arkharov.statemachine.StateRegistry
 
+/**
+ * @param key При использовании нескольких диалогов на одном экране передать уникальный ключ
+ */
 class ZombieDialog(
 	lifecycle: Lifecycle,
 	private val context: Context,
 	private val dialogFactory: DialogFactory,
-	stateRegistry: StateRegistry
+	stateRegistry: StateRegistry,
+	key: String = "got_shot_in_the_head"
 ) : DialogWidget, LifecycleObserver {
 
 	override val isShowing: Boolean
 		get() = isShowingValue.value
 
-	private val isShowingValue: SavedBoolean = SavedBoolean("got_shot_in_the_head", false)
+	private val isShowingValue: SavedBoolean = SavedBoolean(key, false)
 
 	private var dialog: Dialog? = null
 	private var dismissListener: DialogInterface.OnDismissListener? = null

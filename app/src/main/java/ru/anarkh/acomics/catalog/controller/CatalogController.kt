@@ -6,17 +6,20 @@ import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import ru.anarkh.acomics.catalog.CatalogRouter
+import ru.anarkh.acomics.catalog.model.CatalogSortConfig
 import ru.anarkh.acomics.catalog.model.CatalogSortingBy
 import ru.anarkh.acomics.catalog.repository.CatalogRepository
 import ru.anarkh.acomics.catalog.repository.CatalogSortConfigRepository
+import ru.anarkh.acomics.catalog.widget.CatalogFilterDialogWidget
+import ru.anarkh.acomics.catalog.widget.CatalogSortDialogWidget
 import ru.anarkh.acomics.catalog.widget.CatalogWidget
-import ru.anarkh.acomics.catalog.widget.SortDialogWidget
 import java.util.concurrent.Executors
 
 class CatalogController(
 	private val router: CatalogRouter,
 	private val widget: CatalogWidget,
-	private val sortDialogWidget: SortDialogWidget,
+	private val sortDialogWidget: CatalogSortDialogWidget,
+	private val filterDialogWidget: CatalogFilterDialogWidget,
 	lifecycleOwner: LifecycleOwner,
 	dataSourceFactory : DataSource.Factory<Int, Any>,
 	private val catalogRepository: CatalogRepository,
@@ -44,17 +47,32 @@ class CatalogController(
 		widget.onSortIconClick {
 			sortDialogWidget.show()
 		}
+		widget.onFilteritemClick {
+			filterDialogWidget.show()
+		}
 
 		sortDialogWidget.currentlyPickedSortingProvider = {
 			sortConfigRepository.getActualSortingConfig().sorting
 		}
 		sortDialogWidget.onSortingItemClick = { pickedSort: CatalogSortingBy ->
 			val currentCatalogConfig = sortConfigRepository.getActualSortingConfig()
-			currentCatalogConfig.sorting = pickedSort
-			sortConfigRepository.updateSortingConfig(currentCatalogConfig)
+			if (pickedSort != currentCatalogConfig.sorting) {
+				currentCatalogConfig.sorting = pickedSort
+				sortConfigRepository.updateSortingConfig(currentCatalogConfig)
+				catalogRepository.invalidateCache()
+				livePagedList.value?.dataSource?.invalidate()
+			}
+		}
+		sortDialogWidget.retain()
+
+		filterDialogWidget.currentFilterConfigProvider = {
+			sortConfigRepository.getActualSortingConfig()
+		}
+		filterDialogWidget.onDialogCloseListener = { dialogConfigChanges: CatalogSortConfig ->
+			sortConfigRepository.updateSortingConfig(dialogConfigChanges)
 			catalogRepository.invalidateCache()
 			livePagedList.value?.dataSource?.invalidate()
 		}
-		sortDialogWidget.riseFromTheDead()
+		filterDialogWidget.retain()
 	}
 }

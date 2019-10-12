@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- todo Навести порядок, убрать повторения в отдельные файлики, заюзать стили -->
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	>
+	<LinearLayout
+		android:background="@drawable/dialog_background_white_rounded_borders"
+		android:orientation="vertical"
+		android:padding="16dp"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		>
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:padding="8dp"
+			android:text="@string/catalog_age_filter_dialog_title"
+			android:textSize="18sp"
+			android:textStyle="bold"
+			/>
+
+		<LinearLayout
+			android:id="@+id/catalog_age_filter_dialog_rating_all"
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="8dp"
+			android:paddingBottom="8dp"
+			>
+			<androidx.appcompat.widget.AppCompatRadioButton
+				android:id="@+id/catalog_age_filter_dialog_rating_all_option"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:clickable="false"
+				/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:text="@string/catalog_age_filter_dialog_rating_all"
+				/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:id="@+id/catalog_age_filter_dialog_rating_undef"
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="8dp"
+			android:paddingBottom="8dp"
+			>
+			<androidx.appcompat.widget.AppCompatCheckBox
+				android:id="@+id/catalog_age_filter_dialog_rating_undef_option"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:clickable="false"
+				/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:text="@string/catalog_age_filter_dialog_rating_undef"
+				/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:id="@+id/catalog_age_filter_dialog_rating_g"
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="8dp"
+			android:paddingBottom="8dp"
+			>
+			<androidx.appcompat.widget.AppCompatCheckBox
+				android:id="@+id/catalog_age_filter_dialog_rating_g_option"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:clickable="false"
+				/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:text="@string/catalog_age_filter_dialog_rating_g"
+				/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:id="@+id/catalog_age_filter_dialog_rating_pg"
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="8dp"
+			android:paddingBottom="8dp"
+			>
+			<androidx.appcompat.widget.AppCompatCheckBox
+				android:id="@+id/catalog_age_filter_dialog_rating_pg_option"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:clickable="false"
+				/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:text="@string/catalog_age_filter_dialog_rating_pg"
+				/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:id="@+id/catalog_age_filter_dialog_rating_pg_13"
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="8dp"
+			android:paddingBottom="8dp"
+			>
+			<androidx.appcompat.widget.AppCompatCheckBox
+				android:id="@+id/catalog_age_filter_dialog_rating_pg_13_option"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:clickable="false"
+				/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:text="@string/catalog_age_filter_dialog_rating_pg_13"
+				/>
+		</LinearLayout>
+
+		<View
+			android:layout_gravity="bottom"
+			android:layout_width="match_parent"
+			android:layout_height="0.5dp"
+			android:background="@drawable/shadow_bottom"
+			android:backgroundTint="@color/cream"
+			android:layout_marginTop="8dp"
+			android:layout_marginBottom="8dp"
+			/>
+
+		<TextView
+			android:id="@+id/sort_dialog_title"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:padding="8dp"
+			android:text="@string/catalog_filter_type_dialog_title"
+			android:textSize="18sp"
+			android:textStyle="bold"
+			/>
+
+		<LinearLayout
+			android:id="@+id/catalog_filter_type_dialog_all"
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="8dp"
+			android:paddingBottom="8dp"
+			>
+			<androidx.appcompat.widget.AppCompatRadioButton
+				android:id="@+id/catalog_filter_type_dialog_all_option"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:clickable="false"
+				/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:text="@string/catalog_filter_type_dialog_all"
+				/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:id="@+id/catalog_filter_type_dialog_original"
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="8dp"
+			android:paddingBottom="8dp"
+			>
+			<androidx.appcompat.widget.AppCompatRadioButton
+				android:id="@+id/catalog_filter_type_dialog_original_option"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:clickable="false"
+				/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:text="@string/catalog_filter_type_dialog_original"
+				/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:id="@+id/catalog_filter_type_dialog_translated"
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="8dp"
+			android:paddingBottom="8dp"
+			>
+			<androidx.appcompat.widget.AppCompatRadioButton
+				android:id="@+id/catalog_filter_type_dialog_translate_option"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:clickable="false"
+				/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="16dp"
+				android:text="@string/catalog_filter_type_dialog_translated"
+				/>
+		</LinearLayout>
+	</LinearLayout>
+</androidx.core.widget.NestedScrollView>

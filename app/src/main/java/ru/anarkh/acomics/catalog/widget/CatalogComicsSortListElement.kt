@@ -7,14 +7,14 @@ import ru.anarkh.acomics.core.list.BaseListElement
 
 class CatalogComicsSortListElement : BaseListElement<CatalogSortConfig, CatalogSortItemViewHolder>() {
 
-	var onSortItemClickListener: (() -> Unit)? = null
+	var onFilterItemClickListener: (() -> Unit)? = null
 	var onSortIconClickListener: (() -> Unit)? = null
 
 	override fun getViewType(): Int = 1552
 	override fun onCreateViewHolder(parent: ViewGroup): CatalogSortItemViewHolder {
 		val holder = CatalogSortItemViewHolder(parent)
-		holder.itemView.sort_order_spinner.setOnClickListener {
-			onSortItemClickListener?.invoke()
+		holder.itemView.filter_item.setOnClickListener {
+			onFilterItemClickListener?.invoke()
 		}
 		holder.itemView.sort_icon.setOnClickListener {
 			onSortIconClickListener?.invoke()
