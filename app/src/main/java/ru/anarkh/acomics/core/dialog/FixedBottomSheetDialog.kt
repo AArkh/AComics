@@ -47,7 +47,7 @@ class FixedBottomSheetDialog(
 
 	/**
 	 * Вызывать для обновления высоты диалога при изменении содержимого. Например, при
-	 * someDialogElement.setVisibility(VISIBLE);
+	 * someDialogElement.setVisibility(VISIBLE); Или в случае использования списков.
 	 */
 	fun updateHeight() {
 		view!!.post { heightFixOnShowListener!!.onShow(this) }

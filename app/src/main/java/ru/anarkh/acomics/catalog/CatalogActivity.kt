@@ -9,8 +9,9 @@ import ru.anarkh.acomics.R
 import ru.anarkh.acomics.catalog.controller.CatalogController
 import ru.anarkh.acomics.catalog.repository.*
 import ru.anarkh.acomics.catalog.util.FixedLocaleQuantityStringParser
+import ru.anarkh.acomics.catalog.widget.CatalogFilterDialogWidget
+import ru.anarkh.acomics.catalog.widget.CatalogSortDialogWidget
 import ru.anarkh.acomics.catalog.widget.CatalogWidget
-import ru.anarkh.acomics.catalog.widget.SortDialogWidget
 import ru.anarkh.acomics.core.DefaultActivity
 import ru.anarkh.acomics.core.web.HttpClientProvider
 
@@ -40,7 +41,8 @@ class CatalogActivity : DefaultActivity() {
         CatalogController(
             CatalogRouter(this),
             widget,
-            SortDialogWidget(this, lifecycle, stateRegistry),
+            CatalogSortDialogWidget(this, lifecycle, stateRegistry),
+            CatalogFilterDialogWidget(this, lifecycle, stateRegistry),
             this,
             object : DataSource.Factory<Int, Any>() {
                 override fun create(): DataSource<Int, Any> = CatalogDataSource(

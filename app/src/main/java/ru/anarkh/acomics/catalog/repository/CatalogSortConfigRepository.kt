@@ -5,19 +5,30 @@ import android.content.Context.MODE_PRIVATE
 import com.google.gson.Gson
 import ru.anarkh.acomics.catalog.model.CatalogSortConfig
 import ru.anarkh.acomics.catalog.model.CatalogSortingBy
+import ru.anarkh.acomics.catalog.model.MPAARating
 
 private const val EXTRA_SORT_CONFIG = "sort_config"
+
 class CatalogSortConfigRepository(
 	context: Context
 ) {
 
 	private val sharedPreferences = context.getSharedPreferences(EXTRA_SORT_CONFIG, MODE_PRIVATE)
 	private val gson = Gson()
+
 	private var sortConfig: CatalogSortConfig
 
 	init {
 		if (!sharedPreferences.contains(EXTRA_SORT_CONFIG)) {
-			val defaultConfig = CatalogSortConfig(CatalogSortingBy.BY_DATE)
+			val defaultConfig = CatalogSortConfig(
+				CatalogSortingBy.BY_DATE,
+				setOf(
+					MPAARating.UNDEFINED,
+					MPAARating.G,
+					MPAARating.PG,
+					MPAARating.PG_13
+				)
+			)
 			sortConfig = defaultConfig
 			updatePreferences(defaultConfig)
 		} else {

@@ -12,6 +12,18 @@
 	<string name="catalog_sort_dialog_sort_by_issues">количеству выпусков</string>
 	<string name="catalog_sort_dialog_sort_by_alphabet">алфавиту</string>
 
+	<string name="catalog_age_filter_dialog_title">Возрастной рейтинг</string>
+	<string name="catalog_age_filter_dialog_rating_all">Выбрать все</string>
+	<string name="catalog_age_filter_dialog_rating_undef">Рейтинг не установлен</string>
+	<string name="catalog_age_filter_dialog_rating_g">0+</string>
+	<string name="catalog_age_filter_dialog_rating_pg">6+</string>
+	<string name="catalog_age_filter_dialog_rating_pg_13">12+</string>
+
+	<string name="catalog_filter_type_dialog_title">Тип комикса</string>
+	<string name="catalog_filter_type_dialog_original">Оригинальный</string>
+	<string name="catalog_filter_type_dialog_translated">Перевод</string>
+	<string name="catalog_filter_type_dialog_all">Все</string>
+
 	<plurals name="catalog_item_subscribers">
 		<item quantity="zero">Нет подписчиков</item>
 		<item quantity="one">%d подписчик</item>

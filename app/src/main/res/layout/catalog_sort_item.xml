@@ -9,7 +9,7 @@
 	>
 
 	<ru.anarkh.acomics.core.view.VectorFriendlyTextView
-		android:id="@+id/sort_order_spinner"
+		android:id="@+id/filter_item"
 		android:paddingLeft="16dp"
 		android:textColor="@color/gray"
 		android:layout_width="wrap_content"

@@ -15,7 +15,7 @@ import ru.anarkh.acomics.core.dialog.FixedBottomSheetDialog
 import ru.anarkh.acomics.core.dialog.ZombieDialog
 import ru.arkharov.statemachine.StateRegistry
 
-class SortDialogWidget(
+class CatalogSortDialogWidget(
 	private val context: Context,
 	lifecycle: Lifecycle,
 	stateRegistry: StateRegistry
@@ -26,7 +26,7 @@ class SortDialogWidget(
 	var onSortingItemClick: ((pickedSort: CatalogSortingBy) -> Unit)? = null
 	var currentlyPickedSortingProvider: (() -> CatalogSortingBy)? = null
 
-	private var zombieDialog = ZombieDialog(lifecycle, context, this, stateRegistry)
+	private var zombieDialog = ZombieDialog(lifecycle, context, this, stateRegistry, "sort_dialog")
 
 	override fun create(builder: AlertDialog.Builder): Dialog {
 		val bottomShitDialog = FixedBottomSheetDialog(context)
@@ -62,7 +62,7 @@ class SortDialogWidget(
 
 	override fun hide() = zombieDialog.hide()
 
-	fun riseFromTheDead() = zombieDialog.riseFromTheDead()
+	fun retain() = zombieDialog.riseFromTheDead()
 
 	private fun onSortClick(sortingBy: CatalogSortingBy) {
 		onSortingItemClick?.invoke(sortingBy)

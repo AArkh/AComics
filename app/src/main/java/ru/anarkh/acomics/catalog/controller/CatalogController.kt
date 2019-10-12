@@ -9,14 +9,16 @@ import ru.anarkh.acomics.catalog.CatalogRouter
 import ru.anarkh.acomics.catalog.model.CatalogSortingBy
 import ru.anarkh.acomics.catalog.repository.CatalogRepository
 import ru.anarkh.acomics.catalog.repository.CatalogSortConfigRepository
+import ru.anarkh.acomics.catalog.widget.CatalogFilterDialogWidget
+import ru.anarkh.acomics.catalog.widget.CatalogSortDialogWidget
 import ru.anarkh.acomics.catalog.widget.CatalogWidget
-import ru.anarkh.acomics.catalog.widget.SortDialogWidget
 import java.util.concurrent.Executors
 
 class CatalogController(
 	private val router: CatalogRouter,
 	private val widget: CatalogWidget,
-	private val sortDialogWidget: SortDialogWidget,
+	private val sortDialogWidget: CatalogSortDialogWidget,
+	private val filterDialogWidget: CatalogFilterDialogWidget,
 	lifecycleOwner: LifecycleOwner,
 	dataSourceFactory : DataSource.Factory<Int, Any>,
 	private val catalogRepository: CatalogRepository,
@@ -44,6 +46,9 @@ class CatalogController(
 		widget.onSortIconClick {
 			sortDialogWidget.show()
 		}
+		widget.onFilteritemClick {
+			filterDialogWidget.show()
+		}
 
 		sortDialogWidget.currentlyPickedSortingProvider = {
 			sortConfigRepository.getActualSortingConfig().sorting
@@ -55,6 +60,11 @@ class CatalogController(
 			catalogRepository.invalidateCache()
 			livePagedList.value?.dataSource?.invalidate()
 		}
-		sortDialogWidget.riseFromTheDead()
+		sortDialogWidget.retain()
+
+		filterDialogWidget.currentFilterConfigProvider = {
+			sortConfigRepository.getActualSortingConfig()
+		}
+		filterDialogWidget.retain()
 	}
 }
