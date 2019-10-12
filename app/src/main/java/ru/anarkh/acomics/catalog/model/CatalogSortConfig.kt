@@ -4,5 +4,6 @@ import java.io.Serializable
 
 data class CatalogSortConfig(
 	var sorting: CatalogSortingBy,
-	var rating: Set<MPAARating>
+	val rating: LinkedHashSet<MPAARating>,
+	var translationType: TranslationType
 ) : Serializable

@@ -30,6 +30,7 @@ class CatalogSortDialogWidget(
 
 	override fun create(builder: AlertDialog.Builder): Dialog {
 		val bottomShitDialog = FixedBottomSheetDialog(context)
+		bottomShitDialog.setOnCancelListener { hide() }
 		val view = LayoutInflater.from(context).inflate(R.layout.catalog_sort_bottom_dialog, null)
 		val sortByDateIcon = view.findViewById<View>(R.id.by_date_selected_icon)
 		val sortBySubsIcon = view.findViewById<View>(R.id.by_subs_selected_icon)

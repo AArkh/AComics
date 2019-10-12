@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import ru.anarkh.acomics.catalog.model.CatalogSortConfig
 import ru.anarkh.acomics.catalog.model.CatalogSortingBy
 import ru.anarkh.acomics.catalog.model.MPAARating
+import ru.anarkh.acomics.catalog.model.TranslationType
 
 private const val EXTRA_SORT_CONFIG = "sort_config"
 
@@ -22,12 +23,15 @@ class CatalogSortConfigRepository(
 		if (!sharedPreferences.contains(EXTRA_SORT_CONFIG)) {
 			val defaultConfig = CatalogSortConfig(
 				CatalogSortingBy.BY_DATE,
-				setOf(
-					MPAARating.UNDEFINED,
-					MPAARating.G,
-					MPAARating.PG,
-					MPAARating.PG_13
-				)
+				LinkedHashSet(
+					mutableListOf(
+						MPAARating.UNDEFINED,
+						MPAARating.G,
+						MPAARating.PG,
+						MPAARating.PG_13
+					)
+				),
+				TranslationType.ANY
 			)
 			sortConfig = defaultConfig
 			updatePreferences(defaultConfig)
@@ -37,7 +41,7 @@ class CatalogSortConfigRepository(
 		}
 	}
 
-	fun getActualSortingConfig() : CatalogSortConfig = sortConfig
+	fun getActualSortingConfig(): CatalogSortConfig = sortConfig
 
 	fun updateSortingConfig(newConfig: CatalogSortConfig) {
 		sortConfig = newConfig

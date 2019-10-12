@@ -6,6 +6,7 @@ import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import ru.anarkh.acomics.catalog.CatalogRouter
+import ru.anarkh.acomics.catalog.model.CatalogSortConfig
 import ru.anarkh.acomics.catalog.model.CatalogSortingBy
 import ru.anarkh.acomics.catalog.repository.CatalogRepository
 import ru.anarkh.acomics.catalog.repository.CatalogSortConfigRepository
@@ -55,15 +56,22 @@ class CatalogController(
 		}
 		sortDialogWidget.onSortingItemClick = { pickedSort: CatalogSortingBy ->
 			val currentCatalogConfig = sortConfigRepository.getActualSortingConfig()
-			currentCatalogConfig.sorting = pickedSort
-			sortConfigRepository.updateSortingConfig(currentCatalogConfig)
-			catalogRepository.invalidateCache()
-			livePagedList.value?.dataSource?.invalidate()
+			if (pickedSort != currentCatalogConfig.sorting) {
+				currentCatalogConfig.sorting = pickedSort
+				sortConfigRepository.updateSortingConfig(currentCatalogConfig)
+				catalogRepository.invalidateCache()
+				livePagedList.value?.dataSource?.invalidate()
+			}
 		}
 		sortDialogWidget.retain()
 
 		filterDialogWidget.currentFilterConfigProvider = {
 			sortConfigRepository.getActualSortingConfig()
+		}
+		filterDialogWidget.onDialogCloseListener = { dialogConfigChanges: CatalogSortConfig ->
+			sortConfigRepository.updateSortingConfig(dialogConfigChanges)
+			catalogRepository.invalidateCache()
+			livePagedList.value?.dataSource?.invalidate()
 		}
 		filterDialogWidget.retain()
 	}
