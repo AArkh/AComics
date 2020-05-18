@@ -1,4 +1,4 @@
-package ru.anarkh.acomics.catalog.widget
+package ru.anarkh.acomics.catalog.widget.filter
 
 import android.view.ViewGroup
 import ru.anarkh.acomics.R

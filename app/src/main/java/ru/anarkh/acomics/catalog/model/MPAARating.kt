@@ -3,16 +3,15 @@ package ru.anarkh.acomics.catalog.model
 import androidx.annotation.ColorRes
 
 enum class MPAARating(
-	val queryParamValue: String,
 	val text: String,
 	@ColorRes val colorRes: Int
 ) {
-	UNDEFINED("1", "NR", ru.anarkh.acomics.R.color.rating_undef),
-	G("2", "G", ru.anarkh.acomics.R.color.rating_g),
-	PG("3", "PG", ru.anarkh.acomics.R.color.rating_pg),
-	PG_13("4", "PG-13", ru.anarkh.acomics.R.color.rating_pg13),
-	R("5", "R", ru.anarkh.acomics.R.color.rating_r),
-	NC_17("6", "NC-17", ru.anarkh.acomics.R.color.rating_nc17);
+	UNDEFINED("NR", ru.anarkh.acomics.R.color.rating_undef),
+	G("G", ru.anarkh.acomics.R.color.rating_g),
+	PG("PG", ru.anarkh.acomics.R.color.rating_pg),
+	PG_13("PG-13", ru.anarkh.acomics.R.color.rating_pg13),
+	R("R", ru.anarkh.acomics.R.color.rating_r),
+	NC_17("NC-17", ru.anarkh.acomics.R.color.rating_nc17);
 
 	companion object {
 		fun fromString(rating: String?) : MPAARating {

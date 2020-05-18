@@ -2,7 +2,7 @@ package ru.anarkh.acomics.core.list
 
 import android.annotation.SuppressLint
 
-class ListMapper(
+class ListConfig(
 	vararg associations: Triple<BaseListElement<out Any, out BaseViewHolder>, Class<out BaseViewHolder>, Class<*>>
 ) {
 

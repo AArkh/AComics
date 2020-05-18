@@ -3,54 +3,55 @@ package ru.anarkh.acomics.catalog
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.ViewModelProviders
-import androidx.paging.DataSource
 import ru.anarkh.acomics.R
 import ru.anarkh.acomics.catalog.controller.CatalogController
-import ru.anarkh.acomics.catalog.repository.*
+import ru.anarkh.acomics.catalog.repository.CatalogDataSource
+import ru.anarkh.acomics.catalog.repository.CatalogRepository
+import ru.anarkh.acomics.catalog.repository.CatalogSortConfigRepository
 import ru.anarkh.acomics.catalog.util.FixedLocaleQuantityStringParser
-import ru.anarkh.acomics.catalog.widget.CatalogFilterDialogWidget
-import ru.anarkh.acomics.catalog.widget.CatalogSortDialogWidget
 import ru.anarkh.acomics.catalog.widget.CatalogWidget
+import ru.anarkh.acomics.catalog.widget.LoadingWidget
+import ru.anarkh.acomics.catalog.widget.filter.CatalogFilterDialogWidget
+import ru.anarkh.acomics.catalog.widget.filter.CatalogSortDialogWidget
 import ru.anarkh.acomics.core.DefaultActivity
-import ru.anarkh.acomics.core.web.HttpClientProvider
+import ru.anarkh.acomics.core.api.AComicsApiService
+import ru.anarkh.acomics.core.api.AComicsRetrofitProvider
 
 class CatalogActivity : DefaultActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        toolbar.title = ""
-        toolbar.findViewById<ImageView>(R.id.toolbar_logo).setImageResource(R.drawable.logo)
-        setSupportActionBar(toolbar)
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		setContentView(R.layout.activity_main)
 
-        val sortConfigRepository = CatalogSortConfigRepository(this)
-        val localCache = ViewModelProviders
-            .of(this)
-            .get(CatalogCache::class.java)
-        val repo = CatalogRepositoryImpl(
-            HttpClientProvider.getHttpClient(),
-            CatalogHTMLParser(),
-            localCache,
-            sortConfigRepository
-        )
+		val toolbar = findViewById<Toolbar>(R.id.toolbar)
+		toolbar.title = ""
+		toolbar.findViewById<ImageView>(R.id.toolbar_logo).setImageResource(R.drawable.logo)
+		setSupportActionBar(toolbar)
 
-        val parser = FixedLocaleQuantityStringParser(this)
-        val widget = CatalogWidget(findViewById(R.id.list), parser)
-        CatalogController(
-            CatalogRouter(this),
-            widget,
-            CatalogSortDialogWidget(this, lifecycle, stateRegistry),
-            CatalogFilterDialogWidget(this, lifecycle, stateRegistry),
-            this,
-            object : DataSource.Factory<Int, Any>() {
-                override fun create(): DataSource<Int, Any> = CatalogDataSource(
-                    repo, sortConfigRepository, stateRegistry
-                )
-            },
-            repo,
-            sortConfigRepository
-        )
-    }
+		val loadingWidget = LoadingWidget(
+			findViewById(R.id.loading_screen),
+			findViewById(R.id.loading_bar),
+			findViewById(R.id.retry_button),
+			findViewById(R.id.no_data_text)
+		)
+		val widget = CatalogWidget(
+			loadingWidget,
+			findViewById(R.id.list),
+			FixedLocaleQuantityStringParser(this)
+		)
+		val dataSource = CatalogDataSource(
+			AComicsRetrofitProvider.retrofit.create(AComicsApiService::class.java)
+		)
+		val repo = CatalogRepository(dataSource)
+		CatalogController(
+			CatalogRouter(this),
+			widget,
+			CatalogSortDialogWidget(this, lifecycle, stateRegistry),
+			CatalogFilterDialogWidget(this, lifecycle, stateRegistry),
+			CatalogSortConfigRepository(this),
+			repo,
+			activityScope,
+			stateRegistry
+		)
+	}
 }

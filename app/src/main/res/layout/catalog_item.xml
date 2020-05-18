@@ -1,42 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:fresco="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
+	android:gravity="center_vertical"
+	android:orientation="vertical"
+	android:paddingLeft="16dp"
 	android:paddingTop="12dp"
 	android:paddingRight="16dp"
-	android:paddingLeft="16dp"
-	android:gravity="center_vertical"
 	>
+
+	<TextView
+		android:id="@+id/title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:ellipsize="end"
+		android:maxLines="1"
+		android:textSize="16sp"
+		android:textStyle="bold"
+		tools:text="Ава и её Демон [Ava's Demon] (перевод) "
+		/>
 
 	<LinearLayout
 		android:id="@+id/container"
-		android:orientation="horizontal"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginBottom="16dp"
+		android:orientation="horizontal"
 		>
+
+		<com.facebook.drawee.view.SimpleDraweeView
+			android:id="@+id/image"
+			android:layout_width="112dp"
+			android:layout_height="56dp"
+			android:layout_marginTop="4dp"
+			fresco:roundedCornerRadius="4dp"
+			fresco:failureImage="@drawable/catalog_stub"
+			fresco:failureImageScaleType="centerCrop"
+			fresco:placeholderImage="@color/gray_disabled"
+			/>
+
+		<TextView
+			android:id="@+id/description"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="8dp"
+			android:ellipsize="end"
+			android:maxLines="6"
+			android:textSize="12sp"
+			tools:text="В экспедиции Рин видит на горе и в своих снах силуэт мужчины в черных мешковатых одеяниях. Зайдя в храм Волов, та обнаруживает письмена, прочитав которые, она сама становится частью древней истории."
+			/>
+	</LinearLayout>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="4dp"
+		android:layout_marginBottom="8dp"
+		>
+
+		<Space
+			android:id="@+id/space"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			/>
 
 		<LinearLayout
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:paddingTop="4dp"
+			android:layout_alignParentLeft="true"
+			android:layout_toLeftOf="@+id/space"
 			android:orientation="vertical"
 			>
 
-			<com.facebook.drawee.view.SimpleDraweeView
-				android:id="@+id/image"
-				android:layout_height="72dp"
-				android:layout_width="128dp"
-				fresco:roundedCornerRadius="4dp"
-				tools:background="@color/colorAccent"
-				/>
-
 			<TextView
 				android:id="@+id/rating"
-				android:layout_marginTop="6dp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:textColor="@color/gray"
@@ -46,7 +86,6 @@
 
 			<TextView
 				android:id="@+id/subscribers_count"
-				android:layout_marginTop="4dp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:textSize="10sp"
@@ -58,35 +97,13 @@
 		<LinearLayout
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:paddingLeft="16dp"
+			android:layout_alignParentRight="true"
+			android:layout_toRightOf="@+id/space"
 			android:orientation="vertical"
 			>
 
 			<TextView
-				android:id="@+id/title"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:textSize="16sp"
-				android:maxLines="1"
-				android:textStyle="bold"
-				android:ellipsize="end"
-				tools:text="IMMORTAL"
-				/>
-
-			<TextView
-				android:id="@+id/description"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="6dp"
-				android:textSize="12sp"
-				android:maxLines="3"
-				android:ellipsize="end"
-				tools:text="В экспедиции Рин видит на горе и в своих снах силуэт мужчины в черных мешковатых одеяниях. Зайдя в храм Волов, та обнаруживает письмена, прочитав которые, она сама становится частью древней истории."
-				/>
-
-			<TextView
 				android:id="@+id/updates_count"
-				android:layout_marginTop="4dp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:textSize="10sp"
@@ -95,20 +112,19 @@
 
 			<TextView
 				android:id="@+id/last_updated"
-				android:layout_marginTop="4dp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:textSize="10sp"
 				tools:text="Последний выпуск: 4 часа назад"
 				/>
 		</LinearLayout>
-	</LinearLayout>
+	</RelativeLayout>
 
 	<View
-		android:layout_gravity="bottom"
 		android:layout_width="match_parent"
 		android:layout_height="0.5dp"
+		android:layout_gravity="bottom"
 		android:background="@drawable/shadow_bottom"
 		android:backgroundTint="@color/cream"
 		/>
-</FrameLayout>
+</LinearLayout>

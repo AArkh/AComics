@@ -10,9 +10,7 @@ import ru.anarkh.acomics.catalog.model.TranslationType
 
 private const val EXTRA_SORT_CONFIG = "sort_config"
 
-class CatalogSortConfigRepository(
-	context: Context
-) {
+class CatalogSortConfigRepository(context: Context) {
 
 	private val sharedPreferences = context.getSharedPreferences(EXTRA_SORT_CONFIG, MODE_PRIVATE)
 	private val gson = Gson()

@@ -2,6 +2,7 @@ package ru.anarkh.acomics.core.web
 
 import okhttp3.OkHttpClient
 
+@Deprecated("удалить")
 object HttpClientProvider {
 
 	@Volatile
@@ -11,9 +12,7 @@ object HttpClientProvider {
 		if (client == null) {
 			synchronized(this) {
 				if (client == null) {
-					client = OkHttpClient.Builder()
-						.cookieJar(AdultCookieJar())
-						.build()
+					client = OkHttpClient.Builder().build()
 				}
 			}
 		}

@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
-apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "ru.anarkh.acomics"
         minSdkVersion 21
@@ -22,38 +22,52 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+configurations.all {
+    exclude group: 'com.facebook.soloader', module: 'soloader'
+    // only bump gson if https://github.com/google/gson/issues/1597 is fixed
+    resolutionStrategy.force "com.google.code.gson:gson:2.8.5"
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.1.0'
+    implementation 'androidx.core:core-ktx:1.2.0'
 
-    implementation "androidx.recyclerview:recyclerview:1.1.0-beta04"
-    implementation 'androidx.viewpager2:viewpager2:1.0.0-beta04'
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    implementation 'com.google.android.material:material:1.1.0'
 
     // coroutines todo Может, выпилить?
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0"
 
     // io
-    implementation 'com.squareup.okhttp3:okhttp:3.12.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.14.7'
     implementation 'org.jsoup:jsoup:1.12.1'
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
 
     // android arcrhitechture components
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0-alpha05"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0-alpha05"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0-alpha05"
-    implementation "androidx.paging:paging-runtime:2.1.0"
-    kapt "androidx.lifecycle:lifecycle-compiler:2.2.0-alpha05"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0" //fixme?
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0" //fixme
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.2.0"
 
     //fresco
-    implementation 'com.facebook.fresco:fresco:2.0.0'
+    implementation 'com.facebook.fresco:fresco:2.1.0'
     implementation 'com.facebook.fresco:animated-gif:2.0.0'
     implementation 'com.github.piasy:BigImageViewer:1.5.7'
     implementation 'com.github.piasy:FrescoImageLoader:1.5.7'

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
-	android:orientation="vertical"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	>
 
-	<include layout="@layout/toolbar"/>
+	<include layout="@layout/toolbar" />
 
 	<FrameLayout
 		android:layout_width="match_parent"
@@ -18,8 +18,47 @@
 			android:id="@+id/list"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:scrollbars="vertical"
 			android:background="@color/white"
+			android:scrollbars="vertical"
+			tools:listitem="@layout/catalog_item"
 			/>
+
+		<LinearLayout
+			android:id="@+id/loading_screen"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:gravity="center"
+			android:orientation="vertical"
+			android:visibility="gone"
+			>
+
+			<ProgressBar
+				android:id="@+id/loading_bar"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				/>
+
+			<TextView
+				android:id="@+id/retry_button"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/catalog_no_data_retry_loading_text"
+				android:textColor="@android:color/holo_red_dark"
+				android:textSize="16sp"
+				android:padding="12dp"
+				/>
+
+			<TextView
+				android:gravity="center"
+				android:lineSpacingExtra="8dp"
+				android:textStyle="bold"
+				android:id="@+id/no_data_text"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/catalog_no_data"
+				android:textColor="@color/black"
+				android:textSize="16sp"
+				/>
+		</LinearLayout>
 	</FrameLayout>
 </LinearLayout>

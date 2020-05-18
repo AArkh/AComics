@@ -3,8 +3,11 @@
 
 	<string name="catalog_item_rating">Рейтинг:</string>
 	<string name="catalog_item_no_updates">Нет выпусков</string>
+	<string name="catalog_item_no_subs">Нет подписчиков</string>
 
 	<string name="catalog_filter_title">Настройки выдачи</string>
+	<string name="catalog_no_data_retry_loading_text">ПОВТОРИТЬ</string>
+	<string name="catalog_no_data">Я ничего не нашел, сорян\n¯\\_(ツ)_/¯</string>
 
 	<string name="catalog_sort_dialog_title">Сортировать по</string>
 	<string name="catalog_sort_dialog_sort_by_date">дате обновления</string>
@@ -30,5 +33,21 @@
 		<item quantity="few">%d подписчика</item>
 		<item quantity="many">%d подписчиков</item>
 		<item quantity="other">%d подписчиков</item>
+	</plurals>
+
+	<plurals name="catalog_item_hours">
+		<item quantity="zero">часов назад</item>
+		<item quantity="one">%d час назад</item>
+		<item quantity="few">%d часа назад</item>
+		<item quantity="many">%d часов назад</item>
+		<item quantity="other">%d часов назад</item>
+	</plurals>
+
+	<plurals name="catalog_item_issues">
+		<item quantity="zero">нет выпусков</item>
+		<item quantity="one">%d выпуск</item>
+		<item quantity="few">%d выпуска</item>
+		<item quantity="many">%d выпусков</item>
+		<item quantity="other">%d выпусков</item>
 	</plurals>
 </resources>

@@ -1,8 +1,8 @@
 package ru.anarkh.acomics.catalog.model
 
 enum class CatalogSortingBy(val queryParamValue: String) {
-	BY_DATE("last_update"),
-	BY_SUBS("subscr_count"),
-	BY_ISSUES("issue_count"),
-	BY_ALPHABET("serial_name")
+	BY_DATE("last_updated"),
+	BY_SUBS("total_subscribers"),
+	BY_ISSUES("total_pages"),
+	BY_ALPHABET("title")
 }

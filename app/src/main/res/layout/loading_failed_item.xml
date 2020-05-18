@@ -4,10 +4,13 @@
 	android:layout_height="wrap_content"
 	>
 
-	<ProgressBar
+	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_gravity="center_horizontal"
-		android:layout_margin="12dp"
+		android:padding="12dp"
+		android:text="@string/catalog_no_data_retry_loading_text"
+		android:textColor="@android:color/holo_red_dark"
+		android:textSize="16sp"
 		/>
 </FrameLayout>

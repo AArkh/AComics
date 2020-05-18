@@ -4,7 +4,7 @@ import android.os.Bundle
 import java.io.Serializable
 
 class SavedSerializable<T : Serializable> (
-    val key: String,
+    private val key: String,
     var value: T? = null
 ) : Savable {
 
