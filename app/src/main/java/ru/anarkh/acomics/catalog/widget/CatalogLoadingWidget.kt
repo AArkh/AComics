@@ -3,18 +3,18 @@ package ru.anarkh.acomics.catalog.widget
 import android.view.View
 import android.view.ViewGroup
 
-class LoadingWidget(
+class CatalogLoadingWidget(
 	private val container: ViewGroup,
 	private val loadingView: View,
 	private val retryButton: View,
 	private val noDataView: View
 ) {
 
-	var retryButtonClickListener: View.OnClickListener? = null
+	var retryButtonClickListener: (() -> Unit)? = null
 
 	init {
 		retryButton.setOnClickListener {
-			retryButtonClickListener?.onClick(it)
+			retryButtonClickListener?.invoke()
 		}
 	}
 

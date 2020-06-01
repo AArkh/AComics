@@ -17,7 +17,7 @@ import ru.anarkh.acomics.core.list.convenience.LoadingFailedViewHolder
 import ru.anarkh.acomics.core.list.convenience.LoadingViewHolder
 
 class CatalogWidget(
-	private val noDataWidget: LoadingWidget,
+	private val noDataWidget: CatalogLoadingWidget,
 	private val recyclerView: RecyclerView,
 	quantityStringParser: FixedLocaleQuantityStringParser
 ) {
@@ -26,6 +26,7 @@ class CatalogWidget(
 
 	private val comicsListElement = CatalogComicsListElement(quantityStringParser)
 	private val sortListElement = CatalogSortListElement()
+	private val loadingFailedElement = LoadingFailedElement()
 	private val adapter: MultipleVHListAdapter
 
 	init {
@@ -38,7 +39,7 @@ class CatalogWidget(
 				LoadingElement.Stub::class.java
 			),
 			Triple(
-				LoadingFailedElement(),
+				loadingFailedElement,
 				LoadingFailedViewHolder::class.java,
 				LoadingFailedElement.Stub::class.java
 			)
@@ -96,7 +97,7 @@ class CatalogWidget(
 		}
 	}
 
-	fun onComicsClick(listener: (link: String, pagesAmount: Int) -> Unit) {
+	fun onComicsClick(listener: (comicsTitle: String, pagesAmount: Int) -> Unit) {
 		comicsListElement.onItemClickListener = listener
 	}
 
@@ -106,6 +107,14 @@ class CatalogWidget(
 
 	fun onFilterItemClick(listener: (() -> Unit)) {
 		sortListElement.onFilterItemClickListener = listener
+	}
+
+	fun onRetryButtonClick(listener: () -> Unit) {
+		noDataWidget.retryButtonClickListener = listener
+	}
+
+	fun onRetryLoadNextPageButtonClick(listener: () -> Unit) {
+		loadingFailedElement.clickListener = listener
 	}
 
 	private fun List<Any>.clone(): MutableList<Any> {

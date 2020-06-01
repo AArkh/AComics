@@ -42,8 +42,8 @@ class CatalogController(
 	}
 
 	private fun initWidget() {
-		widget.onComicsClick { link: String, pagesAmount: Int ->
-			router.openComicsPage(link, pagesAmount)
+		widget.onComicsClick { comicsTitle: String, pagesAmount: Int ->
+			router.openComicsPage(comicsTitle, pagesAmount)
 		}
 		widget.onSortIconClick {
 			sortDialogWidget.show()
@@ -55,6 +55,18 @@ class CatalogController(
 			val currentState: PagingState? = savedState.value
 			if (currentState is Content && currentState.state == Content.ContentState.HAS_MORE) {
 				savedState.value = currentState.copy(state = Content.ContentState.LOADING_NEXT_PAGE)
+				loadNextPage(currentState.page.inc())
+			}
+		}
+		widget.onRetryButtonClick {
+			savedState.value = Initial
+			updateList()
+		}
+		widget.onRetryLoadNextPageButtonClick {
+			val currentState: PagingState? = savedState.value
+			if (currentState is Content) {
+				savedState.value = currentState.copy(state = Content.ContentState.LOADING_NEXT_PAGE)
+				updateList()
 				loadNextPage(currentState.page.inc())
 			}
 		}
@@ -131,20 +143,20 @@ class CatalogController(
 		val currentState = savedState.value ?: Initial
 		widget.updateState(currentState)
 		if (savedState.value is Initial) {
-			activityScope.asyncObservable(INITIAL_TASK_KEY) {
+			activityScope.runCoroutine(INITIAL_TASK_KEY) {
 				val config = sortConfigRepository.getActualSortingConfig()
 				val catalogPage: List<CatalogComicsItem> = catalogRepository.getList(config, 1)
 				val resultedList: MutableList<Any> = ArrayList(catalogPage)
 				resultedList.add(0, config)
-				return@asyncObservable resultedList
+				return@runCoroutine resultedList
 			}
 		}
 	}
 
 	private fun loadNextPage(page: Int) {
-		activityScope.asyncObservable(PAGINATION_TASK_KEY) {
+		activityScope.runCoroutine(PAGINATION_TASK_KEY) {
 			val config = sortConfigRepository.getActualSortingConfig()
-			return@asyncObservable catalogRepository.getList(config, page)
+			return@runCoroutine catalogRepository.getList(config, page)
 		}
 	}
 }

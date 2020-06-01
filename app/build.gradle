@@ -32,7 +32,8 @@ android {
 }
 
 configurations.all {
-    exclude group: 'com.facebook.soloader', module: 'soloader'
+    //exclude group: 'com.facebook.soloader', module: 'soloader'
+    // При включении крашится на .gif файлах.
     // only bump gson if https://github.com/google/gson/issues/1597 is fixed
     resolutionStrategy.force "com.google.code.gson:gson:2.8.5"
 }
@@ -56,14 +57,13 @@ dependencies {
     // io
     implementation 'com.squareup.okhttp3:okhttp:3.14.7'
     implementation 'org.jsoup:jsoup:1.12.1'
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.retrofit2:retrofit:2.8.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
 
     // android arcrhitechture components
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0" //fixme?
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0" //fixme
     implementation "androidx.lifecycle:lifecycle-common-java8:2.2.0"
 
     //fresco

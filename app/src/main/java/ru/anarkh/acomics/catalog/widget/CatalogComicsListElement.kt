@@ -23,7 +23,7 @@ class CatalogComicsListElement(
 	private val quantityStringParser: FixedLocaleQuantityStringParser
 ) : BaseListElement<CatalogComicsItem, CatalogViewHolder>() {
 
-	var onItemClickListener: ((link: String, pagesAmount: Int) -> Unit)? = null
+	var onItemClickListener: ((comicsTitle: String, pagesAmount: Int) -> Unit)? = null
 
 	override fun onCreateViewHolder(parent: ViewGroup): CatalogViewHolder = CatalogViewHolder(parent)
 

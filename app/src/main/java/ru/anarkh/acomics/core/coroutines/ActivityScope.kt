@@ -16,7 +16,7 @@ class ActivityScope : ViewModel(), CoroutineScope by MainScope() {
 		}
 	}
 
-	fun <TYPE> asyncObservable(key: String, block: suspend CoroutineScope.() -> TYPE) {
+	fun <TYPE> runCoroutine(key: String, block: suspend CoroutineScope.() -> TYPE) {
 		observers[key]?.onLoading()
 		val job: Job = launch {
 			try {

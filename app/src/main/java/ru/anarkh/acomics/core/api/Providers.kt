@@ -6,30 +6,12 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.Dns
 import okhttp3.OkHttpClient
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Query
-import ru.anarkh.acomics.catalog.model.CatalogComicsItem
 import java.net.Inet4Address
 import java.net.InetAddress
 
-interface AComicsApiService {
-	@GET("/search")
-	fun catalogList(
-		@Query("sortingBy")
-		sortingBy: String,
-		@Query("isAsc")
-		isAsc: Boolean,
-		@Query("page")
-		page: Int,
-		@Query("rating")
-		rating: List<String>
-	): Call<List<CatalogComicsItem>>
-}
-
-object AComicsRetrofitProvider {
+object Providers {
 
 	val retrofit: Retrofit = Retrofit.Builder()
 		.baseUrl("http://emptydomain.ru")

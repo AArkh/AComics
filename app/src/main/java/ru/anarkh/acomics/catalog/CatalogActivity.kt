@@ -9,13 +9,13 @@ import ru.anarkh.acomics.catalog.repository.CatalogDataSource
 import ru.anarkh.acomics.catalog.repository.CatalogRepository
 import ru.anarkh.acomics.catalog.repository.CatalogSortConfigRepository
 import ru.anarkh.acomics.catalog.util.FixedLocaleQuantityStringParser
+import ru.anarkh.acomics.catalog.widget.CatalogLoadingWidget
 import ru.anarkh.acomics.catalog.widget.CatalogWidget
-import ru.anarkh.acomics.catalog.widget.LoadingWidget
 import ru.anarkh.acomics.catalog.widget.filter.CatalogFilterDialogWidget
 import ru.anarkh.acomics.catalog.widget.filter.CatalogSortDialogWidget
 import ru.anarkh.acomics.core.DefaultActivity
-import ru.anarkh.acomics.core.api.AComicsApiService
-import ru.anarkh.acomics.core.api.AComicsRetrofitProvider
+import ru.anarkh.acomics.core.api.AComicsCatalogService
+import ru.anarkh.acomics.core.api.Providers
 
 class CatalogActivity : DefaultActivity() {
 
@@ -28,7 +28,7 @@ class CatalogActivity : DefaultActivity() {
 		toolbar.findViewById<ImageView>(R.id.toolbar_logo).setImageResource(R.drawable.logo)
 		setSupportActionBar(toolbar)
 
-		val loadingWidget = LoadingWidget(
+		val loadingWidget = CatalogLoadingWidget(
 			findViewById(R.id.loading_screen),
 			findViewById(R.id.loading_bar),
 			findViewById(R.id.retry_button),
@@ -40,7 +40,7 @@ class CatalogActivity : DefaultActivity() {
 			FixedLocaleQuantityStringParser(this)
 		)
 		val dataSource = CatalogDataSource(
-			AComicsRetrofitProvider.retrofit.create(AComicsApiService::class.java)
+			Providers.retrofit.create(AComicsCatalogService::class.java)
 		)
 		val repo = CatalogRepository(dataSource)
 		CatalogController(

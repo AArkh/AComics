@@ -1,40 +1,69 @@
 package ru.anarkh.acomics.comics.controller
 
-import android.util.Log
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
-import ru.anarkh.acomics.comics.model.ComicsPage
+import ru.anarkh.acomics.comics.model.*
 import ru.anarkh.acomics.comics.repository.ComicsRepository
 import ru.anarkh.acomics.comics.widget.ComicsWidget
+import ru.anarkh.acomics.core.coroutines.ActivityScope
+import ru.anarkh.acomics.core.coroutines.ObserverBuilder
+import ru.arkharov.statemachine.SavedSerializable
+import ru.arkharov.statemachine.StateRegistry
 
 class ComicsController(
+	private val comicsName: String,
 	private val widget: ComicsWidget,
-	private val repo: ComicsRepository
+	private val repo: ComicsRepository,
+	private val activityScope: ActivityScope,
+	stateRegistry: StateRegistry
 ) {
+
+	private val state = SavedSerializable<ComicsWidgetState>(comicsName, Initial)
+
 	init {
-		val obser = PublishSubject.create<ComicsPage>()
-		obser.subscribeOn(Schedulers.io())
-			.observeOn(AndroidSchedulers.mainThread())
-			.subscribe(object : Observer<ComicsPage> {
-				override fun onComplete() {}
-				override fun onSubscribe(d: Disposable) {}
+		stateRegistry.register(state)
+		initAsyncObservers()
+		initWidget()
 
-				override fun onNext(t: ComicsPage) {
-					widget.setPage(t.index, t.comicsPageData)
-				}
-
-				override fun onError(e: Throwable) {
-					Log.e("12345", "onError")
-				}
-			})
-
-		widget.setOnPageChangeListener { position ->
-			Schedulers.io().createWorker().schedule {
-				obser.onNext(repo.getComicsPage(position + 1))
-			}
+		val currentState = state.value ?: Initial
+		if (state.value is Initial) {
+			loadComics()
 		}
+		widget.updateState(currentState)
+	}
+
+	private fun loadComics() {
+		activityScope.runCoroutine(comicsName) {
+			return@runCoroutine repo.getComicsPage(comicsName)
+		}
+	}
+
+	private fun initWidget() {
+		widget.setOnPageChangeListener { pageIndex: Int ->
+			val currentState = state.value as? Content ?: return@setOnPageChangeListener
+			updateState(Content(currentState.issues, pageIndex))
+		}
+		widget.onRetryClickListener {
+			updateState(Loading)
+			loadComics()
+		}
+	}
+
+	private fun initAsyncObservers() {
+		val observer = ObserverBuilder<ArrayList<ComicsPage>>(comicsName)
+			.onFailed {
+				updateState(Failed)
+			}
+			.onLoading {
+				updateState(Loading)
+			}
+			.onSuccess { issues: List<ComicsPage> ->
+				updateState(Content(issues, 0))
+			}
+			.build()
+		activityScope.addObserver(observer)
+	}
+
+	private fun updateState(newState: ComicsWidgetState) {
+		state.value = newState
+		widget.updateState(newState)
 	}
 }

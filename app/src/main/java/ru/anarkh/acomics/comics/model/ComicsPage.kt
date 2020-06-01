@@ -1,6 +1,9 @@
 package ru.anarkh.acomics.comics.model
 
+import java.io.Serializable
+
 data class ComicsPage(
-	val comicsPageData: ComicsPageData,
-	val index: Int
-)
+	val comicsTitle: String,
+	val imageUrl: String,
+	val issueName: String?
+) : Serializable

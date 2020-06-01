@@ -3,25 +3,24 @@ package ru.anarkh.acomics.comics
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProviders
 import ru.anarkh.acomics.R
 import ru.anarkh.acomics.comics.controller.ComicsController
-import ru.anarkh.acomics.comics.repository.ComicsHTMLParser
-import ru.anarkh.acomics.comics.repository.ComicsRepositoryImpl
-import ru.anarkh.acomics.comics.repository.ComicsSessionCache
+import ru.anarkh.acomics.comics.repository.ComicsRepository
+import ru.anarkh.acomics.comics.widget.ComicsLoadingWidget
 import ru.anarkh.acomics.comics.widget.ComicsWidget
 import ru.anarkh.acomics.core.DefaultActivity
-import ru.anarkh.acomics.core.web.HttpClientProvider
+import ru.anarkh.acomics.core.api.AComicsIssuesService
+import ru.anarkh.acomics.core.api.Providers
 
 class ComicsActivity : DefaultActivity() {
 
 	companion object {
-		private const val COMICS_LINK_EXTRA = "comics_link_extra"
+		private const val COMICS_TITLE_EXTRA = "comics_title_extra"
 		private const val COMICS_PAGES_AMOUNT_EXTRA = "comics_pages_amount_extra"
 
 		fun intent(context: Context, comicsLink: String, pagesAmount: Int) : Intent {
 			return Intent(context, ComicsActivity::class.java)
-				.putExtra(COMICS_LINK_EXTRA, comicsLink)
+				.putExtra(COMICS_TITLE_EXTRA, comicsLink)
 				.putExtra(COMICS_PAGES_AMOUNT_EXTRA, pagesAmount)
 		}
 	}
@@ -30,25 +29,19 @@ class ComicsActivity : DefaultActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_comics)
 
-		val comicsLink = intent.getStringExtra(COMICS_LINK_EXTRA)
+		val comicsTitle = intent.getStringExtra(COMICS_TITLE_EXTRA)
 		val pagesAmount = intent.getIntExtra(COMICS_PAGES_AMOUNT_EXTRA, -1)
-		if (comicsLink.isNullOrEmpty() || pagesAmount < 0) {
+		if (comicsTitle.isNullOrEmpty() || pagesAmount < 0) {
 			finish()
 			return
 		}
-
-		val widget = ComicsWidget(findViewById(R.id.view_pager), pagesAmount)
-
-		val localCache = ViewModelProviders
-			.of(this)
-			.get(ComicsSessionCache::class.java)
-		val repo = ComicsRepositoryImpl(
-			comicsLink,
-			HttpClientProvider.getHttpClient(),
-			ComicsHTMLParser(),
-			localCache
+		val loadingWidget = ComicsLoadingWidget(
+			findViewById(R.id.loading_screen),
+			findViewById(R.id.loading_bar),
+			findViewById(R.id.retry_button)
 		)
-
-		ComicsController(widget, repo)
+		val widget = ComicsWidget(findViewById(R.id.view_pager), loadingWidget)
+		val repo = ComicsRepository(Providers.retrofit.create(AComicsIssuesService::class.java))
+		ComicsController(comicsTitle, widget, repo, activityScope, stateRegistry)
 	}
 }

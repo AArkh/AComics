@@ -6,10 +6,10 @@ import retrofit2.Response
 import ru.anarkh.acomics.catalog.model.CatalogComicsItem
 import ru.anarkh.acomics.catalog.model.CatalogSortConfig
 import ru.anarkh.acomics.catalog.model.CatalogSortingBy
-import ru.anarkh.acomics.core.api.AComicsApiService
+import ru.anarkh.acomics.core.api.AComicsCatalogService
 
 class CatalogDataSource(
-	private val apiService: AComicsApiService
+	private val catalogService: AComicsCatalogService
 ) {
 
 	@Throws
@@ -17,7 +17,7 @@ class CatalogDataSource(
 	fun loadInitial(sortConfig: CatalogSortConfig, page: Int): List<CatalogComicsItem> {
 		val isAsc = sortConfig.sorting == CatalogSortingBy.BY_ALPHABET
 			|| sortConfig.sorting == CatalogSortingBy.BY_DATE
-		val response: Response<List<CatalogComicsItem>> = apiService.catalogList(
+		val response: Response<List<CatalogComicsItem>> = catalogService.catalogList(
 			sortConfig.sorting.queryParamValue,
 			isAsc,
 			page,
