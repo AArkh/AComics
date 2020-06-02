@@ -88,7 +88,10 @@ class CatalogController(
 			sortConfigRepository.getActualSortingConfig()
 		}
 		filterDialogWidget.onDialogCloseListener = { dialogConfigChanges: CatalogSortConfig ->
-			updateFilter(dialogConfigChanges)
+			val currentConfig: CatalogSortConfig = sortConfigRepository.getActualSortingConfig()
+			if (dialogConfigChanges != currentConfig) {
+				updateFilter(dialogConfigChanges)
+			}
 		}
 		filterDialogWidget.retain()
 	}
