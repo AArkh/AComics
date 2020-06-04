@@ -4,8 +4,8 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import ru.anarkh.acomics.catalog.model.CatalogComicsItem
-import ru.anarkh.acomics.comics.model.ComicsPage
+import ru.anarkh.acomics.comics.model.ComicsPageModel
+import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemWebModel
 
 
 interface AComicsCatalogService {
@@ -19,10 +19,10 @@ interface AComicsCatalogService {
 		page: Int,
 		@Query("rating")
 		rating: List<String>
-	): Call<List<CatalogComicsItem>>
+	): Call<List<CatalogComicsItemWebModel>>
 }
 
 interface AComicsIssuesService {
-	@GET("/comics/{name}")
-	fun issue(@Path("name") comicsName: String): Call<List<ComicsPage>>
+	@GET("/comics/{id}")
+	fun issue(@Path("id") catalogId: String): Call<List<ComicsPageModel>>
 }

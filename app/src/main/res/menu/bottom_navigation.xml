@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item
+		android:id="@+id/feed_item"
+		android:enabled="true"
+		android:icon="@drawable/ic_list_24dp"
+		android:title="@string/navbar_feed_item"
+		/>
+	<item
+		android:id="@+id/favorites_item"
+		android:enabled="true"
+		android:icon="@drawable/ic_favorite_24dp"
+		android:title="@string/navbar_favorites_item"
+		/>
+</menu>

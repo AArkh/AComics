@@ -1,6 +1,9 @@
 <resources>
 	<string name="app_name">AComics</string>
 
+	<string name="navbar_feed_item">Лента</string>
+	<string name="navbar_favorites_item">Избранное</string>
+
 	<string name="catalog_item_rating">Рейтинг:</string>
 	<string name="catalog_item_no_updates">Нет выпусков</string>
 	<string name="catalog_item_no_subs">Нет подписчиков</string>

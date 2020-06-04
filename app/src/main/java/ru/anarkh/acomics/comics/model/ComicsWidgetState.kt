@@ -9,6 +9,6 @@ object Loading : ComicsWidgetState()
 object Failed : ComicsWidgetState()
 
 data class Content(
-	val issues: List<ComicsPage>,
+	val issues: List<ComicsPageModel>,
 	val currentPage: Int
 ) : ComicsWidgetState()

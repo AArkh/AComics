@@ -9,6 +9,7 @@
 	android:paddingLeft="16dp"
 	android:paddingTop="12dp"
 	android:paddingRight="16dp"
+	tools:ignore="RtlHardcoded"
 	>
 
 	<TextView
@@ -53,72 +54,90 @@
 			/>
 	</LinearLayout>
 
-	<RelativeLayout
+	<FrameLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="4dp"
-		android:layout_marginBottom="8dp"
+		android:layout_marginBottom="6dp"
 		>
 
-		<Space
-			android:id="@+id/space"
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_marginRight="48dp"
+			>
+
+			<Space
+				android:id="@+id/space"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerHorizontal="true"
+				/>
+
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:layout_toLeftOf="@+id/space"
+				android:orientation="vertical"
+				>
+
+				<TextView
+					android:id="@+id/rating"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textColor="@color/gray"
+					android:textSize="10sp"
+					tools:text="Рейтинг: PG-13"
+					/>
+
+				<TextView
+					android:id="@+id/subscribers_count"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="10sp"
+					tools:text="подписчиков: 28"
+					/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentRight="true"
+				android:layout_toRightOf="@+id/space"
+				android:orientation="vertical"
+				>
+
+				<TextView
+					android:id="@+id/updates_count"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="10sp"
+					tools:text="164 выпуска"
+					/>
+
+				<TextView
+					android:id="@+id/last_updated"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="10sp"
+					tools:text="Последний выпуск: 4 часа назад"
+					/>
+			</LinearLayout>
+		</RelativeLayout>
+
+		<ImageView
+			android:id="@+id/add_to_favorites_item"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_centerHorizontal="true"
+			android:layout_gravity="right|center_vertical"
+			android:padding="6dp"
+			android:src="@drawable/ic_favorite_border_24dp"
+			android:background="?selectableItemBackgroundBorderless"
+			tools:ignore="ContentDescription"
 			/>
-
-		<LinearLayout
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignParentLeft="true"
-			android:layout_toLeftOf="@+id/space"
-			android:orientation="vertical"
-			>
-
-			<TextView
-				android:id="@+id/rating"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:textColor="@color/gray"
-				android:textSize="10sp"
-				tools:text="Рейтинг: PG-13"
-				/>
-
-			<TextView
-				android:id="@+id/subscribers_count"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:textSize="10sp"
-				tools:text="подписчиков: 28"
-				/>
-
-		</LinearLayout>
-
-		<LinearLayout
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignParentRight="true"
-			android:layout_toRightOf="@+id/space"
-			android:orientation="vertical"
-			>
-
-			<TextView
-				android:id="@+id/updates_count"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:textSize="10sp"
-				tools:text="164 выпуска"
-				/>
-
-			<TextView
-				android:id="@+id/last_updated"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:textSize="10sp"
-				tools:text="Последний выпуск: 4 часа назад"
-				/>
-		</LinearLayout>
-	</RelativeLayout>
+	</FrameLayout>
 
 	<View
 		android:layout_width="match_parent"

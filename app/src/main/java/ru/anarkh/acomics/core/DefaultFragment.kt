@@ -1,12 +1,13 @@
 package ru.anarkh.acomics.core
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import ru.anarkh.acomics.core.coroutines.CoroutineScope
 import ru.arkharov.statemachine.SavedStateRegistry
 
-abstract class DefaultActivity: AppCompatActivity() {
+abstract class DefaultFragment: Fragment() {
 
 	protected val stateRegistry = SavedStateRegistry(javaClass.simpleName)
 	protected lateinit var coroutineScope: CoroutineScope
@@ -22,17 +23,16 @@ abstract class DefaultActivity: AppCompatActivity() {
 		stateRegistry.saveState(outState)
 	}
 
-	override fun onPause() {
-		super.onPause()
-		if (isFinishing) {
+	override fun onDestroy() {
+		super.onDestroy()
+		if (requireActivity().isChangingConfigurations) {
+			coroutineScope.removeObservers()
+		} else {
 			coroutineScope.cancelScope()
 		}
 	}
 
-	override fun onDestroy() {
-		super.onDestroy()
-		if (isChangingConfigurations) {
-			coroutineScope.removeObservers()
-		}
+	fun getViewLifecycle(): Lifecycle {
+		return viewLifecycleOwner.lifecycle
 	}
 }

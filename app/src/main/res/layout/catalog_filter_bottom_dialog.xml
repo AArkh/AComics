@@ -27,8 +27,6 @@
 			android:orientation="horizontal"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:paddingTop="8dp"
-			android:paddingBottom="8dp"
 			>
 			<androidx.appcompat.widget.AppCompatRadioButton
 				android:id="@+id/catalog_age_filter_dialog_rating_all_option"
@@ -51,8 +49,6 @@
 			android:orientation="horizontal"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:paddingTop="8dp"
-			android:paddingBottom="8dp"
 			>
 			<androidx.appcompat.widget.AppCompatCheckBox
 				android:id="@+id/catalog_age_filter_dialog_rating_undef_option"
@@ -75,8 +71,6 @@
 			android:orientation="horizontal"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:paddingTop="8dp"
-			android:paddingBottom="8dp"
 			>
 			<androidx.appcompat.widget.AppCompatCheckBox
 				android:id="@+id/catalog_age_filter_dialog_rating_g_option"
@@ -99,8 +93,6 @@
 			android:orientation="horizontal"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:paddingTop="8dp"
-			android:paddingBottom="8dp"
 			>
 			<androidx.appcompat.widget.AppCompatCheckBox
 				android:id="@+id/catalog_age_filter_dialog_rating_pg_option"
@@ -123,8 +115,6 @@
 			android:orientation="horizontal"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:paddingTop="8dp"
-			android:paddingBottom="8dp"
 			>
 			<androidx.appcompat.widget.AppCompatCheckBox
 				android:id="@+id/catalog_age_filter_dialog_rating_pg_13_option"
@@ -167,8 +157,6 @@
 			android:orientation="horizontal"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:paddingTop="8dp"
-			android:paddingBottom="8dp"
 			>
 			<androidx.appcompat.widget.AppCompatRadioButton
 				android:id="@+id/catalog_filter_type_dialog_all_option"
@@ -191,8 +179,6 @@
 			android:orientation="horizontal"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:paddingTop="8dp"
-			android:paddingBottom="8dp"
 			>
 			<androidx.appcompat.widget.AppCompatRadioButton
 				android:id="@+id/catalog_filter_type_dialog_original_option"
@@ -215,8 +201,6 @@
 			android:orientation="horizontal"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:paddingTop="8dp"
-			android:paddingBottom="8dp"
 			>
 			<androidx.appcompat.widget.AppCompatRadioButton
 				android:id="@+id/catalog_filter_type_dialog_translate_option"

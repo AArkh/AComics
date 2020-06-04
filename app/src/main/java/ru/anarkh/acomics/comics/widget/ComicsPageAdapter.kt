@@ -4,10 +4,10 @@ import android.net.Uri
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.comics_page_item.view.*
-import ru.anarkh.acomics.comics.model.ComicsPage
+import ru.anarkh.acomics.comics.model.ComicsPageModel
 
 class ComicsPageAdapter(
-	private val issues: List<ComicsPage>
+	private val issues: List<ComicsPageModel>
 ) : RecyclerView.Adapter<ComicsPageHolder>() {
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ComicsPageHolder {

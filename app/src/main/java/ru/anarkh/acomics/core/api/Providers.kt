@@ -1,6 +1,8 @@
 package ru.anarkh.acomics.core.api
 
+import android.content.Context
 import android.util.Log
+import androidx.room.Room
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -8,20 +10,38 @@ import okhttp3.Dns
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.anarkh.acomics.core.db.AppDatabase
+import ru.anarkh.acomics.main.favorite.model.FavoritesRepository
 import java.net.Inet4Address
 import java.net.InetAddress
 
 object Providers {
 
-	val retrofit: Retrofit = Retrofit.Builder()
-		.baseUrl("http://emptydomain.ru")
-		.client(getOkHttpClient())
-		.addConverterFactory(GsonConverterFactory.create(getGson()))
-		.build()
+	@JvmStatic
+	fun init(context: Context) {
+		val appContext = context.applicationContext
+		appDatabase = Room.databaseBuilder(appContext, AppDatabase::class.java, "app_database.db")
+			.build()
+	}
+
+	val retrofit: Retrofit by lazy {
+		Retrofit.Builder()
+			.baseUrl("http://emptydomain.ru")
+			.client(getOkHttpClient())
+			.addConverterFactory(GsonConverterFactory.create(getGson()))
+			.build()
+	}
+
+	val favoriteRepository: FavoritesRepository by lazy {
+		FavoritesRepository(appDatabase.favoritesDao())
+	}
+
+	private lateinit var appDatabase: AppDatabase
 
 	private fun getOkHttpClient(): OkHttpClient {
 		return OkHttpClient.Builder()
-			.dns { hostname: String -> //todo Убрать, когда починю эмуль
+			.dns { hostname: String ->
+				//todo Убрать, когда починю эмуль
 				if (hostname.contains("emptydomain.ru")) {
 					val address: InetAddress = Inet4Address.getByName("194.87.146.71")
 					mutableListOf(address)

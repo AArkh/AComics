@@ -15,12 +15,12 @@ import ru.anarkh.acomics.core.api.Providers
 class ComicsActivity : DefaultActivity() {
 
 	companion object {
-		private const val COMICS_TITLE_EXTRA = "comics_title_extra"
+		private const val CATALOG_ID_EXTRA = "catalog_id_extra"
 		private const val COMICS_PAGES_AMOUNT_EXTRA = "comics_pages_amount_extra"
 
-		fun intent(context: Context, comicsLink: String, pagesAmount: Int) : Intent {
+		fun intent(context: Context, catalogId: String, pagesAmount: Int) : Intent {
 			return Intent(context, ComicsActivity::class.java)
-				.putExtra(COMICS_TITLE_EXTRA, comicsLink)
+				.putExtra(CATALOG_ID_EXTRA, catalogId)
 				.putExtra(COMICS_PAGES_AMOUNT_EXTRA, pagesAmount)
 		}
 	}
@@ -29,9 +29,9 @@ class ComicsActivity : DefaultActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_comics)
 
-		val comicsTitle = intent.getStringExtra(COMICS_TITLE_EXTRA)
+		val catalogId = intent.getStringExtra(CATALOG_ID_EXTRA)
 		val pagesAmount = intent.getIntExtra(COMICS_PAGES_AMOUNT_EXTRA, -1)
-		if (comicsTitle.isNullOrEmpty() || pagesAmount < 0) {
+		if (catalogId.isNullOrEmpty() || pagesAmount < 0) {
 			finish()
 			return
 		}
@@ -42,6 +42,6 @@ class ComicsActivity : DefaultActivity() {
 		)
 		val widget = ComicsWidget(findViewById(R.id.view_pager), loadingWidget)
 		val repo = ComicsRepository(Providers.retrofit.create(AComicsIssuesService::class.java))
-		ComicsController(comicsTitle, widget, repo, activityScope, stateRegistry)
+		ComicsController(catalogId, widget, repo, coroutineScope, stateRegistry)
 	}
 }

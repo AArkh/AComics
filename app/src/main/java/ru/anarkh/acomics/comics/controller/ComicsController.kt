@@ -3,20 +3,20 @@ package ru.anarkh.acomics.comics.controller
 import ru.anarkh.acomics.comics.model.*
 import ru.anarkh.acomics.comics.repository.ComicsRepository
 import ru.anarkh.acomics.comics.widget.ComicsWidget
-import ru.anarkh.acomics.core.coroutines.ActivityScope
+import ru.anarkh.acomics.core.coroutines.CoroutineScope
 import ru.anarkh.acomics.core.coroutines.ObserverBuilder
 import ru.arkharov.statemachine.SavedSerializable
 import ru.arkharov.statemachine.StateRegistry
 
 class ComicsController(
-	private val comicsName: String,
+	private val catalogId: String,
 	private val widget: ComicsWidget,
 	private val repo: ComicsRepository,
-	private val activityScope: ActivityScope,
+	private val coroutineScope: CoroutineScope,
 	stateRegistry: StateRegistry
 ) {
 
-	private val state = SavedSerializable<ComicsWidgetState>(comicsName, Initial)
+	private val state = SavedSerializable<ComicsWidgetState>(catalogId, Initial)
 
 	init {
 		stateRegistry.register(state)
@@ -31,8 +31,8 @@ class ComicsController(
 	}
 
 	private fun loadComics() {
-		activityScope.runCoroutine(comicsName) {
-			return@runCoroutine repo.getComicsPage(comicsName)
+		coroutineScope.runCoroutine(catalogId) {
+			return@runCoroutine repo.getComicsPage(catalogId)
 		}
 	}
 
@@ -48,18 +48,18 @@ class ComicsController(
 	}
 
 	private fun initAsyncObservers() {
-		val observer = ObserverBuilder<ArrayList<ComicsPage>>(comicsName)
+		val observer = ObserverBuilder<ArrayList<ComicsPageModel>>(catalogId)
 			.onFailed {
 				updateState(Failed)
 			}
 			.onLoading {
 				updateState(Loading)
 			}
-			.onSuccess { issues: List<ComicsPage> ->
+			.onSuccess { issues: List<ComicsPageModel> ->
 				updateState(Content(issues, 0))
 			}
 			.build()
-		activityScope.addObserver(observer)
+		coroutineScope.addObserver(observer)
 	}
 
 	private fun updateState(newState: ComicsWidgetState) {
