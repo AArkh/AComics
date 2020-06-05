@@ -1,9 +1,6 @@
 package ru.anarkh.acomics.main.catalog.controller
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import ru.anarkh.acomics.core.coroutines.CoroutineScope
+import ru.anarkh.acomics.core.coroutines.ObservableScope
 import ru.anarkh.acomics.core.coroutines.ObserverBuilder
 import ru.anarkh.acomics.main.catalog.CatalogRouter
 import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemUiModel
@@ -15,15 +12,17 @@ import ru.anarkh.acomics.main.catalog.widget.CatalogWidget
 import ru.anarkh.acomics.main.catalog.widget.filter.CatalogFilterDialogWidget
 import ru.anarkh.acomics.main.catalog.widget.filter.CatalogSortDialogWidget
 import ru.anarkh.acomics.main.catalog.widget.paging.*
+import ru.anarkh.acomics.main.favorite.controller.REMOVE_FROM_FAVORITES_KEY
 import ru.anarkh.acomics.main.favorite.model.FavoritesRepository
 import ru.arkharov.statemachine.SavedSerializable
 import ru.arkharov.statemachine.StateRegistry
 import java.io.Serializable
 
+const val TOGGLE_FAVORITE_KEY = "toggle_favorite_key"
+
 private const val BUNDLE_KEY = "catalog_controller_bundle_key"
 private const val INITIAL_TASK_KEY = "catalog_controller_initial"
 private const val PAGINATION_TASK_KEY = "catalog_controller_pagination"
-private const val TOGGLE_FAVORITE_TASK_KEY = "toggle_favorite_task_key"
 
 class CatalogController(
 	private val router: CatalogRouter,
@@ -33,7 +32,7 @@ class CatalogController(
 	private val sortConfigRepository: CatalogSortConfigRepository,
 	private val catalogRepository: CatalogRepository,
 	private val favoritesRepository: FavoritesRepository,
-	private val coroutineScope: CoroutineScope,
+	private val coroutineScope: ObservableScope,
 	stateRegistry: StateRegistry
 ) {
 
@@ -44,7 +43,7 @@ class CatalogController(
 		initWidget()
 		initDialogs()
 		initAsyncObservers()
-		updateList()
+		updateUi()
 	}
 
 	private fun initWidget() {
@@ -69,13 +68,13 @@ class CatalogController(
 		}
 		widget.onRetryButtonClick {
 			savedState.value = Initial
-			updateList()
+			updateUi()
 		}
 		widget.onRetryLoadNextPageButtonClick {
 			val currentState: PagingState? = savedState.value
 			if (currentState is Content) {
 				savedState.value = currentState.copy(state = Content.ContentState.LOADING_NEXT_PAGE)
-				updateList()
+				updateUi()
 				loadNextPage(currentState.page.inc())
 			}
 		}
@@ -108,18 +107,18 @@ class CatalogController(
 	private fun updateFilter(newConfig: CatalogSortConfig) {
 		sortConfigRepository.updateSortingConfig(newConfig)
 		savedState.value = Initial
-		updateList()
+		updateUi()
 	}
 
 	private fun initAsyncObservers() {
 		var observer = ObserverBuilder<List<Serializable>>(INITIAL_TASK_KEY)
 			.onFailed {
 				savedState.value = Failed
-				updateList()
+				updateUi()
 			}
 			.onLoading {
 				savedState.value = Loading
-				updateList()
+				updateUi()
 			}
 			.onSuccess { list: List<Serializable> ->
 				val contentState =
@@ -127,7 +126,7 @@ class CatalogController(
 					else Content.ContentState.END_REACHED
 				val state = Content(list, 1, contentState)
 				savedState.value = state
-				updateList()
+				updateUi()
 			}
 			.build()
 		coroutineScope.addObserver(observer)
@@ -135,7 +134,7 @@ class CatalogController(
 			.onFailed {
 				val currentState: Content = savedState.value as? Content ?: return@onFailed
 				savedState.value = currentState.copy(state = Content.ContentState.FAILED)
-				updateList()
+				updateUi()
 			}
 			.onSuccess { list: List<Serializable> ->
 				val currentState: Content = savedState.value as? Content ?: return@onSuccess
@@ -145,31 +144,45 @@ class CatalogController(
 					if (list.size >= 20) Content.ContentState.HAS_MORE
 					else Content.ContentState.END_REACHED
 				savedState.value = Content(newList, page, contentState)
-				updateList()
+				updateUi()
 			}
 			.build()
 		coroutineScope.addObserver(observer)
+		val removeFavoriteObserver = ObserverBuilder<String>(REMOVE_FROM_FAVORITES_KEY)
+			.onSuccess { catalogId: String ->
+				val currentState = savedState.value as? Content ?: return@onSuccess
+				val currentList = currentState.resultList
+				val newList = currentList.map {
+					return@map if (it is CatalogComicsItemUiModel && it.catalogId == catalogId) {
+						return@map it.copy(isFavorite = false)
+					} else it
+				}
+				savedState.value = currentState.copy(resultList = newList)
+				updateUi()
+			}
+			.build()
+		coroutineScope.addObserver(removeFavoriteObserver)
 	}
 
-	private fun updateList() {
+	private fun updateUi() {
 		val currentState = savedState.value ?: Initial
 		widget.updateState(currentState)
 		if (savedState.value is Initial) {
-			coroutineScope.runCoroutine(INITIAL_TASK_KEY) {
+			coroutineScope.runObservable(INITIAL_TASK_KEY) {
 				val config = sortConfigRepository.getActualSortingConfig()
 				val catalogPage: List<CatalogComicsItemUiModel> =
 					catalogRepository.getList(config, 1)
 				val resultedList: MutableList<Any> = ArrayList(catalogPage)
 				resultedList.add(0, config)
-				return@runCoroutine resultedList
+				return@runObservable resultedList
 			}
 		}
 	}
 
 	private fun loadNextPage(page: Int) {
-		coroutineScope.runCoroutine(PAGINATION_TASK_KEY) {
+		coroutineScope.runObservable(PAGINATION_TASK_KEY) {
 			val config = sortConfigRepository.getActualSortingConfig()
-			return@runCoroutine catalogRepository.getList(config, page)
+			return@runObservable catalogRepository.getList(config, page)
 		}
 	}
 
@@ -192,9 +205,9 @@ class CatalogController(
 		newList.removeAt(clickedIndex)
 		newList.add(clickedIndex, updatedItem.copy(isFavorite = !updatedItem.isFavorite))
 		savedState.value = currentContent.copy(resultList = newList)
-		updateList()
-		coroutineScope.launch {
-			withContext(Dispatchers.IO) { favoritesRepository.toggleFavorite(catalogId) }
+		updateUi()
+		coroutineScope.runObservable(TOGGLE_FAVORITE_KEY) {
+			return@runObservable favoritesRepository.toggleFavorite(updatedItem.webModel)
 		}
 	}
 }

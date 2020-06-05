@@ -6,6 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import ru.anarkh.acomics.R
 import ru.anarkh.acomics.core.DefaultFragment
+import ru.anarkh.acomics.core.api.Providers
+import ru.anarkh.acomics.main.catalog.CatalogRouter
+import ru.anarkh.acomics.main.catalog.util.FixedLocaleQuantityStringParser
+import ru.anarkh.acomics.main.catalog.widget.CatalogLoadingWidget
+import ru.anarkh.acomics.main.favorite.controller.FavoritesController
+import ru.anarkh.acomics.main.favorite.widget.FavoritesWidget
 
 class FavoritesFragment : DefaultFragment() {
 
@@ -19,5 +25,25 @@ class FavoritesFragment : DefaultFragment() {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+
+		val router = CatalogRouter(requireContext())
+		val repository = Providers.favoriteRepository
+		val widget = FavoritesWidget(
+			CatalogLoadingWidget(
+				view.findViewById(R.id.loading_screen),
+				view.findViewById(R.id.loading_bar),
+				view.findViewById(R.id.retry_button),
+				view.findViewById(R.id.no_data_text)
+			),
+			view.findViewById(R.id.list),
+			FixedLocaleQuantityStringParser(requireContext())
+		)
+		FavoritesController(
+			router,
+			repository,
+			widget,
+			getParentScope(),
+			stateRegistry
+		)
 	}
 }

@@ -31,8 +31,16 @@ class CatalogWidget(
 
 	init {
 		val listConfig = ListConfig(
-			Triple(comicsListElement, CatalogViewHolder::class.java, CatalogComicsItemUiModel::class.java),
-			Triple(sortListElement, CatalogSortItemViewHolder::class.java, CatalogSortConfig::class.java),
+			Triple(
+				comicsListElement,
+				CatalogViewHolder::class.java,
+				CatalogComicsItemUiModel::class.java
+			),
+			Triple(
+				sortListElement,
+				CatalogSortItemViewHolder::class.java,
+				CatalogSortConfig::class.java
+			),
 			Triple(
 				LoadingElement(),
 				LoadingViewHolder::class.java,

@@ -2,10 +2,16 @@ package ru.anarkh.acomics.main.favorite.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
-const val FAVORITE_TABLE = "favorites"
+const val FAVORITES_TABLE = "favorites"
 
-@Entity(tableName = FAVORITE_TABLE)
+@Entity(tableName = FAVORITES_TABLE)
 data class FavoriteEntity(
-	@PrimaryKey val catalogId: String
-)
+	@field:PrimaryKey val catalogId: String,
+	val previewImage: String,
+	val totalPages: Int,
+	val readPages: Int,
+	val title: String,
+	val description: String
+) : Serializable

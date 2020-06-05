@@ -6,7 +6,6 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.format.DateFormat
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.facebook.drawee.backends.pipeline.Fresco
@@ -52,7 +51,6 @@ class CatalogComicsListElement(
 		holder.itemView.subscribers_count.text = formSubscribersCount(model, context)
 		holder.itemView.description.text = model.description
 		holder.itemView.last_updated.text = formLastUpdate(model, context)
-		Log.d("12345", "model for ${model.title} is favorite: ${model.isFavorite}")
 		val favoriteIconRes = if (model.isFavorite) {
 			R.drawable.ic_favorite_24dp
 		} else {

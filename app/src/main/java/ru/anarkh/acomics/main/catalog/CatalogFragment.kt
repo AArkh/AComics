@@ -60,7 +60,7 @@ class CatalogFragment : DefaultFragment() {
 			CatalogSortConfigRepository(requireContext()),
 			repo,
 			Providers.favoriteRepository,
-			coroutineScope,
+			getParentScope(),
 			stateRegistry
 		)
 	}

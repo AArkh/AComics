@@ -3,17 +3,18 @@ package ru.anarkh.acomics.core
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import ru.anarkh.acomics.core.coroutines.CoroutineScope
+import ru.anarkh.acomics.core.coroutines.ObservableScope
 import ru.arkharov.statemachine.SavedStateRegistry
 
 abstract class DefaultActivity: AppCompatActivity() {
 
+	lateinit var coroutineScope: ObservableScope
+
 	protected val stateRegistry = SavedStateRegistry(javaClass.simpleName)
-	protected lateinit var coroutineScope: CoroutineScope
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		coroutineScope = ViewModelProvider(this).get(CoroutineScope::class.java)
+		coroutineScope = ViewModelProvider(this).get(ObservableScope::class.java)
 		stateRegistry.restoreState(savedInstanceState)
 	}
 

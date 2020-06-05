@@ -3,7 +3,7 @@ package ru.anarkh.acomics.comics.controller
 import ru.anarkh.acomics.comics.model.*
 import ru.anarkh.acomics.comics.repository.ComicsRepository
 import ru.anarkh.acomics.comics.widget.ComicsWidget
-import ru.anarkh.acomics.core.coroutines.CoroutineScope
+import ru.anarkh.acomics.core.coroutines.ObservableScope
 import ru.anarkh.acomics.core.coroutines.ObserverBuilder
 import ru.arkharov.statemachine.SavedSerializable
 import ru.arkharov.statemachine.StateRegistry
@@ -12,7 +12,7 @@ class ComicsController(
 	private val catalogId: String,
 	private val widget: ComicsWidget,
 	private val repo: ComicsRepository,
-	private val coroutineScope: CoroutineScope,
+	private val coroutineScope: ObservableScope,
 	stateRegistry: StateRegistry
 ) {
 
@@ -31,8 +31,8 @@ class ComicsController(
 	}
 
 	private fun loadComics() {
-		coroutineScope.runCoroutine(catalogId) {
-			return@runCoroutine repo.getComicsPage(catalogId)
+		coroutineScope.runObservable(catalogId) {
+			return@runObservable repo.getComicsPage(catalogId)
 		}
 	}
 

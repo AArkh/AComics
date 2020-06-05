@@ -2,6 +2,8 @@ package ru.anarkh.acomics.main
 
 import androidx.annotation.IdRes
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import ru.anarkh.acomics.R
 import ru.anarkh.acomics.main.catalog.CatalogFragment
 import ru.anarkh.acomics.main.favorite.FavoritesFragment
 
@@ -24,6 +26,7 @@ class MainRouter(
 
 	fun openCatalog() {
 		fragmentManager.beginTransaction()
+			.withCrossFadeAnimation()
 			.hide(favoriteFragment())
 			.show(catalogFragment())
 			.commit()
@@ -31,6 +34,7 @@ class MainRouter(
 
 	fun openFavorites() {
 		fragmentManager.beginTransaction()
+			.withCrossFadeAnimation()
 			.hide(catalogFragment())
 			.show(favoriteFragment())
 			.commit()
@@ -46,5 +50,14 @@ class MainRouter(
 		return fragmentManager.findFragmentByTag(FAVORITES_FRAGMENT_TAG)
 			as? FavoritesFragment
 			?: FavoritesFragment()
+	}
+
+	private fun FragmentTransaction.withCrossFadeAnimation() : FragmentTransaction {
+		return this.setCustomAnimations(
+			R.anim.fade_in,
+			R.anim.fade_out,
+			R.anim.fade_in,
+			R.anim.fade_out
+		)
 	}
 }

@@ -3,7 +3,7 @@ package ru.anarkh.acomics.main.catalog.model
 import java.io.Serializable
 
 data class CatalogComicsItemUiModel(
-	private val webModel: CatalogComicsItemWebModel,
+	val webModel: CatalogComicsItemWebModel,
 	val isFavorite: Boolean,
 	val isDownloaded: DownloadingState
 ) : Serializable {

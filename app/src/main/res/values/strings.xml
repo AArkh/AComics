@@ -30,6 +30,11 @@
 	<string name="catalog_filter_type_dialog_translated">Перевод</string>
 	<string name="catalog_filter_type_dialog_all">Все</string>
 
+	<string name="favorites_no_favorites">В избранном пусто и одиноко…</string>
+	<string name="favorites_no_pages_to_read">Нечего читать =_=</string>
+	<string name="favorites_no_new_issues">Ничего нового</string>
+	<string name="favorites_no_data"> Что-то пошло не так о_о</string>
+
 	<plurals name="catalog_item_subscribers">
 		<item quantity="zero">Нет подписчиков</item>
 		<item quantity="one">%d подписчик</item>
@@ -52,5 +57,13 @@
 		<item quantity="few">%d выпуска</item>
 		<item quantity="many">%d выпусков</item>
 		<item quantity="other">%d выпусков</item>
+	</plurals>
+
+	<plurals name="unread_issues">
+		<item quantity="zero">Ничего нового</item>
+		<item quantity="one">Непрочитанно: %d выпуск</item>
+		<item quantity="few">Непрочитанно: %d выпуска</item>
+		<item quantity="many">Непрочитанно: %d выпусков</item>
+		<item quantity="other">Непрочитанно: %d выпусков</item>
 	</plurals>
 </resources>

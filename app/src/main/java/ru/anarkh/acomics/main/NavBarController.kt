@@ -2,7 +2,7 @@ package ru.anarkh.acomics.main
 
 class NavBarController(
 	private val router: MainRouter,
-	private val widget: NavBarWidget
+	widget: NavBarWidget
 ) {
 
 	init {
