@@ -47,7 +47,7 @@ class FavoriteListElement(
 		holder.itemView.title.text = model.title
 		holder.itemView.description.text = model.description
 		holder.itemView.issues_overall_count.text = formTotalPages(model.totalPages, context)
-		holder.itemView.unread_issues_count.text = formUnreadPages(model, context)
+		holder.itemView.unread_issues_count.text = formReadPages(model, context)
 	}
 
 	private fun formTotalPages(totalPages: Int, context: Context) : String {
@@ -58,15 +58,14 @@ class FavoriteListElement(
 		) else context.getText(R.string.catalog_item_no_updates) as String
 	}
 
-	private fun formUnreadPages(model: FavoriteEntity, context: Context): String {
-		if (model.totalPages <= 0) {
+	private fun formReadPages(model: FavoriteEntity, context: Context): String {
+		if (model.totalPages <= model.readPages) {
 			return context.getString(R.string.favorites_no_pages_to_read)
 		}
-		val unreadPages = model.totalPages - model.readPages
-		return if (unreadPages > 0) quantityStringParser.formatQuantityString(
-			R.plurals.unread_issues,
-			unreadPages,
-			unreadPages
+		return if (model.readPages > 0) quantityStringParser.formatQuantityString(
+			R.plurals.read_issues,
+			model.readPages,
+			model.readPages
 		) else context.getText(R.string.favorites_no_new_issues) as String
 	}
 }

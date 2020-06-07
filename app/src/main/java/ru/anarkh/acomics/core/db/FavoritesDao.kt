@@ -9,7 +9,7 @@ import ru.anarkh.acomics.main.favorite.model.FavoriteEntity
 interface FavoritesDao {
 
 	@WorkerThread
-	@Query("SELECT * FROM $FAVORITES_TABLE")
+	@Query("SELECT * FROM $FAVORITES_TABLE order by catalogId")
 	fun getAll(): List<FavoriteEntity>
 
 	@WorkerThread

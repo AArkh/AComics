@@ -16,9 +16,6 @@ class FixedLocaleQuantityStringParser(context: Context) {
 		contextWrapper.applyOverrideConfiguration(newConfiguration)
 	}
 
-	/**
-	 * Посмотреть сурово на эту штуку. Используется криво.
-	 */
 	fun formatQuantityString(@PluralsRes id: Int, quantity: Int, vararg formatArgs: Any): String {
 		return contextWrapper.resources.getQuantityString(id, quantity, *formatArgs)
 	}

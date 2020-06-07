@@ -5,6 +5,7 @@ import ru.anarkh.acomics.comics.repository.ComicsRepository
 import ru.anarkh.acomics.comics.widget.ComicsWidget
 import ru.anarkh.acomics.core.coroutines.ObservableScope
 import ru.anarkh.acomics.core.coroutines.ObserverBuilder
+import ru.anarkh.acomics.main.favorite.model.FavoritesRepository
 import ru.arkharov.statemachine.SavedSerializable
 import ru.arkharov.statemachine.StateRegistry
 
@@ -12,6 +13,7 @@ class ComicsController(
 	private val catalogId: String,
 	private val widget: ComicsWidget,
 	private val repo: ComicsRepository,
+	private val favoritesRepository: FavoritesRepository,
 	private val coroutineScope: ObservableScope,
 	stateRegistry: StateRegistry
 ) {
@@ -40,6 +42,12 @@ class ComicsController(
 		widget.setOnPageChangeListener { pageIndex: Int ->
 			val currentState = state.value as? Content ?: return@setOnPageChangeListener
 			updateState(currentState.copy(currentPage = pageIndex))
+			coroutineScope.runObservable("") {
+				val model = favoritesRepository.getFavoriteById(catalogId) ?: return@runObservable
+				if (pageIndex >= model.readPages) {
+					favoritesRepository.update(model.copy(readPages = pageIndex.inc()))
+				}
+			}
 		}
 		widget.onRetryClickListener {
 			updateState(Loading)

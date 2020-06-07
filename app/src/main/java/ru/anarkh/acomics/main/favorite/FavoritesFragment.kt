@@ -43,7 +43,8 @@ class FavoritesFragment : DefaultFragment() {
 			repository,
 			widget,
 			getParentScope(),
-			stateRegistry
+			stateRegistry,
+			getViewLifecycle()
 		)
 	}
 }

@@ -53,6 +53,12 @@ class FavoritesRepository(
 
 	@WorkerThread
 	@Synchronized
+	fun getFavoriteById(catalogId: String): FavoriteEntity? {
+		return dao.findById(catalogId)
+	}
+
+	@WorkerThread
+	@Synchronized
 	fun update(model: CatalogComicsItemWebModel) {
 		val currentEntry: FavoriteEntity = dao.findById(model.catalogId) ?: return
 		val newEntry = currentEntry.copy(
@@ -61,6 +67,12 @@ class FavoritesRepository(
 			totalPages = model.totalPages,
 			previewImage = model.previewImage
 		)
-		dao.insert(newEntry)
+		update(newEntry)
+	}
+
+	@WorkerThread
+	@Synchronized
+	fun update(model: FavoriteEntity) {
+		dao.insert(model)
 	}
 }

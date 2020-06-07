@@ -36,7 +36,7 @@ class ComicsPageIndexWidget(
 		rightArrowButton.setOnClickListener {
 			onRightButtonClickListener?.invoke()
 		}
-		seekBar.max = maxValue
+		seekBar.max = maxValue.dec()
 		seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 			override fun onStartTrackingTouch(seekBar: SeekBar) {}
 			override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {

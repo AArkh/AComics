@@ -51,6 +51,13 @@ class ComicsActivity : DefaultActivity() {
 		)
 		val widget = ComicsWidget(findViewById(R.id.view_pager), loadingWidget, indexWidget)
 		val repo = ComicsRepository(Providers.retrofit.create(AComicsIssuesService::class.java))
-		ComicsController(catalogId, widget, repo, coroutineScope, stateRegistry)
+		ComicsController(
+			catalogId,
+			widget,
+			repo,
+			Providers.favoriteRepository,
+			coroutineScope,
+			stateRegistry
+		)
 	}
 }
