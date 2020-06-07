@@ -39,11 +39,25 @@ class ComicsController(
 	private fun initWidget() {
 		widget.setOnPageChangeListener { pageIndex: Int ->
 			val currentState = state.value as? Content ?: return@setOnPageChangeListener
-			updateState(Content(currentState.issues, pageIndex))
+			updateState(currentState.copy(currentPage = pageIndex))
 		}
 		widget.onRetryClickListener {
 			updateState(Loading)
 			loadComics()
+		}
+		widget.onLeftButtonClickListener {
+			val currentState = state.value as? Content ?: return@onLeftButtonClickListener
+			updateState(currentState.copy(currentPage = currentState.currentPage.dec()))
+		}
+		widget.onRightButtonClickListener {
+			val currentState = state.value as? Content ?: return@onRightButtonClickListener
+			updateState(currentState.copy(currentPage = currentState.currentPage.inc()))
+		}
+		widget.onSingleClickListener = {
+			val currentState = state.value as? Content
+			if (currentState != null) {
+				updateState(currentState.copy(isInFullscreen = !currentState.isInFullscreen))
+			}
 		}
 	}
 
@@ -56,7 +70,7 @@ class ComicsController(
 				updateState(Loading)
 			}
 			.onSuccess { issues: List<ComicsPageModel> ->
-				updateState(Content(issues, 0))
+				updateState(Content(issues, 0, false))
 			}
 			.build()
 		coroutineScope.addObserver(observer)

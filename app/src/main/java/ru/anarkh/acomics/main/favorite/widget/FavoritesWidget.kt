@@ -37,10 +37,6 @@ class FavoritesWidget(
 
 	fun updateState(state: FavoritesState) {
 		when (state) {
-			Failed -> {
-				noFavoritesWidget.showFailed()
-				recyclerView.visibility = View.GONE
-			}
 			Initial -> {
 				noFavoritesWidget.showLoading()
 				recyclerView.visibility = View.GONE
@@ -51,6 +47,10 @@ class FavoritesWidget(
 			}
 			NoSavedFavorites -> {
 				noFavoritesWidget.showNoData()
+				recyclerView.visibility = View.GONE
+			}
+			Failed -> {
+				noFavoritesWidget.showFailed()
 				recyclerView.visibility = View.GONE
 			}
 			is Content -> {

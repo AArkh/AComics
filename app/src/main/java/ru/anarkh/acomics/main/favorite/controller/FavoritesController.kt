@@ -69,6 +69,11 @@ class FavoritesController(
 				updateUi()
 			}
 			.onSuccess { favorites: List<FavoriteEntity> ->
+				if (favorites.isEmpty()) {
+					state.value = NoSavedFavorites
+					updateUi()
+					return@onSuccess
+				}
 				val newState = Content(favorites)
 				state.value = newState
 				updateUi()

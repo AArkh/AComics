@@ -7,6 +7,7 @@ import ru.anarkh.acomics.R
 import ru.anarkh.acomics.comics.controller.ComicsController
 import ru.anarkh.acomics.comics.repository.ComicsRepository
 import ru.anarkh.acomics.comics.widget.ComicsLoadingWidget
+import ru.anarkh.acomics.comics.widget.ComicsPageIndexWidget
 import ru.anarkh.acomics.comics.widget.ComicsWidget
 import ru.anarkh.acomics.core.DefaultActivity
 import ru.anarkh.acomics.core.api.AComicsIssuesService
@@ -40,7 +41,15 @@ class ComicsActivity : DefaultActivity() {
 			findViewById(R.id.loading_bar),
 			findViewById(R.id.retry_button)
 		)
-		val widget = ComicsWidget(findViewById(R.id.view_pager), loadingWidget)
+		val indexWidget = ComicsPageIndexWidget(
+			findViewById(R.id.index_widget_container),
+			findViewById(R.id.index_indicator),
+			findViewById(R.id.left_control),
+			findViewById(R.id.right_control),
+			findViewById(R.id.seek_bar),
+			pagesAmount
+		)
+		val widget = ComicsWidget(findViewById(R.id.view_pager), loadingWidget, indexWidget)
 		val repo = ComicsRepository(Providers.retrofit.create(AComicsIssuesService::class.java))
 		ComicsController(catalogId, widget, repo, coroutineScope, stateRegistry)
 	}

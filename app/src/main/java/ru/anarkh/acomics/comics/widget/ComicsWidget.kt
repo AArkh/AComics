@@ -1,19 +1,33 @@
 package ru.anarkh.acomics.comics.widget
 
 import android.view.View
+import androidx.core.view.get
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import kotlinx.android.synthetic.main.comics_page_item.view.*
 import ru.anarkh.acomics.comics.model.*
 
 class ComicsWidget(
 	private val viewPager: ViewPager2,
-	private val loadingWidget: ComicsLoadingWidget
+	private val loadingWidget: ComicsLoadingWidget,
+	private val indexWidget: ComicsPageIndexWidget
 ) {
+
+	var onSingleClickListener: (() -> Unit)? = null
+
+	init {
+		viewPager.offscreenPageLimit = 2
+		indexWidget.onPageChangedListener = { newPageIndex: Int ->
+			viewPager.setCurrentItem(newPageIndex, true)
+		}
+	}
 
 	fun setOnPageChangeListener(listener: (position: Int) -> Unit) {
 		viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
 			override fun onPageSelected(position: Int) {
 				super.onPageSelected(position)
 				listener.invoke(position)
+				fixImageLoadingBug(position)
 			}
 		})
 	}
@@ -31,6 +45,14 @@ class ComicsWidget(
 		loadingWidget.onFailedButtonClickListener = listener
 	}
 
+	fun onLeftButtonClickListener(listener: () -> Unit) {
+		indexWidget.onLeftButtonClickListener = listener
+	}
+
+	fun onRightButtonClickListener(listener: () -> Unit) {
+		indexWidget.onRightButtonClickListener = listener
+	}
+
 	private fun showLoading() {
 		viewPager.visibility = View.GONE
 		loadingWidget.showLoading()
@@ -45,8 +67,30 @@ class ComicsWidget(
 		viewPager.visibility = View.VISIBLE
 		loadingWidget.hide()
 		if (viewPager.adapter == null) {
-			viewPager.adapter = ComicsPageAdapter(content.issues)
+			val adapter = ComicsPageAdapter(content.issues)
+			adapter.onPageClickListener = { onSingleClickListener?.invoke() }
+			viewPager.adapter = adapter
 		}
 		viewPager.currentItem = content.currentPage
+		if (content.isInFullscreen) {
+			indexWidget.hide()
+		} else {
+			indexWidget.show()
+		}
+		indexWidget.updatePage(content.currentPage)
+	}
+
+	/**
+	 * Костыль. {@see [BigImageViewExt]}.
+	 */
+	private fun fixImageLoadingBug(position: Int) {
+		val viewHolder: ComicsPageHolder = (viewPager[0] as? RecyclerView)
+			?.findViewHolderForAdapterPosition(position)
+			as? ComicsPageHolder
+			?: return
+		val image: BigImageViewExt = viewHolder.itemView.image
+		if (image.shouldResetImageShowing()) {
+			image.showImage(image.shownUri)
+		}
 	}
 }

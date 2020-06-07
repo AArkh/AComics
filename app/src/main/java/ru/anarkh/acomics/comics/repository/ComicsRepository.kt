@@ -10,13 +10,8 @@ class ComicsRepository(
 
 	@WorkerThread
 	fun getComicsPage(catalogId: String): ArrayList<ComicsPageModel> {
-		//var page = getCachedPage(pageIndex)
-		//if (page != null) {
-		//	return page
-		//}
-		val list = retrieveFromServer(catalogId)
-		return list
-		// todo сохранять в кэш тут.
+		// cache here later
+		return retrieveFromServer(catalogId)
 	}
 
 	private fun retrieveFromServer(catalogId: String) : ArrayList<ComicsPageModel> {

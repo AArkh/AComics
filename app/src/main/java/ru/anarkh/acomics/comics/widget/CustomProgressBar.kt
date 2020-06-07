@@ -9,17 +9,18 @@ import ru.anarkh.acomics.R
 
 class CustomProgressBar : ProgressIndicator {
 
-	private lateinit var progressBarView : NumberProgressBar
+	var progressBarView: NumberProgressBar? = null
+		private set
 
 	override fun getView(parent: BigImageView): View {
 		progressBarView = LayoutInflater.from(parent.context)
 			.inflate(R.layout.comics_custom_progress_bar_indicator, parent, false)
 			as NumberProgressBar
-		return progressBarView
+		return progressBarView!!
 	}
 
 	override fun onProgress(progress: Int) {
-		progressBarView.progress = progress
+		progressBarView?.progress = progress
 	}
 
 	override fun onFinish() {}

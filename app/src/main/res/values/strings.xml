@@ -33,7 +33,9 @@
 	<string name="favorites_no_favorites">В избранном пусто и одиноко…</string>
 	<string name="favorites_no_pages_to_read">Нечего читать =_=</string>
 	<string name="favorites_no_new_issues">Ничего нового</string>
-	<string name="favorites_no_data"> Что-то пошло не так о_о</string>
+	<string name="favorites_no_data">Что-то пошло совсем не так о_о</string>
+
+	<string name="comics_index">%s из %s</string>
 
 	<plurals name="catalog_item_subscribers">
 		<item quantity="zero">Нет подписчиков</item>

@@ -6,7 +6,6 @@ import androidx.annotation.PluralsRes
 import androidx.appcompat.view.ContextThemeWrapper
 import java.util.*
 
-//todo запихать в какой-нибудь DI-контейнер и юзать синглтоном везде
 class FixedLocaleQuantityStringParser(context: Context) {
 
 	private val contextWrapper = ContextThemeWrapper(context, context.theme)
