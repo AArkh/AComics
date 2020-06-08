@@ -23,7 +23,7 @@ class ObservableScope : ViewModel(), CoroutineScope by MainScope() {
 	/**
 	 * by default run on [Dispatchers.IO] dispatcher.
 	 */
-	fun <TYPE> runObservable(key: String, block: suspend CoroutineScope.() -> TYPE) {
+	fun <TYPE> runObservable(key: String = "", block: suspend CoroutineScope.() -> TYPE) {
 		observers[key]?.forEach { it.onLoading() }
 		val job: Job = launch {
 			try {

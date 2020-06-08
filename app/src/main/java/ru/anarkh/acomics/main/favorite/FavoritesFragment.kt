@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import ru.anarkh.acomics.R
 import ru.anarkh.acomics.core.DefaultFragment
 import ru.anarkh.acomics.core.api.Providers
@@ -43,6 +44,7 @@ class FavoritesFragment : DefaultFragment() {
 			repository,
 			widget,
 			getParentScope(),
+			FirebaseCrashlytics.getInstance(),
 			stateRegistry,
 			getViewLifecycle()
 		)

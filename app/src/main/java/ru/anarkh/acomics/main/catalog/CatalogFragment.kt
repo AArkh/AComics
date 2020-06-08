@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import ru.anarkh.acomics.R
 import ru.anarkh.acomics.core.DefaultFragment
 import ru.anarkh.acomics.core.api.AComicsCatalogService
@@ -61,6 +62,7 @@ class CatalogFragment : DefaultFragment() {
 			repo,
 			Providers.favoriteRepository,
 			getParentScope(),
+			FirebaseCrashlytics.getInstance(),
 			stateRegistry
 		)
 	}

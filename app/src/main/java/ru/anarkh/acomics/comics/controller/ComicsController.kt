@@ -1,5 +1,6 @@
 package ru.anarkh.acomics.comics.controller
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import ru.anarkh.acomics.comics.model.*
 import ru.anarkh.acomics.comics.repository.ComicsRepository
 import ru.anarkh.acomics.comics.widget.ComicsWidget
@@ -8,6 +9,7 @@ import ru.anarkh.acomics.core.coroutines.ObserverBuilder
 import ru.anarkh.acomics.main.favorite.model.FavoritesRepository
 import ru.arkharov.statemachine.SavedSerializable
 import ru.arkharov.statemachine.StateRegistry
+import java.net.ConnectException
 
 class ComicsController(
 	private val catalogId: String,
@@ -15,6 +17,7 @@ class ComicsController(
 	private val repo: ComicsRepository,
 	private val favoritesRepository: FavoritesRepository,
 	private val coroutineScope: ObservableScope,
+	private val crashlytics: FirebaseCrashlytics,
 	stateRegistry: StateRegistry
 ) {
 
@@ -42,7 +45,7 @@ class ComicsController(
 		widget.setOnPageChangeListener { pageIndex: Int ->
 			val currentState = state.value as? Content ?: return@setOnPageChangeListener
 			updateState(currentState.copy(currentPage = pageIndex))
-			coroutineScope.runObservable("") {
+			coroutineScope.runObservable {
 				val model = favoritesRepository.getFavoriteById(catalogId) ?: return@runObservable
 				if (pageIndex >= model.readPages) {
 					favoritesRepository.update(model.copy(readPages = pageIndex.inc()))
@@ -72,6 +75,9 @@ class ComicsController(
 	private fun initAsyncObservers() {
 		val observer = ObserverBuilder<ArrayList<ComicsPageModel>>(catalogId)
 			.onFailed {
+				if (it !is ConnectException) {
+					crashlytics.recordException(it)
+				}
 				updateState(Failed)
 			}
 			.onLoading {

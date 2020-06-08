@@ -3,6 +3,7 @@ package ru.anarkh.acomics.comics
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import ru.anarkh.acomics.R
 import ru.anarkh.acomics.comics.controller.ComicsController
 import ru.anarkh.acomics.comics.repository.ComicsRepository
@@ -57,6 +58,7 @@ class ComicsActivity : DefaultActivity() {
 			repo,
 			Providers.favoriteRepository,
 			coroutineScope,
+			FirebaseCrashlytics.getInstance(),
 			stateRegistry
 		)
 	}

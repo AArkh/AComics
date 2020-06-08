@@ -3,6 +3,7 @@ package ru.anarkh.acomics.main.favorite.controller
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import ru.anarkh.acomics.core.coroutines.ObservableScope
 import ru.anarkh.acomics.core.coroutines.ObserverBuilder
 import ru.anarkh.acomics.main.catalog.CatalogRouter
@@ -22,9 +23,10 @@ class FavoritesController(
 	private val repository: FavoritesRepository,
 	private val widget: FavoritesWidget,
 	private val scope: ObservableScope,
+	private val crashlytics: FirebaseCrashlytics,
 	stateRegistry: StateRegistry,
 	lifecycle: Lifecycle
-): DefaultLifecycleObserver {
+) : DefaultLifecycleObserver {
 
 	private val state = SavedSerializable<FavoritesState>(this::class.java.name, Initial)
 
@@ -73,7 +75,7 @@ class FavoritesController(
 	private fun initObservers() {
 		val observer = ObserverBuilder<List<FavoriteEntity>>(INITIAL_TASK_KEY)
 			.onFailed {
-				//todo log exception here
+				FirebaseCrashlytics.getInstance().recordException(it)
 				state.value = Failed
 				updateUi()
 			}
@@ -90,6 +92,9 @@ class FavoritesController(
 			.build()
 		scope.addObserver(observer)
 		val favoriteObserver = ObserverBuilder<FavoriteEntity>(TOGGLE_FAVORITE_KEY)
+			.onFailed {
+				crashlytics.recordException(it)
+			}
 			.onSuccess { favoriteEntity: FavoriteEntity ->
 				val currentState: FavoritesState = state.value ?: return@onSuccess
 				val newState: FavoritesState = if (currentState is Content) {

@@ -1,5 +1,6 @@
 package ru.anarkh.acomics.main.catalog.controller
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import ru.anarkh.acomics.core.coroutines.ObservableScope
 import ru.anarkh.acomics.core.coroutines.ObserverBuilder
 import ru.anarkh.acomics.main.catalog.CatalogRouter
@@ -17,6 +18,7 @@ import ru.anarkh.acomics.main.favorite.model.FavoritesRepository
 import ru.arkharov.statemachine.SavedSerializable
 import ru.arkharov.statemachine.StateRegistry
 import java.io.Serializable
+import java.net.ConnectException
 
 const val TOGGLE_FAVORITE_KEY = "toggle_favorite_key"
 
@@ -33,6 +35,7 @@ class CatalogController(
 	private val catalogRepository: CatalogRepository,
 	private val favoritesRepository: FavoritesRepository,
 	private val coroutineScope: ObservableScope,
+	private val crashlytics: FirebaseCrashlytics,
 	stateRegistry: StateRegistry
 ) {
 
@@ -113,6 +116,9 @@ class CatalogController(
 	private fun initAsyncObservers() {
 		var observer = ObserverBuilder<List<Serializable>>(INITIAL_TASK_KEY)
 			.onFailed {
+				if (it !is ConnectException) {
+					crashlytics.recordException(it)
+				}
 				savedState.value = Failed
 				updateUi()
 			}
@@ -132,6 +138,9 @@ class CatalogController(
 		coroutineScope.addObserver(observer)
 		observer = ObserverBuilder<List<Serializable>>(PAGINATION_TASK_KEY)
 			.onFailed {
+				if (it !is ConnectException) {
+					crashlytics.recordException(it)
+				}
 				val currentState: Content = savedState.value as? Content ?: return@onFailed
 				savedState.value = currentState.copy(state = Content.ContentState.FAILED)
 				updateUi()
