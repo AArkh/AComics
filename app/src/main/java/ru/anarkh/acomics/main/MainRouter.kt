@@ -17,9 +17,11 @@ class MainRouter(
 
 	init {
 		if (fragmentManager.fragments.isEmpty()) {
+			val favoritesFragment = FavoritesFragment()
 			fragmentManager.beginTransaction()
-				.add(containerId, FavoritesFragment(), FAVORITES_FRAGMENT_TAG)
+				.add(containerId, favoritesFragment, FAVORITES_FRAGMENT_TAG)
 				.add(containerId, CatalogFragment(), CATALOG_FRAGMENT_TAG)
+				.hide(favoritesFragment)
 				.commit()
 		}
 	}
