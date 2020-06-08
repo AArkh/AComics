@@ -145,6 +145,7 @@
 			android:layout_marginBottom="8dp"
 			android:background="@drawable/shadow_bottom"
 			android:backgroundTint="@color/cream"
+			android:visibility="gone"
 			/>
 
 		<TextView
@@ -155,6 +156,7 @@
 			android:text="@string/catalog_filter_type_dialog_title"
 			android:textSize="18sp"
 			android:textStyle="bold"
+			android:visibility="gone"
 			/>
 
 		<LinearLayout
@@ -162,6 +164,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="horizontal"
+			android:visibility="gone"
 			>
 
 			<androidx.appcompat.widget.AppCompatRadioButton
@@ -185,6 +188,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="horizontal"
+			android:visibility="gone"
 			>
 
 			<androidx.appcompat.widget.AppCompatRadioButton
@@ -208,6 +212,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="horizontal"
+			android:visibility="gone"
 			>
 
 			<androidx.appcompat.widget.AppCompatRadioButton
