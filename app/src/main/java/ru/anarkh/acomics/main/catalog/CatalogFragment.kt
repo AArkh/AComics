@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.appcompat.widget.Toolbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import ru.anarkh.acomics.R
 import ru.anarkh.acomics.core.DefaultFragment
@@ -33,10 +31,6 @@ class CatalogFragment : DefaultFragment() {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-
-		val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
-		toolbar.title = ""
-		toolbar.findViewById<ImageView>(R.id.toolbar_logo).setImageResource(R.drawable.logo)
 
 		val loadingWidget = CatalogLoadingWidget(
 			view.findViewById(R.id.loading_screen),
