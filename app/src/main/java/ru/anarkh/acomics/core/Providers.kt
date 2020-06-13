@@ -1,4 +1,4 @@
-package ru.anarkh.acomics.core.api
+package ru.anarkh.acomics.core
 
 import android.content.Context
 import android.util.Log

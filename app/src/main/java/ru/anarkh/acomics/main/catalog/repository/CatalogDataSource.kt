@@ -21,7 +21,8 @@ class CatalogDataSource(
 			sortConfig.sorting.queryParamValue,
 			isAsc,
 			page,
-			sortConfig.rating.mapTo(ArrayList(sortConfig.rating.size), { return@mapTo it.text })
+			sortConfig.rating.mapTo(ArrayList(sortConfig.rating.size), { return@mapTo it.text }),
+			if (sortConfig.minPages > 0) sortConfig.minPages else null
 		).execute()
 		Log.d("12345", "response is $response")
 		return response.body() ?: throw Exception()

@@ -11,8 +11,8 @@ import ru.anarkh.acomics.comics.widget.ComicsLoadingWidget
 import ru.anarkh.acomics.comics.widget.ComicsPageIndexWidget
 import ru.anarkh.acomics.comics.widget.ComicsWidget
 import ru.anarkh.acomics.core.DefaultActivity
+import ru.anarkh.acomics.core.Providers
 import ru.anarkh.acomics.core.api.AComicsIssuesService
-import ru.anarkh.acomics.core.api.Providers
 
 class ComicsActivity : DefaultActivity() {
 

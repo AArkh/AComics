@@ -18,7 +18,9 @@ interface AComicsCatalogService {
 		@Query("page")
 		page: Int,
 		@Query("rating")
-		rating: List<String>
+		rating: List<String>,
+		@Query("minPages")
+		minPages: Int?
 	): Call<List<CatalogComicsItemWebModel>>
 }
 

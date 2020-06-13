@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import ru.anarkh.acomics.R
 import ru.anarkh.acomics.core.DefaultFragment
-import ru.anarkh.acomics.core.api.Providers
+import ru.anarkh.acomics.core.Providers
 import ru.anarkh.acomics.main.catalog.CatalogRouter
 import ru.anarkh.acomics.main.catalog.util.FixedLocaleQuantityStringParser
 import ru.anarkh.acomics.main.catalog.widget.CatalogLoadingWidget

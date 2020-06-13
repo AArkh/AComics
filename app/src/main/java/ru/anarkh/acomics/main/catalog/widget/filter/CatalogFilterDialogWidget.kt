@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.CheckBox
 import android.widget.RadioButton
+import android.widget.SeekBar
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Lifecycle
 import ru.anarkh.acomics.R
@@ -34,7 +36,7 @@ class CatalogFilterDialogWidget(
 	var onDialogCloseListener: ((state: CatalogSortConfig) -> Unit)? = null
 
 	private val currentState = SavedSerializable<CatalogSortConfig>("filter_dialog_state", null)
-	private var dialog = ZombieDialog(lifecycle, context, this, stateRegistry, "filter_dialog")
+	private val dialog = ZombieDialog(lifecycle, context, this, stateRegistry, "filter_dialog")
 
 	init {
 		stateRegistry.register(currentState)
@@ -44,16 +46,43 @@ class CatalogFilterDialogWidget(
 		val bottomShitDialog = FixedBottomSheetDialog(context)
 		val view = LayoutInflater.from(context).inflate(R.layout.catalog_filter_bottom_dialog, null)
 
-		val anyRateItem =
-			view.findViewById<RadioButton>(R.id.catalog_age_filter_dialog_rating_all_option)
-		val undfRateItem =
-			view.findViewById<CheckBox>(R.id.catalog_age_filter_dialog_rating_undef_option)
-		val gRateItem = view.findViewById<CheckBox>(R.id.catalog_age_filter_dialog_rating_g_option)
-		val pGRateItem =
-			view.findViewById<CheckBox>(R.id.catalog_age_filter_dialog_rating_pg_option)
-		val pG13RateItem =
-			view.findViewById<CheckBox>(R.id.catalog_age_filter_dialog_rating_pg_13_option)
+		initRatingFilter(view)
+		initTranslationFilter(view)
+		initIssuesFilter(view)
 
+		bottomShitDialog.setOnCancelListener {
+			val value = currentState.value
+			if (value != null) {
+				onDialogCloseListener?.invoke(value)
+			}
+			currentState.value = null
+			hide()
+		}
+
+		bottomShitDialog.setContentView(view)
+		bottomShitDialog.updateHeight()
+		return bottomShitDialog
+	}
+
+	override fun show() = dialog.show()
+	override fun hide() = dialog.hide()
+
+	fun retain() = dialog.riseFromTheDead()
+
+	private fun initRatingFilter(view: View) {
+		val anyRateItem = view.findViewById<RadioButton>(
+			R.id.catalog_age_filter_dialog_rating_all_option
+		)
+		val undfRateItem = view.findViewById<CheckBox>(
+			R.id.catalog_age_filter_dialog_rating_undef_option
+		)
+		val gRateItem = view.findViewById<CheckBox>(R.id.catalog_age_filter_dialog_rating_g_option)
+		val pGRateItem = view.findViewById<CheckBox>(
+			R.id.catalog_age_filter_dialog_rating_pg_option
+		)
+		val pG13RateItem = view.findViewById<CheckBox>(
+			R.id.catalog_age_filter_dialog_rating_pg_13_option
+		)
 
 		if (currentState.value == null) {
 			currentState.value = currentFilterConfigProvider?.invoke()?.copy()
@@ -134,15 +163,44 @@ class CatalogFilterDialogWidget(
 			else currentState.value?.rating?.remove(MPAARating.PG_13)
 			updateAnyRateItemState()
 		}
+	}
 
-		val anyTypeOption =
-			view.findViewById<RadioButton>(R.id.catalog_filter_type_dialog_all_option)
-		val originalTypeOption =
-			view.findViewById<RadioButton>(R.id.catalog_filter_type_dialog_original_option)
-		val transTypeOption =
-			view.findViewById<RadioButton>(R.id.catalog_filter_type_dialog_translate_option)
+	private fun initIssuesFilter(view: View) {
+		val issuesCountFilterText = view.findViewById<TextView>(R.id.issues_filter_text)
+		val issuesCountSeekBar = view.findViewById<SeekBar>(R.id.seek_bar)
+		issuesCountSeekBar.progress = currentState.value?.minPages ?: 0
+		issuesCountFilterText.text = context.getString(
+			R.string.catalog_filter_type_dialog_issues_config_title,
+			currentState.value?.minPages ?: 0
+		)
 
-		when (sortConfig?.translationType) {
+		issuesCountSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+			override fun onStartTrackingTouch(seekBar: SeekBar) {}
+			override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+				issuesCountFilterText.text = context.getString(
+					R.string.catalog_filter_type_dialog_issues_config_title,
+					progress
+				)
+			}
+
+			override fun onStopTrackingTouch(seekBar: SeekBar) {
+				currentState.value?.minPages = seekBar.progress
+			}
+		})
+	}
+
+	private fun initTranslationFilter(view: View) {
+		val anyTypeOption = view.findViewById<RadioButton>(
+			R.id.catalog_filter_type_dialog_all_option
+		)
+		val originalTypeOption = view.findViewById<RadioButton>(
+			R.id.catalog_filter_type_dialog_original_option
+		)
+		val transTypeOption = view.findViewById<RadioButton>(
+			R.id.catalog_filter_type_dialog_translate_option
+		)
+
+		when (currentState.value?.translationType) {
 			TranslationType.ANY -> anyTypeOption.isChecked = true
 			TranslationType.ORIGINAL -> originalTypeOption.isChecked = true
 			TranslationType.TRANSLATED -> transTypeOption.isChecked = true
@@ -164,22 +222,5 @@ class CatalogFilterDialogWidget(
 		view.findViewById<View>(R.id.catalog_filter_type_dialog_translated).setOnClickListener {
 			onTypeClick(TranslationType.TRANSLATED)
 		}
-
-		bottomShitDialog.setOnCancelListener {
-			val value = currentState.value
-			if (value != null) {
-				onDialogCloseListener?.invoke(value)
-			}
-			currentState.value = null
-			hide()
-		}
-		bottomShitDialog.setContentView(view)
-		bottomShitDialog.updateHeight()
-		return bottomShitDialog
 	}
-
-	override fun show() = dialog.show()
-	override fun hide() = dialog.hide()
-
-	fun retain() = dialog.riseFromTheDead()
 }

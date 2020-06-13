@@ -29,7 +29,8 @@ class CatalogSortConfigRepository(context: Context) {
 						MPAARating.PG_13
 					)
 				),
-				TranslationType.ANY
+				TranslationType.ANY,
+				0
 			)
 			sortConfig = defaultConfig
 			updatePreferences(defaultConfig)

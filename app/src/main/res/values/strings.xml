@@ -26,6 +26,7 @@
 	<string name="catalog_age_filter_dialog_rating_pg_13">12+</string>
 
 	<string name="catalog_filter_type_dialog_title">Тип комикса</string>
+	<string name="catalog_filter_type_dialog_issues_config_title">Выпусков не меньше: %d</string>
 	<string name="catalog_filter_type_dialog_original">Оригинальный</string>
 	<string name="catalog_filter_type_dialog_translated">Перевод</string>
 	<string name="catalog_filter_type_dialog_all">Все</string>
