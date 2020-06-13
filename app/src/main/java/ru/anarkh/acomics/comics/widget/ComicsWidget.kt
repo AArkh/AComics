@@ -54,6 +54,10 @@ class ComicsWidget(
 		indexWidget.onRightButtonClickListener = listener
 	}
 
+	fun onAddToBookmarksClickListener(listener: () -> Unit) {
+		toolbarWidget.onAddToBookmarksClickListener = listener
+	}
+
 	private fun showLoading() {
 		viewPager.visibility = View.GONE
 		loadingWidget.showLoading()
@@ -74,7 +78,7 @@ class ComicsWidget(
 			adapter.onPageClickListener = { onSingleClickListener?.invoke() }
 			viewPager.adapter = adapter
 		}
-		viewPager.currentItem = content.currentPage
+		scrollToPage(content.currentPage)
 		if (content.isInFullscreen) {
 			indexWidget.hide()
 			toolbarWidget.hide()
@@ -84,6 +88,22 @@ class ComicsWidget(
 		}
 		indexWidget.updatePage(content.currentPage)
 		toolbarWidget.showIssueTitle(content)
+	}
+
+	private fun scrollToPage(page: Int) {
+		if (shouldCurrentItemPageScroll(page)) {
+			viewPager.setCurrentItem(page, false)
+		} else {
+			viewPager.currentItem = page
+		}
+	}
+
+	/**
+	 * Костыль. [ViewPager2] не скроллит анимировано на страницы с вызванным onBind. В итоге,
+	 * при открытии комикса с 2-4-й страницы включительно комикс открывался всегда на первой.
+	 */
+	private fun shouldCurrentItemPageScroll(pageToBeShown: Int): Boolean {
+		return viewPager.currentItem == 0 && pageToBeShown in 1..3
 	}
 
 	/**

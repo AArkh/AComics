@@ -2,6 +2,7 @@ package ru.anarkh.acomics.comics.widget
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.core.animation.doOnEnd
@@ -13,6 +14,17 @@ import ru.anarkh.acomics.comics.model.Content
 class ComicsToolbarWidget(
 	private val toolbar: Toolbar
 ) {
+
+	var onAddToBookmarksClickListener: (() -> Unit)? = null
+
+	init {
+		toolbar.setOnMenuItemClickListener { item: MenuItem ->
+			if (item.itemId == R.id.bookmark_item) {
+				onAddToBookmarksClickListener?.invoke()
+			}
+			return@setOnMenuItemClickListener true
+		}
+	}
 
 	fun hide() {
 		if (toolbar.visibility == View.VISIBLE) {

@@ -10,6 +10,7 @@ import ru.anarkh.acomics.main.favorite.model.FavoritesRepository
 import ru.arkharov.statemachine.SavedSerializable
 import ru.arkharov.statemachine.StateRegistry
 import java.net.ConnectException
+import kotlin.math.min
 
 class ComicsController(
 	private val catalogId: String,
@@ -37,7 +38,15 @@ class ComicsController(
 
 	private fun loadComics() {
 		coroutineScope.runObservable(catalogId) {
-			return@runObservable repo.getComicsPage(catalogId)
+			var bookmarkIndex = favoritesRepository.getFavoriteById(catalogId)
+				?.readPages
+				?.dec()
+				?: 0
+			val pages = repo.getComicsPages(catalogId)
+			if (pages.isNotEmpty()) {
+				bookmarkIndex = min(pages.lastIndex, bookmarkIndex)
+			}
+			return@runObservable Content(pages, bookmarkIndex, false)
 		}
 	}
 
@@ -45,12 +54,6 @@ class ComicsController(
 		widget.setOnPageChangeListener { pageIndex: Int ->
 			val currentState = state.value as? Content ?: return@setOnPageChangeListener
 			updateState(currentState.copy(currentPage = pageIndex))
-			coroutineScope.runObservable {
-				val model = favoritesRepository.getFavoriteById(catalogId) ?: return@runObservable
-				if (pageIndex >= model.readPages) {
-					favoritesRepository.update(model.copy(readPages = pageIndex.inc()))
-				}
-			}
 		}
 		widget.onRetryClickListener {
 			updateState(Loading)
@@ -70,10 +73,17 @@ class ComicsController(
 				updateState(currentState.copy(isInFullscreen = !currentState.isInFullscreen))
 			}
 		}
+		widget.onAddToBookmarksClickListener {
+			val currentState = state.value as? Content ?: return@onAddToBookmarksClickListener
+			coroutineScope.runObservable {
+				val model = favoritesRepository.getFavoriteById(catalogId) ?: return@runObservable
+				favoritesRepository.update(model.copy(readPages = currentState.currentPage.inc()))
+			}
+		}
 	}
 
 	private fun initAsyncObservers() {
-		val observer = ObserverBuilder<ArrayList<ComicsPageModel>>(catalogId)
+		val observer = ObserverBuilder<Content>(catalogId)
 			.onFailed {
 				if (it !is ConnectException) {
 					crashlytics.recordException(it)
@@ -83,8 +93,8 @@ class ComicsController(
 			.onLoading {
 				updateState(Loading)
 			}
-			.onSuccess { issues: List<ComicsPageModel> ->
-				updateState(Content(issues, 0, false))
+			.onSuccess { content: Content ->
+				updateState(content)
 			}
 			.build()
 		coroutineScope.addObserver(observer)

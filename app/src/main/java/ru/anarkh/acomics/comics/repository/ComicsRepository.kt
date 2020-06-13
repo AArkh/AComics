@@ -9,7 +9,7 @@ class ComicsRepository(
 ) {
 
 	@WorkerThread
-	fun getComicsPage(catalogId: String): ArrayList<ComicsPageModel> {
+	fun getComicsPages(catalogId: String): ArrayList<ComicsPageModel> {
 		// cache here later
 		return retrieveFromServer(catalogId)
 	}

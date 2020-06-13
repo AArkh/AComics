@@ -15,6 +15,7 @@ import ru.anarkh.acomics.core.DefaultActivity
 import ru.anarkh.acomics.core.Providers
 import ru.anarkh.acomics.core.api.AComicsIssuesService
 
+
 class ComicsActivity : DefaultActivity() {
 
 	companion object {
