@@ -13,6 +13,8 @@
 		android:layout_height="match_parent"
 		/>
 
+	<include layout="@layout/comics_page_toolbar"/>
+
 	<include layout="@layout/comics_index_control" />
 
 	<LinearLayout

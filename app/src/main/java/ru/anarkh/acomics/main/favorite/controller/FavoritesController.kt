@@ -100,7 +100,10 @@ class FavoritesController(
 				val newState: FavoritesState = if (currentState is Content) {
 					val currentList = currentState.favorites
 					if (currentList.contains(favoriteEntity)) {
-						Content(currentList.filter { it.catalogId != favoriteEntity.catalogId })
+						val newList = currentList.filter {
+							it.catalogId != favoriteEntity.catalogId
+						}
+						if (newList.isNotEmpty()) Content(newList) else NoSavedFavorites
 					} else {
 						val newList = currentList.toMutableList()
 						newList.add(favoriteEntity)

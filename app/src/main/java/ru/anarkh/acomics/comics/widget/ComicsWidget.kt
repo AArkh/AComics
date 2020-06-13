@@ -10,7 +10,8 @@ import ru.anarkh.acomics.comics.model.*
 class ComicsWidget(
 	private val viewPager: ViewPager2,
 	private val loadingWidget: ComicsLoadingWidget,
-	private val indexWidget: ComicsPageIndexWidget
+	private val indexWidget: ComicsPageIndexWidget,
+	private val toolbarWidget: ComicsToolbarWidget
 ) {
 
 	var onSingleClickListener: (() -> Unit)? = null
@@ -56,11 +57,13 @@ class ComicsWidget(
 	private fun showLoading() {
 		viewPager.visibility = View.GONE
 		loadingWidget.showLoading()
+		toolbarWidget.showLoading()
 	}
 
 	private fun showFailed() {
 		viewPager.visibility = View.GONE
 		loadingWidget.showFailed()
+		toolbarWidget.showNothing()
 	}
 
 	private fun showContent(content: Content) {
@@ -74,10 +77,13 @@ class ComicsWidget(
 		viewPager.currentItem = content.currentPage
 		if (content.isInFullscreen) {
 			indexWidget.hide()
+			toolbarWidget.hide()
 		} else {
 			indexWidget.show()
+			toolbarWidget.show()
 		}
 		indexWidget.updatePage(content.currentPage)
+		toolbarWidget.showIssueTitle(content)
 	}
 
 	/**

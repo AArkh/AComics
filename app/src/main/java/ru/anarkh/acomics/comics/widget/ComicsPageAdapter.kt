@@ -29,7 +29,7 @@ class ComicsPageAdapter(
 	override fun getItemCount(): Int = issues.size
 
 	override fun onBindViewHolder(holder: ComicsPageHolder, position: Int) {
-		val page = issues[position]
+		val page: ComicsPageModel = issues[position]
 		holder.itemView.image.removeAllViews()
 		holder.itemView.image.showImage(Uri.parse(page.imageUrl))
 		holder.itemView.image.wasDetachedFromWindow = false

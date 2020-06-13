@@ -49,8 +49,8 @@ class ComicsPageIndexWidget(
 		})
 		val animDuration = res.getInteger(android.R.integer.config_shortAnimTime).toLong()
 		val transparentAlpha = ResourcesCompat.getFloat(res, R.dimen.full_transparent_alpha)
-		val halfTransparentAlpha = ResourcesCompat.getFloat(res, R.dimen.half_transparent_alpha)
-		hideAnimator = ObjectAnimator.ofFloat(halfTransparentAlpha, transparentAlpha)
+		val notTransparentAlpha = ResourcesCompat.getFloat(res, R.dimen.not_transparent_alpha)
+		hideAnimator = ObjectAnimator.ofFloat(notTransparentAlpha, transparentAlpha)
 		hideAnimator.duration = animDuration
 		hideAnimator.addUpdateListener { animation: ValueAnimator ->
 			container.alpha = animation.animatedValue as Float
@@ -58,7 +58,7 @@ class ComicsPageIndexWidget(
 		hideAnimator.doOnEnd {
 			container.visibility = View.GONE
 		}
-		showAnimator = ObjectAnimator.ofFloat(transparentAlpha, halfTransparentAlpha)
+		showAnimator = ObjectAnimator.ofFloat(transparentAlpha, notTransparentAlpha)
 		showAnimator.duration = animDuration
 		showAnimator.addUpdateListener { animation: ValueAnimator ->
 			container.alpha = animation.animatedValue as Float
