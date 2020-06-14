@@ -57,6 +57,8 @@
 				android:textColor="@color/black"
 				android:textSize="16sp"
 				android:textStyle="bold"
+				android:drawableTop="@drawable/no_favorites_stub"
+				android:drawablePadding="16dp"
 				/>
 		</LinearLayout>
 	</FrameLayout>
