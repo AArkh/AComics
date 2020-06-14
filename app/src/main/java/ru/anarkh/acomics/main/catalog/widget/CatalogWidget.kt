@@ -10,6 +10,7 @@ import ru.anarkh.acomics.core.list.convenience.LoadingFailedElement
 import ru.anarkh.acomics.core.list.convenience.LoadingFailedViewHolder
 import ru.anarkh.acomics.core.list.convenience.LoadingViewHolder
 import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemUiModel
+import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemWebModel
 import ru.anarkh.acomics.main.catalog.model.CatalogSortConfig
 import ru.anarkh.acomics.main.catalog.util.FixedLocaleQuantityStringParser
 import ru.anarkh.acomics.main.catalog.widget.filter.CatalogSortItemViewHolder
@@ -105,7 +106,7 @@ class CatalogWidget(
 		}
 	}
 
-	fun onComicsClick(listener: (catalogId: String, pagesAmount: Int) -> Unit) {
+	fun onComicsClick(listener: (webModel: CatalogComicsItemWebModel) -> Unit) {
 		comicsListElement.onItemClickListener = listener
 	}
 

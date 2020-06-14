@@ -5,6 +5,7 @@ import ru.anarkh.acomics.core.coroutines.ObservableScope
 import ru.anarkh.acomics.core.coroutines.ObserverBuilder
 import ru.anarkh.acomics.main.catalog.CatalogRouter
 import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemUiModel
+import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemWebModel
 import ru.anarkh.acomics.main.catalog.model.CatalogSortConfig
 import ru.anarkh.acomics.main.catalog.model.CatalogSortingBy
 import ru.anarkh.acomics.main.catalog.repository.CatalogRepository
@@ -50,8 +51,8 @@ class CatalogController(
 	}
 
 	private fun initWidget() {
-		widget.onComicsClick { catalogId: String, pagesAmount: Int ->
-			router.openComicsPage(catalogId, pagesAmount)
+		widget.onComicsClick { model: CatalogComicsItemWebModel ->
+			router.openComicsPage(model)
 		}
 		widget.onAddToFavoritesClick { catalogId: String ->
 			toggleFavorite(catalogId)

@@ -6,13 +6,18 @@ import ru.anarkh.acomics.comics.repository.ComicsRepository
 import ru.anarkh.acomics.comics.widget.ComicsWidget
 import ru.anarkh.acomics.core.coroutines.ObservableScope
 import ru.anarkh.acomics.core.coroutines.ObserverBuilder
+import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemWebModel
+import ru.anarkh.acomics.main.favorite.model.FavoriteEntity
 import ru.anarkh.acomics.main.favorite.model.FavoritesRepository
 import ru.arkharov.statemachine.SavedSerializable
 import ru.arkharov.statemachine.StateRegistry
 import java.net.ConnectException
 import kotlin.math.min
 
+private const val UPDATE_BOOKMARK_KEY = "update_bookmark_key"
+
 class ComicsController(
+	private val comicsItemWebModel: CatalogComicsItemWebModel?,
 	private val catalogId: String,
 	private val widget: ComicsWidget,
 	private val repo: ComicsRepository,
@@ -40,13 +45,12 @@ class ComicsController(
 		coroutineScope.runObservable(catalogId) {
 			var bookmarkIndex = favoritesRepository.getFavoriteById(catalogId)
 				?.readPages
-				?.dec()
 				?: 0
 			val pages = repo.getComicsPages(catalogId)
 			if (pages.isNotEmpty()) {
 				bookmarkIndex = min(pages.lastIndex, bookmarkIndex)
 			}
-			return@runObservable Content(pages, bookmarkIndex, false)
+			return@runObservable Content(pages, bookmarkIndex, false, bookmarkIndex)
 		}
 	}
 
@@ -75,9 +79,25 @@ class ComicsController(
 		}
 		widget.onAddToBookmarksClickListener {
 			val currentState = state.value as? Content ?: return@onAddToBookmarksClickListener
-			coroutineScope.runObservable {
-				val model = favoritesRepository.getFavoriteById(catalogId) ?: return@runObservable
-				favoritesRepository.update(model.copy(readPages = currentState.currentPage.inc()))
+			coroutineScope.runObservable(UPDATE_BOOKMARK_KEY) {
+				val model = favoritesRepository.getFavoriteById(catalogId)
+				if (model == null) {
+					if (comicsItemWebModel == null) {
+						throw IllegalStateException("Failed to add new favorite from ComicsController")
+					}
+					val newFavorite = FavoriteEntity(
+						catalogId = comicsItemWebModel.catalogId,
+						previewImage = comicsItemWebModel.previewImage,
+						totalPages = comicsItemWebModel.totalPages,
+						readPages = currentState.currentPage,
+						title = comicsItemWebModel.title,
+						description = comicsItemWebModel.description
+					)
+					favoritesRepository.update(newFavorite)
+				} else {
+					favoritesRepository.update(model.copy(readPages = currentState.currentPage))
+				}
+				return@runObservable currentState.currentPage
 			}
 		}
 	}
@@ -98,6 +118,16 @@ class ComicsController(
 			}
 			.build()
 		coroutineScope.addObserver(observer)
+		val updateBookmarkObserver = ObserverBuilder<Int>(UPDATE_BOOKMARK_KEY)
+			.onFailed {
+				crashlytics.recordException(it)
+			}
+			.onSuccess { bookmarkedPageIndex: Int ->
+				val currentState = state.value as? Content ?: return@onSuccess
+				updateState(currentState.copy(bookmarkIndex = bookmarkedPageIndex))
+			}
+			.build()
+		coroutineScope.addObserver(updateBookmarkObserver)
 	}
 
 	private fun updateState(newState: ComicsWidgetState) {

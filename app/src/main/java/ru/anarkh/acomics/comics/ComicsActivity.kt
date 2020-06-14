@@ -14,18 +14,27 @@ import ru.anarkh.acomics.comics.widget.ComicsWidget
 import ru.anarkh.acomics.core.DefaultActivity
 import ru.anarkh.acomics.core.Providers
 import ru.anarkh.acomics.core.api.AComicsIssuesService
+import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemWebModel
 
+private const val CATALOG_ID_EXTRA = "catalog_id_extra"
+private const val COMICS_PAGES_AMOUNT_EXTRA = "comics_pages_amount_extra"
+private const val CATALOG_COMICS_EXTRA = "catalog_comics_extra"
 
 class ComicsActivity : DefaultActivity() {
 
 	companion object {
-		private const val CATALOG_ID_EXTRA = "catalog_id_extra"
-		private const val COMICS_PAGES_AMOUNT_EXTRA = "comics_pages_amount_extra"
-
 		fun intent(context: Context, catalogId: String, pagesAmount: Int) : Intent {
 			return Intent(context, ComicsActivity::class.java)
 				.putExtra(CATALOG_ID_EXTRA, catalogId)
 				.putExtra(COMICS_PAGES_AMOUNT_EXTRA, pagesAmount)
+		}
+
+		fun intent(
+			context: Context,
+			comicsModel: CatalogComicsItemWebModel
+		) : Intent {
+			return Intent(context, ComicsActivity::class.java)
+				.putExtra(CATALOG_COMICS_EXTRA, comicsModel)
 		}
 	}
 
@@ -33,9 +42,13 @@ class ComicsActivity : DefaultActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_comics)
 
-		val catalogId = intent.getStringExtra(CATALOG_ID_EXTRA)
-		val pagesAmount = intent.getIntExtra(COMICS_PAGES_AMOUNT_EXTRA, -1)
-		if (catalogId.isNullOrEmpty() || pagesAmount < 0) {
+		val comicsModel = intent.getSerializableExtra(CATALOG_COMICS_EXTRA)
+			as? CatalogComicsItemWebModel
+		val catalogId = comicsModel?.catalogId
+			?: intent.getStringExtra(CATALOG_ID_EXTRA)
+		val totalPages = comicsModel?.totalPages
+			?: intent.getIntExtra(COMICS_PAGES_AMOUNT_EXTRA, -1)
+		if (catalogId.isNullOrEmpty() || totalPages < 0) {
 			finish()
 			return
 		}
@@ -50,7 +63,7 @@ class ComicsActivity : DefaultActivity() {
 			findViewById(R.id.left_control),
 			findViewById(R.id.right_control),
 			findViewById(R.id.seek_bar),
-			pagesAmount
+			totalPages
 		)
 		val widget = ComicsWidget(
 			findViewById(R.id.view_pager),
@@ -60,6 +73,7 @@ class ComicsActivity : DefaultActivity() {
 		)
 		val repo = ComicsRepository(Providers.retrofit.create(AComicsIssuesService::class.java))
 		ComicsController(
+			comicsModel,
 			catalogId,
 			widget,
 			repo,

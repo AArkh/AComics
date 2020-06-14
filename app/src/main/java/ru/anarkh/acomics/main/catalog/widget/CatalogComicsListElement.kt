@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.catalog_item.view.*
 import ru.anarkh.acomics.R
 import ru.anarkh.acomics.core.list.BaseListElement
 import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemUiModel
+import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemWebModel
 import ru.anarkh.acomics.main.catalog.model.MPAARating
 import ru.anarkh.acomics.main.catalog.util.FixedLocaleQuantityStringParser
 import java.util.*
@@ -23,7 +24,7 @@ class CatalogComicsListElement(
 	private val quantityStringParser: FixedLocaleQuantityStringParser
 ) : BaseListElement<CatalogComicsItemUiModel, CatalogViewHolder>() {
 
-	var onItemClickListener: ((catalogId: String, pagesAmount: Int) -> Unit)? = null
+	var onItemClickListener: ((webModel: CatalogComicsItemWebModel) -> Unit)? = null
 	var onFavoriteClickListener: ((catalogId: String) -> Unit)? = null
 
 	override fun onCreateViewHolder(parent: ViewGroup): CatalogViewHolder = CatalogViewHolder(parent)
@@ -31,7 +32,7 @@ class CatalogComicsListElement(
 	override fun onBind(holder: CatalogViewHolder, position: Int, model: CatalogComicsItemUiModel) {
 		val context = holder.itemView.context
 		holder.itemView.container.setOnClickListener {
-			onItemClickListener?.invoke(model.catalogId, model.totalPages)
+			onItemClickListener?.invoke(model.webModel)
 		}
 		holder.itemView.add_to_favorites_item.setOnClickListener {
 			onFavoriteClickListener?.invoke(model.catalogId)

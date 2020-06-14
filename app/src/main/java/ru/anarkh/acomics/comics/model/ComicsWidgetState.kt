@@ -11,5 +11,6 @@ object Failed : ComicsWidgetState()
 data class Content(
 	val issues: List<ComicsPageModel>,
 	val currentPage: Int,
-	val isInFullscreen: Boolean
+	val isInFullscreen: Boolean,
+	val bookmarkIndex: Int
 ) : ComicsWidgetState()

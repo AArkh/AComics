@@ -7,6 +7,7 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import ru.anarkh.acomics.R
 import ru.anarkh.acomics.comics.model.Content
@@ -16,6 +17,8 @@ class ComicsToolbarWidget(
 ) {
 
 	var onAddToBookmarksClickListener: (() -> Unit)? = null
+
+	private val bookmarkItem: MenuItem = toolbar.menu.findItem(R.id.bookmark_item)
 
 	init {
 		toolbar.setOnMenuItemClickListener { item: MenuItem ->
@@ -40,6 +43,11 @@ class ComicsToolbarWidget(
 
 	fun showIssueTitle(content: Content) {
 		toolbar.title = content.issues[content.currentPage].issueName
+		val context = toolbar.context
+		val bookmarkDrawable = if (content.bookmarkIndex != content.currentPage) {
+			ContextCompat.getDrawable(context, R.drawable.ic_bookmark_border_24dp)
+		} else ContextCompat.getDrawable(context, R.drawable.ic_bookmark_24dp)
+		bookmarkItem.icon = bookmarkDrawable
 	}
 
 	fun showNothing() {
