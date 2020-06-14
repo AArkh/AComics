@@ -36,4 +36,12 @@ abstract class DefaultActivity: AppCompatActivity() {
 			coroutineScope.removeObservers()
 		}
 	}
+
+	override fun onBackPressed() {
+		val fragment = supportFragmentManager.primaryNavigationFragment as? DefaultFragment
+		if (fragment != null && fragment.onBack()) {
+			return
+		}
+		super.onBackPressed()
+	}
 }

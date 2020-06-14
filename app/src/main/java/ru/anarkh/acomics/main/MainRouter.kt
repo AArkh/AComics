@@ -18,10 +18,12 @@ class MainRouter(
 	init {
 		if (fragmentManager.fragments.isEmpty()) {
 			val favoritesFragment = FavoritesFragment()
+			val catalogFragment = CatalogFragment()
 			fragmentManager.beginTransaction()
 				.add(containerId, favoritesFragment, FAVORITES_FRAGMENT_TAG)
-				.add(containerId, CatalogFragment(), CATALOG_FRAGMENT_TAG)
+				.add(containerId, catalogFragment, CATALOG_FRAGMENT_TAG)
 				.hide(favoritesFragment)
+				.setPrimaryNavigationFragment(catalogFragment)
 				.commit()
 		}
 	}
@@ -31,6 +33,7 @@ class MainRouter(
 			.withCrossFadeAnimation()
 			.hide(favoriteFragment())
 			.show(catalogFragment())
+			.setPrimaryNavigationFragment(catalogFragment())
 			.commit()
 	}
 
@@ -39,6 +42,7 @@ class MainRouter(
 			.withCrossFadeAnimation()
 			.hide(catalogFragment())
 			.show(favoriteFragment())
+			.setPrimaryNavigationFragment(favoriteFragment())
 			.commit()
 	}
 

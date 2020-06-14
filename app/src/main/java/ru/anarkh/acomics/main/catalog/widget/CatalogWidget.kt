@@ -29,6 +29,7 @@ class CatalogWidget(
 	private val sortListElement = CatalogSortListElement()
 	private val loadingFailedElement = LoadingFailedElement()
 	private val adapter: MultipleVHListAdapter
+	private val layoutManager: LinearLayoutManager
 
 	init {
 		val listConfig = ListConfig(
@@ -57,7 +58,7 @@ class CatalogWidget(
 			CatalogItemsDiffsValidator(),
 			listConfig
 		)
-		val layoutManager = LinearLayoutManager(recyclerView.context, RecyclerView.VERTICAL, false)
+		layoutManager = LinearLayoutManager(recyclerView.context, RecyclerView.VERTICAL, false)
 		recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 			override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 				super.onScrolled(recyclerView, dx, dy)
@@ -104,6 +105,12 @@ class CatalogWidget(
 				adapter.submitList(list)
 			}
 		}
+	}
+
+	fun firstVisiblePosition(): Int = layoutManager.findFirstVisibleItemPosition()
+
+	fun scrollToStart() {
+		recyclerView.smoothScrollToPosition(0)
 	}
 
 	fun onComicsClick(listener: (webModel: CatalogComicsItemWebModel) -> Unit) {

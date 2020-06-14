@@ -1,6 +1,7 @@
 package ru.anarkh.acomics.main.catalog.controller
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import ru.anarkh.acomics.core.BackButtonController
 import ru.anarkh.acomics.core.coroutines.ObservableScope
 import ru.anarkh.acomics.core.coroutines.ObserverBuilder
 import ru.anarkh.acomics.main.catalog.CatalogRouter
@@ -37,6 +38,7 @@ class CatalogController(
 	private val favoritesRepository: FavoritesRepository,
 	private val coroutineScope: ObservableScope,
 	private val crashlytics: FirebaseCrashlytics,
+	private val backButtonController: BackButtonController,
 	stateRegistry: StateRegistry
 ) {
 
@@ -44,10 +46,20 @@ class CatalogController(
 
 	init {
 		stateRegistry.register(savedState)
+		initController()
 		initWidget()
 		initDialogs()
 		initAsyncObservers()
 		updateUi()
+	}
+
+	private fun initController() {
+		backButtonController.onBackListener = {
+			if (widget.firstVisiblePosition() > 10) {
+				widget.scrollToStart()
+				true
+			} else false
+		}
 	}
 
 	private fun initWidget() {

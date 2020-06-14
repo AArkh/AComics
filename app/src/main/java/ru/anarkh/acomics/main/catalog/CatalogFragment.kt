@@ -57,6 +57,7 @@ class CatalogFragment : DefaultFragment() {
 			Providers.favoriteRepository,
 			getParentScope(),
 			FirebaseCrashlytics.getInstance(),
+			backButtonController,
 			stateRegistry
 		)
 	}

@@ -10,6 +10,7 @@ import ru.arkharov.statemachine.SavedStateRegistry
 abstract class DefaultFragment: Fragment() {
 
 	protected val stateRegistry = SavedStateRegistry(javaClass.simpleName)
+	protected val backButtonController = BackButtonController()
 	protected lateinit var coroutineScope: ObservableScope
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,5 +39,19 @@ abstract class DefaultFragment: Fragment() {
 
 	fun getParentScope(): ObservableScope {
 		return (requireActivity() as DefaultActivity).coroutineScope
+	}
+
+	/**
+	 * @return true, если обработано нажатие на back.
+	 */
+	fun onBack(): Boolean = backButtonController.onBack()
+}
+
+class BackButtonController {
+
+	var onBackListener: (() -> Boolean)? = null
+
+	fun onBack(): Boolean {
+		return onBackListener?.invoke() ?: false
 	}
 }
