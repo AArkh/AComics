@@ -43,10 +43,7 @@ class ComicsController(
 
 	private fun loadComics() {
 		coroutineScope.runObservable(catalogId) {
-			var bookmarkIndex = favoritesRepository.getFavoriteById(catalogId)?.readPages
-			if (bookmarkIndex == null || bookmarkIndex < 0) {
-				bookmarkIndex = 0
-			}
+			var bookmarkIndex = favoritesRepository.getFavoriteById(catalogId)?.readPages ?: 0
 			val pages = repo.getComicsPages(catalogId)
 			if (pages.isNotEmpty()) {
 				bookmarkIndex = min(pages.lastIndex, bookmarkIndex)
@@ -66,10 +63,16 @@ class ComicsController(
 		}
 		widget.onLeftButtonClickListener {
 			val currentState = state.value as? Content ?: return@onLeftButtonClickListener
+			if (currentState.currentPage <= 0) {
+				return@onLeftButtonClickListener
+			}
 			updateState(currentState.copy(currentPage = currentState.currentPage.dec()))
 		}
 		widget.onRightButtonClickListener {
 			val currentState = state.value as? Content ?: return@onRightButtonClickListener
+			if (currentState.currentPage >= currentState.issues.lastIndex) {
+				return@onRightButtonClickListener
+			}
 			updateState(currentState.copy(currentPage = currentState.currentPage.inc()))
 		}
 		widget.onSingleClickListener = {
