@@ -43,12 +43,13 @@ class ComicsController(
 
 	private fun loadComics() {
 		coroutineScope.runObservable(catalogId) {
-			var bookmarkIndex = favoritesRepository.getFavoriteById(catalogId)?.readPages ?: 0
+			var bookmarkIndex = favoritesRepository.getFavoriteById(catalogId)?.readPages ?: -1
 			val pages = repo.getComicsPages(catalogId)
-			if (pages.isNotEmpty()) {
-				bookmarkIndex = min(pages.lastIndex, bookmarkIndex)
+			var currentPage = 0
+			if (pages.isNotEmpty() && bookmarkIndex >= 0) {
+				currentPage = min(pages.lastIndex, bookmarkIndex)
 			}
-			return@runObservable Content(pages, bookmarkIndex, false, bookmarkIndex)
+			return@runObservable Content(pages, currentPage, false, bookmarkIndex)
 		}
 	}
 
