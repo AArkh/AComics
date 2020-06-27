@@ -1,16 +1,24 @@
 package ru.anarkh.acomics.comics.controller
 
+import android.content.Context
+import android.widget.Toast
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import ru.anarkh.acomics.R
+import ru.anarkh.acomics.comics.ComicsRouter
 import ru.anarkh.acomics.comics.model.*
 import ru.anarkh.acomics.comics.repository.ComicsRepository
 import ru.anarkh.acomics.comics.widget.ComicsWidget
+import ru.anarkh.acomics.core.BackButtonController
 import ru.anarkh.acomics.core.coroutines.ObservableScope
 import ru.anarkh.acomics.core.coroutines.ObserverBuilder
 import ru.anarkh.acomics.core.error.ExceptionTelemetry
+import ru.anarkh.acomics.core.state.SavedBoolean
+import ru.anarkh.acomics.core.state.SavedSerializable
+import ru.anarkh.acomics.core.state.StateRegistry
 import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemWebModel
 import ru.anarkh.acomics.main.favorite.model.FavoriteEntity
 import ru.anarkh.acomics.main.favorite.model.FavoritesRepository
-import ru.arkharov.statemachine.SavedSerializable
-import ru.arkharov.statemachine.StateRegistry
 import kotlin.math.min
 
 private const val UPDATE_BOOKMARK_KEY = "update_bookmark_key"
@@ -23,13 +31,19 @@ class ComicsController(
 	private val favoritesRepository: FavoritesRepository,
 	private val coroutineScope: ObservableScope,
 	private val exceptionTelemetry: ExceptionTelemetry,
-	stateRegistry: StateRegistry
+	private val context: Context,
+	stateRegistry: StateRegistry,
+	private val backButtonController: BackButtonController,
+	private val router: ComicsRouter
 ) {
 
 	private val state = SavedSerializable<ComicsWidgetState>(catalogId, Initial)
+	private val wasAddedToFavorites = SavedBoolean("was_saved_to_favorites", false)
 
 	init {
 		stateRegistry.register(state)
+		stateRegistry.register(wasAddedToFavorites)
+		initController()
 		initAsyncObservers()
 		initWidget()
 
@@ -40,15 +54,14 @@ class ComicsController(
 		widget.updateState(currentState)
 	}
 
-	private fun loadComics() {
-		coroutineScope.runObservable(catalogId) {
-			val bookmarkIndex = favoritesRepository.getFavoriteById(catalogId)?.readPages ?: -1
-			val pages = repo.getComicsPages(catalogId)
-			var currentPage = 0
-			if (pages.isNotEmpty() && bookmarkIndex >= 0) {
-				currentPage = min(pages.lastIndex, bookmarkIndex)
+	private fun initController() {
+		backButtonController.onBackListener = {
+			if (wasAddedToFavorites.value) {
+				router.finish(catalogId)
+			} else {
+				router.finish(null)
 			}
-			return@runObservable Content(pages, currentPage, false, bookmarkIndex)
+			true
 		}
 	}
 
@@ -98,6 +111,7 @@ class ComicsController(
 						description = comicsItemWebModel.description
 					)
 					favoritesRepository.update(newFavorite)
+					notifyNewFavoriteHasBeenAdded()
 				} else {
 					favoritesRepository.update(model.copy(readPages = currentState.currentPage))
 				}
@@ -132,8 +146,31 @@ class ComicsController(
 		coroutineScope.addObserver(updateBookmarkObserver)
 	}
 
+	private fun loadComics() {
+		coroutineScope.runObservable(catalogId) {
+			val bookmarkIndex = favoritesRepository.getFavoriteById(catalogId)?.readPages ?: -1
+			val pages = repo.getComicsPages(catalogId)
+			var currentPage = 0
+			if (pages.isNotEmpty() && bookmarkIndex >= 0) {
+				currentPage = min(pages.lastIndex, bookmarkIndex)
+			}
+			return@runObservable Content(pages, currentPage, false, bookmarkIndex)
+		}
+	}
+
 	private fun updateState(newState: ComicsWidgetState) {
 		state.value = newState
 		widget.updateState(newState)
+	}
+
+	private suspend fun notifyNewFavoriteHasBeenAdded() {
+		withContext(Dispatchers.Main) {
+			wasAddedToFavorites.value = true
+			Toast.makeText(
+				context,
+				R.string.comics_new_favorite_added_message,
+				Toast.LENGTH_SHORT
+			).show()
+		}
 	}
 }

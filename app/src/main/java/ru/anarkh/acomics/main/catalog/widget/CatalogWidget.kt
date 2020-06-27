@@ -145,7 +145,7 @@ class CatalogWidget(
 		comicsListElement.onItemClickListener = listener
 	}
 
-	fun onAddToFavoritesClick(listener: (catalogId: String) -> Unit) {
+	fun onAddToFavoritesClick(listener: (model: CatalogComicsItemUiModel) -> Unit) {
 		comicsListElement.onFavoriteClickListener = listener
 	}
 

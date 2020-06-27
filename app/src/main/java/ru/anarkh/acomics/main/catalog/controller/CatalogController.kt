@@ -4,6 +4,8 @@ import ru.anarkh.acomics.core.BackButtonController
 import ru.anarkh.acomics.core.coroutines.ObservableScope
 import ru.anarkh.acomics.core.coroutines.ObserverBuilder
 import ru.anarkh.acomics.core.error.ExceptionTelemetry
+import ru.anarkh.acomics.core.state.SavedSerializable
+import ru.anarkh.acomics.core.state.StateRegistry
 import ru.anarkh.acomics.main.catalog.CatalogRouter
 import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemUiModel
 import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemWebModel
@@ -18,8 +20,6 @@ import ru.anarkh.acomics.main.catalog.widget.filter.CatalogSortDialogWidget
 import ru.anarkh.acomics.main.catalog.widget.paging.*
 import ru.anarkh.acomics.main.favorite.controller.REMOVE_FROM_FAVORITES_KEY
 import ru.anarkh.acomics.main.favorite.model.FavoritesRepository
-import ru.arkharov.statemachine.SavedSerializable
-import ru.arkharov.statemachine.StateRegistry
 import java.io.Serializable
 
 const val TOGGLE_FAVORITE_KEY = "toggle_favorite_key"
@@ -62,14 +62,24 @@ class CatalogController(
 				true
 			} else false
 		}
+		router.setOnComicsScreenReturnCallback { catalogId: String ->
+			toggleFavorite(catalogId)
+			coroutineScope.runObservable(TOGGLE_FAVORITE_KEY) {
+				return@runObservable favoritesRepository.getFavoriteById(catalogId)
+					?: throw IllegalStateException("favorite was null")
+			}
+		}
 	}
 
 	private fun initWidget() {
 		widget.onComicsClick { model: CatalogComicsItemWebModel ->
 			router.openComicsPage(model)
 		}
-		widget.onAddToFavoritesClick { catalogId: String ->
-			toggleFavorite(catalogId)
+		widget.onAddToFavoritesClick { model: CatalogComicsItemUiModel ->
+			toggleFavorite(model.catalogId)
+			coroutineScope.runObservable(TOGGLE_FAVORITE_KEY) {
+				return@runObservable favoritesRepository.toggleFavorite(model.webModel)
+			}
 		}
 		widget.onSortIconClick {
 			sortDialogWidget.show()
@@ -215,7 +225,7 @@ class CatalogController(
 						return@map it.copy(isFavorite = false)
 					} else it
 				}
-				when(currentState) {
+				when (currentState) {
 					is Content -> savedState.value = currentState.copy(resultList = newList)
 					is SearchContent -> {
 						savedState.value = currentState.copy(searchResultList = newList)
@@ -316,8 +326,5 @@ class CatalogController(
 			}
 		}
 		updateUi()
-		coroutineScope.runObservable(TOGGLE_FAVORITE_KEY) {
-			return@runObservable favoritesRepository.toggleFavorite(updatedItem.webModel)
-		}
 	}
 }

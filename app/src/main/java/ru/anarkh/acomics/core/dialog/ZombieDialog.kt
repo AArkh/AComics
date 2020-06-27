@@ -6,8 +6,8 @@ import android.content.DialogInterface
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import ru.arkharov.statemachine.SavedBoolean
-import ru.arkharov.statemachine.StateRegistry
+import ru.anarkh.acomics.core.state.SavedBoolean
+import ru.anarkh.acomics.core.state.StateRegistry
 
 /**
  * @param key При использовании нескольких диалогов на одном экране передать уникальный ключ

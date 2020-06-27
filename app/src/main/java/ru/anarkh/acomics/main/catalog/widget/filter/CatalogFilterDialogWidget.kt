@@ -15,11 +15,11 @@ import ru.anarkh.acomics.core.dialog.DialogFactory
 import ru.anarkh.acomics.core.dialog.DialogWidget
 import ru.anarkh.acomics.core.dialog.FixedBottomSheetDialog
 import ru.anarkh.acomics.core.dialog.ZombieDialog
+import ru.anarkh.acomics.core.state.SavedSerializable
+import ru.anarkh.acomics.core.state.StateRegistry
 import ru.anarkh.acomics.main.catalog.model.CatalogSortConfig
 import ru.anarkh.acomics.main.catalog.model.MPAARating
 import ru.anarkh.acomics.main.catalog.model.TranslationType
-import ru.arkharov.statemachine.SavedSerializable
-import ru.arkharov.statemachine.StateRegistry
 
 private const val EVERY_AGE_RATING_OPTION_SIZE = 4
 

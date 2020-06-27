@@ -28,7 +28,6 @@ class FavoritesFragment : DefaultFragment() {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
-		val router = CatalogRouter(requireContext())
 		val repository = Providers.favoriteRepository
 		val widget = FavoritesWidget(
 			CatalogLoadingWidget(
@@ -41,7 +40,7 @@ class FavoritesFragment : DefaultFragment() {
 			FixedLocaleQuantityStringParser(requireContext())
 		)
 		FavoritesController(
-			router,
+			CatalogRouter(this),
 			repository,
 			widget,
 			getParentScope(),

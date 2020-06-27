@@ -12,8 +12,8 @@ import ru.anarkh.acomics.core.dialog.DialogFactory
 import ru.anarkh.acomics.core.dialog.DialogWidget
 import ru.anarkh.acomics.core.dialog.FixedBottomSheetDialog
 import ru.anarkh.acomics.core.dialog.ZombieDialog
+import ru.anarkh.acomics.core.state.StateRegistry
 import ru.anarkh.acomics.main.catalog.model.CatalogSortingBy
-import ru.arkharov.statemachine.StateRegistry
 
 class CatalogSortDialogWidget(
 	private val context: Context,

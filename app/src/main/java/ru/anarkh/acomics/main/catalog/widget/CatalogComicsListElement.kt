@@ -25,7 +25,7 @@ class CatalogComicsListElement(
 ) : BaseListElement<CatalogComicsItemUiModel, CatalogViewHolder>() {
 
 	var onItemClickListener: ((webModel: CatalogComicsItemWebModel) -> Unit)? = null
-	var onFavoriteClickListener: ((catalogId: String) -> Unit)? = null
+	var onFavoriteClickListener: ((model: CatalogComicsItemUiModel) -> Unit)? = null
 
 	override fun onCreateViewHolder(parent: ViewGroup): CatalogViewHolder = CatalogViewHolder(parent)
 
@@ -35,7 +35,7 @@ class CatalogComicsListElement(
 			onItemClickListener?.invoke(model.webModel)
 		}
 		holder.itemView.add_to_favorites_item.setOnClickListener {
-			onFavoriteClickListener?.invoke(model.catalogId)
+			onFavoriteClickListener?.invoke(model)
 		}
 
 		val imageRequest = ImageRequest.fromUri(Uri.parse(model.previewImage))

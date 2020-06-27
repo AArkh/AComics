@@ -1,4 +1,4 @@
-package ru.arkharov.statemachine
+package ru.anarkh.acomics.core.state
 
 import android.os.Bundle
 
@@ -19,9 +19,9 @@ class SavedStateRegistry(private val key: String) : StateRegistry, Savable {
 	}
 
 	override fun saveState(outState: Bundle) {
-		val savedProperies = Bundle()
-		properties.forEach { it.saveState(savedProperies) }
-		outState.putBundle(key, savedProperies)
+		val savedProperties = Bundle()
+		properties.forEach { it.saveState(savedProperties) }
+		outState.putBundle(key, savedProperties)
 	}
 
 	override fun restoreState(savedState: Bundle?) {

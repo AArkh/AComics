@@ -1,7 +1,6 @@
 package ru.anarkh.acomics.core.state
 
 import android.os.Bundle
-import ru.arkharov.statemachine.Savable
 
 
 class SavedInt(

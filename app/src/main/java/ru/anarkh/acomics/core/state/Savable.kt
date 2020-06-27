@@ -1,4 +1,4 @@
-package ru.arkharov.statemachine
+package ru.anarkh.acomics.core.state
 
 import android.os.Bundle
 

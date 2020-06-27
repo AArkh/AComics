@@ -17,7 +17,8 @@ import ru.anarkh.acomics.core.api.AComicsIssuesService
 import ru.anarkh.acomics.core.error.ExceptionTelemetry
 import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemWebModel
 
-private const val CATALOG_ID_EXTRA = "catalog_id_extra"
+const val CATALOG_ID_EXTRA = "catalog_id_extra"
+
 private const val COMICS_PAGES_AMOUNT_EXTRA = "comics_pages_amount_extra"
 private const val CATALOG_COMICS_EXTRA = "catalog_comics_extra"
 
@@ -81,7 +82,10 @@ class ComicsActivity : DefaultActivity() {
 			Providers.favoriteRepository,
 			coroutineScope,
 			ExceptionTelemetry(FirebaseCrashlytics.getInstance()),
-			stateRegistry
+			this,
+			stateRegistry,
+			backButtonController,
+			ComicsRouter(this)
 		)
 	}
 }

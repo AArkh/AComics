@@ -61,7 +61,7 @@ class CatalogFragment : DefaultFragment() {
 		)
 		val repo = CatalogRepository(dataSource, Providers.favoriteRepository)
 		CatalogController(
-			CatalogRouter(requireContext()),
+			CatalogRouter(this),
 			widget,
 			searchWidget,
 			CatalogSortDialogWidget(requireContext(), getViewLifecycle(), stateRegistry),

@@ -41,6 +41,7 @@
 	<string name="comics_index">%s из %s</string>
 	<string name="comics_toolbar_loading">Загрузка</string>
 	<string name="comics_menu_bookmark_item">В закладки</string>
+	<string name="comics_new_favorite_added_message">Добавлено в избранное</string>
 
 	<plurals name="catalog_item_subscribers">
 		<item quantity="zero">Нет подписчиков</item>
