@@ -1,29 +1,26 @@
 package ru.anarkh.acomics.main.catalog.widget.filter
 
-import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.catalog_sort_item.view.*
+import ru.anarkh.acomics.R
 import ru.anarkh.acomics.core.list.BaseListElement
 import ru.anarkh.acomics.main.catalog.model.CatalogSortConfig
 
-class CatalogSortListElement : BaseListElement<CatalogSortConfig, CatalogSortItemViewHolder>() {
+class CatalogSortListElement : BaseListElement<CatalogSortConfig>(R.layout.catalog_sort_item) {
 
 	var onFilterItemClickListener: (() -> Unit)? = null
 	var onSortIconClickListener: (() -> Unit)? = null
 
-	override fun getViewType(): Int = 1552
-	override fun onCreateViewHolder(parent: ViewGroup): CatalogSortItemViewHolder {
-		val holder =
-			CatalogSortItemViewHolder(
-				parent
-			)
+	override fun onBind(
+		holder: RecyclerView.ViewHolder,
+		position: Int,
+		model: CatalogSortConfig
+	) {
 		holder.itemView.filter_item.setOnClickListener {
 			onFilterItemClickListener?.invoke()
 		}
 		holder.itemView.sort_icon.setOnClickListener {
 			onSortIconClickListener?.invoke()
 		}
-		return holder
 	}
-
-	override fun onBind(holder: CatalogSortItemViewHolder, position: Int, config: CatalogSortConfig) {}
 }

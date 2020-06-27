@@ -36,4 +36,4 @@
 ## Tech
 
 * [ ] Добавить типобезопасность в ObservableScope и Observer.
-* [ ] Убрать getViewType из BaseListElement, ибо зачем оно там?
+* [x] Убрать getViewType из BaseListElement, ибо зачем оно там?

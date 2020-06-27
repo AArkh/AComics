@@ -1,17 +1,12 @@
 package ru.anarkh.acomics.core.list.convenience
 
-import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import ru.anarkh.acomics.R
 import ru.anarkh.acomics.core.list.BaseListElement
 
-class LoadingElement : BaseListElement<LoadingElement.Stub, LoadingViewHolder>() {
+class LoadingElement : BaseListElement<LoadingElement.Stub>(R.layout.loading_item) {
 
-	override fun getViewType(): Int = 0
-
-	override fun onCreateViewHolder(parent: ViewGroup): LoadingViewHolder {
-		return LoadingViewHolder(parent)
-	}
-
-	override fun onBind(holder: LoadingViewHolder, position: Int, model: Stub) {}
+	override fun onBind(holder: RecyclerView.ViewHolder, position: Int, model: Stub) {}
 
 	object Stub
 }

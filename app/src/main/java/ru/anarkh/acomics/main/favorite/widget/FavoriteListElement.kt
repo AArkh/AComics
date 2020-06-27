@@ -2,7 +2,7 @@ package ru.anarkh.acomics.main.favorite.widget
 
 import android.content.Context
 import android.net.Uri
-import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.imagepipeline.request.ImageRequest
 import kotlinx.android.synthetic.main.catalog_item.view.add_to_favorites_item
@@ -18,16 +18,12 @@ import ru.anarkh.acomics.main.favorite.model.FavoriteEntity
 
 class FavoriteListElement(
 	private val quantityStringParser: FixedLocaleQuantityStringParser
-) : BaseListElement<FavoriteEntity, FavoriteViewHolder>() {
+) : BaseListElement<FavoriteEntity>(R.layout.favorite_item) {
 
 	var onItemClickListener: ((catalogId: String, pagesAmount: Int) -> Unit)? = null
 	var onFavoriteClickListener: ((catalogId: String) -> Unit)? = null
 
-	override fun getViewType(): Int = 234346511
-
-	override fun onCreateViewHolder(parent: ViewGroup) = FavoriteViewHolder(parent)
-
-	override fun onBind(holder: FavoriteViewHolder, position: Int, model: FavoriteEntity) {
+	override fun onBind(holder: RecyclerView.ViewHolder, position: Int, model: FavoriteEntity) {
 		val context = holder.itemView.context
 		holder.itemView.container.setOnClickListener {
 			onItemClickListener?.invoke(model.catalogId, model.totalPages)

@@ -3,7 +3,6 @@ package ru.anarkh.acomics.main.favorite.widget
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ru.anarkh.acomics.core.list.ListConfig
 import ru.anarkh.acomics.core.list.MultipleVHListAdapter
 import ru.anarkh.acomics.main.catalog.util.FixedLocaleQuantityStringParser
 import ru.anarkh.acomics.main.catalog.widget.CatalogLoadingWidget
@@ -19,16 +18,9 @@ class FavoritesWidget(
 	private val adapter: MultipleVHListAdapter
 
 	init {
-		val listConfig = ListConfig(
-			Triple(
-				favoriteListElement,
-				FavoriteViewHolder::class.java,
-				FavoriteEntity::class.java
-			)
-		)
 		adapter = MultipleVHListAdapter(
 			FavoriteItemDiffsValidator(),
-			listConfig
+			favoriteListElement to FavoriteEntity::class.java
 		)
 		val layoutManager = LinearLayoutManager(recyclerView.context, RecyclerView.VERTICAL, false)
 		recyclerView.adapter = adapter

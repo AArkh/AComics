@@ -1,14 +1,15 @@
 package ru.anarkh.acomics.core.list
 
-import android.view.ViewGroup
+import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.RecyclerView
 
-abstract class BaseListElement<MODEL, HOLDER: BaseViewHolder> {
+abstract class BaseListElement<MODEL>(
+	@LayoutRes val holderLayout: Int
+) {
 
-	fun <H, M> onBindViewHolder(holder: H, position: Int, model: M) {
-		onBind(holder as HOLDER, position, model as MODEL)
+	abstract fun onBind(holder: RecyclerView.ViewHolder, position: Int, model: MODEL)
+
+	fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, model: Any) {
+		onBind(holder, position, model as MODEL)
 	}
-
-	abstract fun getViewType(): Int
-	abstract fun onCreateViewHolder(parent: ViewGroup): HOLDER
-	abstract fun onBind(holder: HOLDER, position: Int, model: MODEL)
 }

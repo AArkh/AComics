@@ -6,8 +6,8 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.format.DateFormat
 import android.text.style.ForegroundColorSpan
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.imagepipeline.request.ImageRequest
 import kotlinx.android.synthetic.main.catalog_item.view.*
@@ -22,14 +22,12 @@ import java.util.concurrent.TimeUnit
 
 class CatalogComicsListElement(
 	private val quantityStringParser: FixedLocaleQuantityStringParser
-) : BaseListElement<CatalogComicsItemUiModel, CatalogViewHolder>() {
+) : BaseListElement<CatalogComicsItemUiModel>(R.layout.catalog_item) {
 
 	var onItemClickListener: ((webModel: CatalogComicsItemWebModel) -> Unit)? = null
 	var onFavoriteClickListener: ((model: CatalogComicsItemUiModel) -> Unit)? = null
 
-	override fun onCreateViewHolder(parent: ViewGroup): CatalogViewHolder = CatalogViewHolder(parent)
-
-	override fun onBind(holder: CatalogViewHolder, position: Int, model: CatalogComicsItemUiModel) {
+	override fun onBind(holder: RecyclerView.ViewHolder, position: Int, model: CatalogComicsItemUiModel) {
 		val context = holder.itemView.context
 		holder.itemView.container.setOnClickListener {
 			onItemClickListener?.invoke(model.webModel)
@@ -59,8 +57,6 @@ class CatalogComicsListElement(
 		}
 		holder.itemView.add_to_favorites_item.setImageResource(favoriteIconRes)
 	}
-
-	override fun getViewType(): Int = 123
 
 	private fun formRatingText(model: CatalogComicsItemUiModel, context: Context): SpannableString {
 		val ratingPrefix = "${context.getString(R.string.catalog_item_rating)} "

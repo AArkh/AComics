@@ -1,21 +1,18 @@
 package ru.anarkh.acomics.core.list.convenience
 
-import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import ru.anarkh.acomics.R
 import ru.anarkh.acomics.core.list.BaseListElement
 
-class LoadingFailedElement : BaseListElement<LoadingFailedElement.Stub, LoadingFailedViewHolder>() {
+class LoadingFailedElement : BaseListElement<LoadingFailedElement.Stub>(
+	R.layout.loading_failed_item
+) {
 
 	var clickListener: (() -> Unit)? = null
 
-	override fun getViewType(): Int = 2323321
-
-	override fun onCreateViewHolder(parent: ViewGroup): LoadingFailedViewHolder {
-		val holder =  LoadingFailedViewHolder(parent)
+	override fun onBind(holder: RecyclerView.ViewHolder, position: Int, model: Stub) {
 		holder.itemView.setOnClickListener { clickListener?.invoke() }
-		return holder
 	}
-
-	override fun onBind(holder: LoadingFailedViewHolder, position: Int, model: Stub) {}
 
 	object Stub
 }

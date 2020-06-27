@@ -1,25 +1,51 @@
 package ru.anarkh.acomics.core.list
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 
-open class MultipleVHListAdapter(
+class MultipleVHListAdapter(
 	diffUtilsCallback: DiffUtil.ItemCallback<Any>,
-	private val listConfig: ListConfig
-) : ListAdapter<Any, BaseViewHolder>(diffUtilsCallback) {
+	vararg associations: Pair<BaseListElement<out Any>, Class<*>>
+) : ListAdapter<Any, RecyclerView.ViewHolder>(diffUtilsCallback) {
 
-	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-		return listConfig.getListElementFromViewType(viewType).onCreateViewHolder(parent)
+	private val modelClassToElementMap = HashMap<Class<*>, BaseListElement<out Any>>(
+		associations.size,
+		1f
+	)
+
+	init {
+		for (association in associations) {
+			modelClassToElementMap[association.second] = association.first
+		}
 	}
 
-	override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-		listConfig.getListElementFromHolder(holder)
-			.onBindViewHolder(holder, position, getItem(position))
-	}
-
+	@LayoutRes
 	override fun getItemViewType(position: Int): Int {
 		val model = getItem(position)
-		return listConfig.getViewTypeFromModel(model::class.java)
+		val element = getListElementFromModel(model::class.java)
+		return element.holderLayout
+	}
+
+	override fun onCreateViewHolder(
+		parent: ViewGroup,
+		@LayoutRes viewType: Int
+	): RecyclerView.ViewHolder {
+		return object : RecyclerView.ViewHolder(
+			LayoutInflater.from(parent.context).inflate(viewType, parent, false)
+		) {}
+	}
+
+	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+		val model = getItem(position)
+		val element = getListElementFromModel(model::class.java)
+		element.onBindViewHolder(holder, position, getItem(position))
+	}
+
+	private fun getListElementFromModel(clazz: Class<out Any>): BaseListElement<out Any> {
+		return modelClassToElementMap[clazz] as BaseListElement<Any>
 	}
 }

@@ -3,17 +3,13 @@ package ru.anarkh.acomics.main.catalog.widget
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ru.anarkh.acomics.core.list.ListConfig
 import ru.anarkh.acomics.core.list.MultipleVHListAdapter
 import ru.anarkh.acomics.core.list.convenience.LoadingElement
 import ru.anarkh.acomics.core.list.convenience.LoadingFailedElement
-import ru.anarkh.acomics.core.list.convenience.LoadingFailedViewHolder
-import ru.anarkh.acomics.core.list.convenience.LoadingViewHolder
 import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemUiModel
 import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemWebModel
 import ru.anarkh.acomics.main.catalog.model.CatalogSortConfig
 import ru.anarkh.acomics.main.catalog.util.FixedLocaleQuantityStringParser
-import ru.anarkh.acomics.main.catalog.widget.filter.CatalogSortItemViewHolder
 import ru.anarkh.acomics.main.catalog.widget.filter.CatalogSortListElement
 import ru.anarkh.acomics.main.catalog.widget.paging.*
 
@@ -27,36 +23,18 @@ class CatalogWidget(
 
 	private val comicsListElement = CatalogComicsListElement(quantityStringParser)
 	private val sortListElement = CatalogSortListElement()
+	private val loadingElement = LoadingElement()
 	private val loadingFailedElement = LoadingFailedElement()
 	private val adapter: MultipleVHListAdapter
 	private val layoutManager: LinearLayoutManager
 
 	init {
-		val listConfig = ListConfig(
-			Triple(
-				comicsListElement,
-				CatalogViewHolder::class.java,
-				CatalogComicsItemUiModel::class.java
-			),
-			Triple(
-				sortListElement,
-				CatalogSortItemViewHolder::class.java,
-				CatalogSortConfig::class.java
-			),
-			Triple(
-				LoadingElement(),
-				LoadingViewHolder::class.java,
-				LoadingElement.Stub::class.java
-			),
-			Triple(
-				loadingFailedElement,
-				LoadingFailedViewHolder::class.java,
-				LoadingFailedElement.Stub::class.java
-			)
-		)
 		adapter = MultipleVHListAdapter(
 			CatalogItemsDiffsValidator(),
-			listConfig
+			comicsListElement to CatalogComicsItemUiModel::class.java,
+			sortListElement to CatalogSortConfig::class.java,
+			loadingElement to LoadingElement.Stub::class.java,
+			loadingFailedElement to LoadingFailedElement.Stub::class.java
 		)
 		layoutManager = LinearLayoutManager(recyclerView.context, RecyclerView.VERTICAL, false)
 		recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -64,7 +42,7 @@ class CatalogWidget(
 				super.onScrolled(recyclerView, dx, dy)
 				val lastVisible = layoutManager.findLastVisibleItemPosition()
 				val holder = recyclerView.findViewHolderForLayoutPosition(lastVisible)
-				if (holder is LoadingViewHolder) {
+				if (holder?.itemViewType == loadingElement.holderLayout) {
 					onLoadingElementReached?.invoke()
 				}
 			}
