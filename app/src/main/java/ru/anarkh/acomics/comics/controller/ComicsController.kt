@@ -1,17 +1,16 @@
 package ru.anarkh.acomics.comics.controller
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import ru.anarkh.acomics.comics.model.*
 import ru.anarkh.acomics.comics.repository.ComicsRepository
 import ru.anarkh.acomics.comics.widget.ComicsWidget
 import ru.anarkh.acomics.core.coroutines.ObservableScope
 import ru.anarkh.acomics.core.coroutines.ObserverBuilder
+import ru.anarkh.acomics.core.error.ExceptionTelemetry
 import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemWebModel
 import ru.anarkh.acomics.main.favorite.model.FavoriteEntity
 import ru.anarkh.acomics.main.favorite.model.FavoritesRepository
 import ru.arkharov.statemachine.SavedSerializable
 import ru.arkharov.statemachine.StateRegistry
-import java.net.ConnectException
 import kotlin.math.min
 
 private const val UPDATE_BOOKMARK_KEY = "update_bookmark_key"
@@ -23,7 +22,7 @@ class ComicsController(
 	private val repo: ComicsRepository,
 	private val favoritesRepository: FavoritesRepository,
 	private val coroutineScope: ObservableScope,
-	private val crashlytics: FirebaseCrashlytics,
+	private val exceptionTelemetry: ExceptionTelemetry,
 	stateRegistry: StateRegistry
 ) {
 
@@ -43,7 +42,7 @@ class ComicsController(
 
 	private fun loadComics() {
 		coroutineScope.runObservable(catalogId) {
-			var bookmarkIndex = favoritesRepository.getFavoriteById(catalogId)?.readPages ?: -1
+			val bookmarkIndex = favoritesRepository.getFavoriteById(catalogId)?.readPages ?: -1
 			val pages = repo.getComicsPages(catalogId)
 			var currentPage = 0
 			if (pages.isNotEmpty() && bookmarkIndex >= 0) {
@@ -110,9 +109,7 @@ class ComicsController(
 	private fun initAsyncObservers() {
 		val observer = ObserverBuilder<Content>(catalogId)
 			.onFailed {
-				if (it !is ConnectException) {
-					crashlytics.recordException(it)
-				}
+				exceptionTelemetry.recordException(it)
 				updateState(Failed)
 			}
 			.onLoading {
@@ -125,7 +122,7 @@ class ComicsController(
 		coroutineScope.addObserver(observer)
 		val updateBookmarkObserver = ObserverBuilder<Int>(UPDATE_BOOKMARK_KEY)
 			.onFailed {
-				crashlytics.recordException(it)
+				exceptionTelemetry.recordException(it)
 			}
 			.onSuccess { bookmarkedPageIndex: Int ->
 				val currentState = state.value as? Content ?: return@onSuccess

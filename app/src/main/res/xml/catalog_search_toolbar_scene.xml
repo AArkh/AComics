@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:motion="http://schemas.android.com/apk/res-auto"
+	>
+
+	<ConstraintSet android:id="@+id/start">
+		<Constraint
+			android:id="@+id/search_button"
+			android:layout_width="24dp"
+			android:layout_height="24dp"
+			android:layout_marginRight="16dp"
+			motion:layout_constraintBottom_toBottomOf="parent"
+			motion:layout_constraintRight_toRightOf="parent"
+			motion:layout_constraintTop_toTopOf="parent"
+			>
+			<CustomAttribute
+				motion:attributeName="ColorFilter"
+				motion:customColorValue="@color/black"
+				/>
+		</Constraint>
+
+		<Constraint
+			android:id="@+id/search_field"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_marginLeft="48dp"
+			android:visibility="invisible"
+			motion:layout_constraintBottom_toBottomOf="parent"
+			motion:layout_constraintRight_toRightOf="parent"
+			motion:layout_constraintTop_toTopOf="parent"
+			/>
+
+		<Constraint
+			android:id="@+id/search_logo"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:visibility="visible"
+			motion:layout_constraintBottom_toBottomOf="parent"
+			motion:layout_constraintRight_toRightOf="parent"
+			motion:layout_constraintTop_toTopOf="parent"
+			/>
+	</ConstraintSet>
+
+	<ConstraintSet android:id="@+id/end">
+		<Constraint
+			android:id="@id/search_button"
+			android:layout_width="24dp"
+			android:layout_height="24dp"
+			android:layout_marginLeft="16dp"
+			motion:layout_constraintBottom_toBottomOf="parent"
+			motion:layout_constraintLeft_toLeftOf="parent"
+			motion:layout_constraintTop_toTopOf="parent"
+			>
+
+			<CustomAttribute
+				motion:attributeName="ColorFilter"
+				motion:customColorValue="@color/gray"
+				/>
+		</Constraint>
+
+		<Constraint
+			android:id="@+id/search_field"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_marginLeft="48dp"
+			android:layout_marginRight="24dp"
+			android:visibility="visible"
+			motion:layout_constraintBottom_toBottomOf="parent"
+			motion:layout_constraintLeft_toRightOf="@+id/search_button"
+			motion:layout_constraintRight_toRightOf="parent"
+			motion:layout_constraintTop_toTopOf="parent"
+			/>
+
+		<Constraint
+			android:id="@+id/search_logo"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:visibility="invisible"
+			motion:layout_constraintBottom_toBottomOf="parent"
+			motion:layout_constraintRight_toRightOf="parent"
+			motion:layout_constraintTop_toTopOf="parent"
+			/>
+	</ConstraintSet>
+
+	<Transition
+		motion:constraintSetEnd="@+id/end"
+		motion:constraintSetStart="@+id/start"
+		motion:duration="300"
+		motion:motionInterpolator="easeInOut"
+		>
+		<KeyFrameSet>
+			<KeyAttribute
+				android:rotation="90"
+				motion:framePosition="100"
+				motion:motionTarget="@id/search_button"
+				/>
+		</KeyFrameSet>
+
+		<OnClick
+			motion:clickAction="toggle"
+			motion:targetId="@+id/search_button"
+			/>
+	</Transition>
+</MotionScene>

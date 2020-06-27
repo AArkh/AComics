@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/motion_layout"
+	android:layout_width="match_parent"
+	android:layout_height="?attr/actionBarSize"
+	android:background="@color/white"
+	android:minHeight="?attr/actionBarSize"
+	android:orientation="vertical"
+	app:layoutDescription="@xml/catalog_search_toolbar_scene"
+	tools:ignore="ContentDescription"
+	tools:showPaths="true"
+	>
+
+	<ImageView
+		android:id="@+id/search_logo"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/acomics_logo"
+		/>
+
+	<ImageView
+		android:id="@+id/search_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/ic_search"
+		/>
+
+	<EditText
+		android:id="@+id/search_field"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:hint="@string/catalog_menu_search_hint"
+		android:importantForAutofill="no"
+		android:maxLines="1"
+		android:inputType="textVisiblePassword"
+		android:imeOptions="actionNone|flagNoExtractUi"
+		android:paddingLeft="8dp"
+		/>
+</androidx.constraintlayout.motion.widget.MotionLayout>

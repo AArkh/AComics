@@ -77,19 +77,19 @@ class CatalogWidget(
 		when (state) {
 			is Initial -> {
 				noDataWidget.showLoading()
-				recyclerView.visibility = View.GONE
+				hideList()
 			}
 			is Loading -> {
 				noDataWidget.showLoading()
-				recyclerView.visibility = View.GONE
+				hideList()
 			}
 			is NoData -> {
 				noDataWidget.showNoData()
-				recyclerView.visibility = View.GONE
+				hideList()
 			}
 			is Failed -> {
 				noDataWidget.showFailed()
-				recyclerView.visibility = View.GONE
+				hideList()
 			}
 			is Content -> {
 				noDataWidget.hide()
@@ -103,6 +103,34 @@ class CatalogWidget(
 					} // footer прикрутить какой-нибудь.
 				}
 				adapter.submitList(list)
+			}
+			is SearchContent -> {
+				when (state.state) {
+					SearchContent.SearchContentState.CONTENT -> {
+						if (state.searchResultList.isEmpty()) {
+							noDataWidget.showNoData()
+							hideList()
+						} else {
+							noDataWidget.hide()
+							recyclerView.visibility = View.VISIBLE
+							adapter.submitList(state.searchResultList)
+						}
+					}
+					SearchContent.SearchContentState.LOADING -> {
+						noDataWidget.hide()
+						recyclerView.visibility = View.VISIBLE
+						adapter.submitList(listOf(LoadingElement.Stub))
+					}
+					SearchContent.SearchContentState.FAILED -> {
+						noDataWidget.hide()
+						recyclerView.visibility = View.VISIBLE
+						adapter.submitList(listOf(LoadingFailedElement.Stub))
+					}
+					SearchContent.SearchContentState.INITIAL -> {
+						hideList()
+						noDataWidget.showNoData()
+					}
+				}
 			}
 		}
 	}
@@ -135,6 +163,11 @@ class CatalogWidget(
 
 	fun onRetryLoadNextPageButtonClick(listener: () -> Unit) {
 		loadingFailedElement.clickListener = listener
+	}
+
+	private fun hideList() {
+		adapter.submitList(emptyList())
+		recyclerView.visibility = View.GONE
 	}
 
 	private fun List<Any>.clone(): MutableList<Any> {

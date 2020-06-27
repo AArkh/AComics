@@ -28,3 +28,11 @@ interface AComicsIssuesService {
 	@GET("/comics/{id}")
 	fun issue(@Path("id") catalogId: String): Call<List<ComicsPageModel>>
 }
+
+interface AComicsSearchService {
+	@GET("search/query")
+	fun search(
+		@Query("mask")
+		mask: String
+	) : Call<List<CatalogComicsItemWebModel>>
+}

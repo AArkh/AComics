@@ -4,16 +4,9 @@ private const val PACKAGE = "acomics"
 private const val EXTRAS_PATH = "path"
 private const val EXTRAS_LINE = "line"
 private const val EXTRAS_EXCEPTION = "exception"
+private const val EXTRAS_DETAIL = "detail"
 
-/**
- * Утилитарный парсер для логирования исключений в драники согласно формата,
- * описанного в http://jira.farpost.net/browse/DS-3072.
- */
 class StackTraceHelper {
-
-	companion object {
-		const val EXTRAS_DETAIL = "detail"
-	}
 
 	fun getThrowableExtras(throwable: Throwable): MutableMap<String, String> {
 		val scapegoat: StackTraceElement = getScapegoat(throwable)
@@ -21,11 +14,9 @@ class StackTraceHelper {
 		extras[EXTRAS_PATH] = scapegoat.className ?: "failed to retrieve className"
 		extras[EXTRAS_LINE] = scapegoat.lineNumber.toString() ?: "failed to retrieve lineNumber"
 		extras[EXTRAS_EXCEPTION] = throwable.javaClass.canonicalName
-			?: throwable.javaClass.name
-				?: "failed to retrieve throwable name"
+			?: throwable.javaClass.name ?: "failed to retrieve throwable name"
 		extras[EXTRAS_DETAIL] = throwable.localizedMessage
-			?: throwable.message
-			?: "failed to retrieve message"
+			?: throwable.message ?: "failed to retrieve message"
 		return extras
 	}
 

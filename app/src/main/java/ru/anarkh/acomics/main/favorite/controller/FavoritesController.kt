@@ -6,6 +6,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import ru.anarkh.acomics.core.coroutines.ObservableScope
 import ru.anarkh.acomics.core.coroutines.ObserverBuilder
+import ru.anarkh.acomics.core.error.ExceptionTelemetry
 import ru.anarkh.acomics.main.catalog.CatalogRouter
 import ru.anarkh.acomics.main.catalog.controller.TOGGLE_FAVORITE_KEY
 import ru.anarkh.acomics.main.favorite.model.FavoriteEntity
@@ -23,7 +24,7 @@ class FavoritesController(
 	private val repository: FavoritesRepository,
 	private val widget: FavoritesWidget,
 	private val scope: ObservableScope,
-	private val crashlytics: FirebaseCrashlytics,
+	private val exceptionTelemetry: ExceptionTelemetry,
 	stateRegistry: StateRegistry,
 	lifecycle: Lifecycle
 ) : DefaultLifecycleObserver {
@@ -93,7 +94,7 @@ class FavoritesController(
 		scope.addObserver(observer)
 		val favoriteObserver = ObserverBuilder<FavoriteEntity>(TOGGLE_FAVORITE_KEY)
 			.onFailed {
-				crashlytics.recordException(it)
+				exceptionTelemetry.recordException(it)
 			}
 			.onSuccess { favoriteEntity: FavoriteEntity ->
 				val currentState: FavoritesState = state.value ?: return@onSuccess

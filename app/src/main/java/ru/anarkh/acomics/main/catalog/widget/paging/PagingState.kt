@@ -14,10 +14,20 @@ data class Content(
 	}
 }
 
+data class SearchContent(
+	val searchInput: String,
+	val searchResultList: List<Serializable>,
+	val state: SearchContentState
+) : PagingState(), Serializable {
+	enum class SearchContentState {
+		INITIAL, LOADING, FAILED, CONTENT
+	}
+}
+
 object Loading : PagingState()
 
-object Failed: PagingState()
+object Failed : PagingState()
 
 object Initial : PagingState()
 
-object NoData: PagingState()
+object NoData : PagingState()
