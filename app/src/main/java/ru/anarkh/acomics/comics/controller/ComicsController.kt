@@ -113,7 +113,13 @@ class ComicsController(
 					favoritesRepository.update(newFavorite)
 					notifyNewFavoriteHasBeenAdded()
 				} else {
-					favoritesRepository.update(model.copy(readPages = currentState.currentPage))
+					val isCurrentPage = model.readPages == currentState.currentPage
+					if (isCurrentPage) {
+						favoritesRepository.update(model.copy(readPages = -1))
+						return@runObservable -1
+					} else {
+						favoritesRepository.update(model.copy(readPages = currentState.currentPage))
+					}
 				}
 				return@runObservable currentState.currentPage
 			}
