@@ -4,15 +4,13 @@ import android.widget.EditText
 import androidx.annotation.IdRes
 import androidx.constraintlayout.motion.widget.MotionLayout
 import ru.anarkh.acomics.R
-import ru.anarkh.acomics.core.keyboard.EditTextKeyboardWidget
 import ru.anarkh.acomics.core.view.DelayedInputTextWatcher
 import ru.anarkh.acomics.main.catalog.widget.paging.PagingState
 import ru.anarkh.acomics.main.catalog.widget.paging.SearchContent
 
 class CatalogSearchWidget(
 	private val editText: EditText,
-	private val motionLayout: MotionLayout,
-	private val editTextKeyboardWidget: EditTextKeyboardWidget
+	private val motionLayout: MotionLayout
 ) {
 
 	var searchInputCallback: ((text: String) -> Unit)? = null
@@ -28,12 +26,10 @@ class CatalogSearchWidget(
 				editText.removeTextChangedListener(textWatcher)
 				editText.setText("")
 				editText.clearFocus()
-				editTextKeyboardWidget.hide()
 				closeSearchCallback?.invoke()
 			} else {
 				editText.addTextChangedListener(textWatcher)
 				editText.requestFocus()
-				editTextKeyboardWidget.show()
 				openSearchCallback?.invoke()
 			}
 		})

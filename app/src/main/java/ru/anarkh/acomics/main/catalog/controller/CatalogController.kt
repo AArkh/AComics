@@ -4,6 +4,7 @@ import ru.anarkh.acomics.core.BackButtonController
 import ru.anarkh.acomics.core.coroutines.ObservableScope
 import ru.anarkh.acomics.core.coroutines.ObserverBuilder
 import ru.anarkh.acomics.core.error.ExceptionTelemetry
+import ru.anarkh.acomics.core.keyboard.EditTextKeyboardWidget
 import ru.anarkh.acomics.core.state.SavedSerializable
 import ru.anarkh.acomics.core.state.StateRegistry
 import ru.anarkh.acomics.main.catalog.CatalogRouter
@@ -35,6 +36,7 @@ class CatalogController(
 	private val searchWidget: CatalogSearchWidget,
 	private val sortDialogWidget: CatalogSortDialogWidget,
 	private val filterDialogWidget: CatalogFilterDialogWidget,
+	private val editTextKeyboardWidget: EditTextKeyboardWidget,
 	private val sortConfigRepository: CatalogSortConfigRepository,
 	private val catalogRepository: CatalogRepository,
 	private val favoritesRepository: FavoritesRepository,
@@ -73,6 +75,7 @@ class CatalogController(
 
 	private fun initWidget() {
 		widget.onComicsClick { model: CatalogComicsItemWebModel ->
+			editTextKeyboardWidget.hide()
 			router.openComicsPage(model)
 		}
 		widget.onAddToFavoritesClick { model: CatalogComicsItemUiModel ->
@@ -126,6 +129,7 @@ class CatalogController(
 		}
 		searchWidget.openSearchCallback = {
 			if (savedState.value !is SearchContent) {
+				editTextKeyboardWidget.show()
 				savedState.value = SearchContent(
 					"", emptyList(), SearchContent.SearchContentState.INITIAL
 				)
@@ -134,6 +138,7 @@ class CatalogController(
 		}
 		searchWidget.closeSearchCallback = {
 			if (savedState.value is SearchContent) {
+				editTextKeyboardWidget.hide()
 				//fixme тут кэш сделать и лезть туда, чтобы красивый переход был.
 				savedState.value = Initial
 				updateUi()

@@ -40,8 +40,7 @@ class CatalogFragment : DefaultFragment() {
 		val searchEditText: EditText = view.findViewById(R.id.search_field)
 		val searchWidget = CatalogSearchWidget(
 			searchEditText,
-			view.findViewById(R.id.motion_layout),
-			EditTextKeyboardWidget(searchEditText)
+			view.findViewById(R.id.motion_layout)
 		)
 
 		val loadingWidget = CatalogLoadingWidget(
@@ -66,6 +65,7 @@ class CatalogFragment : DefaultFragment() {
 			searchWidget,
 			CatalogSortDialogWidget(requireContext(), getViewLifecycle(), stateRegistry),
 			CatalogFilterDialogWidget(requireContext(), getViewLifecycle(), stateRegistry),
+			EditTextKeyboardWidget(searchEditText),
 			CatalogSortConfigRepository(requireContext()),
 			repo,
 			Providers.favoriteRepository,
