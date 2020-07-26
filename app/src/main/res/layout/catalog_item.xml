@@ -9,6 +9,7 @@
 	android:paddingLeft="16dp"
 	android:paddingTop="12dp"
 	android:paddingRight="16dp"
+	android:id="@+id/container"
 	tools:ignore="RtlHardcoded"
 	>
 
@@ -25,7 +26,6 @@
 		/>
 
 	<LinearLayout
-		android:id="@+id/container"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:orientation="horizontal"

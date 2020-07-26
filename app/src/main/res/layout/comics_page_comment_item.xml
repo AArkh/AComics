@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:fresco="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@color/white"
+	android:orientation="vertical"
+	android:paddingHorizontal="16dp"
+	android:paddingVertical="8dp"
+	tools:ignore="RtlHardcoded"
+	>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:gravity="center_vertical"
+		android:orientation="horizontal"
+		>
+
+		<com.facebook.drawee.view.SimpleDraweeView
+			android:id="@+id/user_avatar"
+			android:layout_width="32dp"
+			android:layout_height="32dp"
+			fresco:failureImage="@drawable/avatar_stub"
+			fresco:failureImageScaleType="centerCrop"
+			fresco:placeholderImage="@color/gray_disabled"
+			fresco:roundedCornerRadius="4dp"
+			/>
+
+		<TextView
+			android:id="@+id/user_name"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="8dp"
+			android:textSize="13sp"
+			android:textStyle="bold"
+			tools:text="Anonymous"
+			/>
+
+		<TextView
+			android:id="@+id/user_status"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="8dp"
+			android:textColor="@color/comment_user_status"
+			android:textSize="12sp"
+			android:visibility="gone"
+			tools:text="Автор"
+			tools:visibility="visible"
+			/>
+
+		<TextView
+			android:id="@+id/comment_date"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="8dp"
+			android:textColor="@color/gray"
+			android:textSize="12sp"
+			tools:text="1 февраля 2016 года"
+			/>
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="@drawable/comics_page_comment_background"
+		android:orientation="vertical"
+		android:paddingVertical="6dp"
+		android:paddingHorizontal="8dp"
+		>
+
+		<TextView
+			android:id="@+id/comment_body"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			tools:text="ігра Жертвоприношение Айзека вдохновилась нозваниям етой игри. The Binding of Isaac"
+			/>
+
+		<TextView
+			android:id="@+id/comment_edited"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="4dp"
+			android:gravity="right"
+			android:textColor="@color/gray"
+			android:textSize="12sp"
+			android:visibility="gone"
+			tools:text="Отредактировано «LexFom» 01.11.2019 19:48:00"
+			tools:visibility="visible"
+			/>
+	</LinearLayout>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="0.5dp"
+		android:layout_gravity="bottom"
+		android:layout_marginTop="12dp"
+		android:background="@drawable/shadow_bottom"
+		android:backgroundTint="@color/cream"
+		/>
+</LinearLayout>

@@ -3,9 +3,11 @@ package ru.anarkh.acomics.comics
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import ru.anarkh.acomics.R
 import ru.anarkh.acomics.comics.controller.ComicsController
+import ru.anarkh.acomics.comics.model.ComicsStateContainer
 import ru.anarkh.acomics.comics.repository.ComicsRepository
 import ru.anarkh.acomics.comics.widget.ComicsLoadingWidget
 import ru.anarkh.acomics.comics.widget.ComicsPageIndexWidget
@@ -74,12 +76,14 @@ class ComicsActivity : DefaultActivity() {
 			ComicsToolbarWidget(findViewById(R.id.comics_toolbar))
 		)
 		val repo = ComicsRepository(Providers.retrofit.create(AComicsIssuesService::class.java))
+		val stateContainer = ViewModelProvider(this).get(ComicsStateContainer::class.java)
 		ComicsController(
 			comicsModel,
 			catalogId,
 			widget,
 			repo,
 			Providers.favoriteRepository,
+			stateContainer,
 			coroutineScope,
 			ExceptionTelemetry(FirebaseCrashlytics.getInstance()),
 			this,

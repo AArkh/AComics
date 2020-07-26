@@ -1,11 +1,10 @@
 package ru.anarkh.acomics.comics.widget
 
 import android.view.View
-import androidx.core.view.get
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import kotlinx.android.synthetic.main.comics_page_item.view.*
 import ru.anarkh.acomics.comics.model.*
+import ru.anarkh.acomics.comics.widget.page.ComicsPageListItem
+import ru.anarkh.acomics.core.list.MultipleVHListAdapter
 
 class ComicsWidget(
 	private val viewPager: ViewPager2,
@@ -15,11 +14,28 @@ class ComicsWidget(
 ) {
 
 	var onSingleClickListener: (() -> Unit)? = null
+	var onImageLoadedListener: ((page: Int) -> Unit)? = null
+	var onImageLoadFailedListener: ((page: Int) -> Unit)? = null
+
+	private val adapter: MultipleVHListAdapter
+	private val pageItem = ComicsPageListItem(viewPager.resources)
 
 	init {
+		adapter = MultipleVHListAdapter(
+			ComicsPagesValidator(),
+			pageItem to ComicsPageUiModel::class.java
+		)
+		viewPager.adapter = adapter
 		viewPager.offscreenPageLimit = 2
 		indexWidget.onPageChangedListener = { newPageIndex: Int ->
 			viewPager.setCurrentItem(newPageIndex, true)
+		}
+		pageItem.setOnPageClickListener { onSingleClickListener?.invoke() }
+		pageItem.setOnPageLoadedListener { page: Int ->
+			onImageLoadedListener?.invoke(page)
+		}
+		pageItem.setOnPageLoadFailedListener { page: Int ->
+			onImageLoadFailedListener?.invoke(page)
 		}
 	}
 
@@ -28,7 +44,6 @@ class ComicsWidget(
 			override fun onPageSelected(position: Int) {
 				super.onPageSelected(position)
 				listener.invoke(position)
-				fixImageLoadingBug(position)
 			}
 		})
 	}
@@ -73,12 +88,7 @@ class ComicsWidget(
 	private fun showContent(content: Content) {
 		viewPager.visibility = View.VISIBLE
 		loadingWidget.hide()
-		if (viewPager.adapter == null) {
-			val adapter = ComicsPageAdapter(content.issues)
-			adapter.onPageClickListener = { onSingleClickListener?.invoke() }
-			viewPager.adapter = adapter
-		}
-		scrollToPage(content.currentPage)
+		adapter.submitList(content.issues as List<Any>)
 		if (content.isInFullscreen) {
 			indexWidget.hide()
 			toolbarWidget.hide()
@@ -90,8 +100,8 @@ class ComicsWidget(
 		toolbarWidget.showIssueTitle(content)
 	}
 
-	private fun scrollToPage(page: Int) {
-		if (shouldCurrentItemPageScroll(page)) {
+	fun scrollToPage(page: Int) {
+		if (shouldScrollPage(page)) {
 			viewPager.setCurrentItem(page, false)
 		} else {
 			viewPager.currentItem = page
@@ -99,24 +109,11 @@ class ComicsWidget(
 	}
 
 	/**
-	 * Костыль. [ViewPager2] не скроллит анимировано на страницы с вызванным onBind. В итоге,
-	 * при открытии комикса с 2-4-й страницы включительно комикс открывался всегда на первой.
+	 * Костыль. [ViewPager2] не скроллит анимировано на страницы с вызванным onBind. Точнее, он
+	 * решает не скроллить их вовсе. В итоге, при открытии комикса с 2-4-й страницы включительно
+	 * комикс открывался всегда на первой.
 	 */
-	private fun shouldCurrentItemPageScroll(pageToBeShown: Int): Boolean {
+	private fun shouldScrollPage(pageToBeShown: Int): Boolean {
 		return viewPager.currentItem == 0 && pageToBeShown in 1..3
-	}
-
-	/**
-	 * Костыль. {@see [BigImageViewExt]}.
-	 */
-	private fun fixImageLoadingBug(position: Int) {
-		val viewHolder: ComicsPageHolder = (viewPager[0] as? RecyclerView)
-			?.findViewHolderForAdapterPosition(position)
-			as? ComicsPageHolder
-			?: return
-		val image: BigImageViewExt = viewHolder.itemView.image
-		if (image.shouldResetImageShowing()) {
-			image.showImage(image.shownUri)
-		}
 	}
 }

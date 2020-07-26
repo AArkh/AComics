@@ -42,7 +42,7 @@ class ComicsToolbarWidget(
 	}
 
 	fun showIssueTitle(content: Content) {
-		toolbar.title = content.issues[content.currentPage].issueName
+		toolbar.title = content.issues[content.currentPage].comicsPageModel.issueName
 		val context = toolbar.context
 		val bookmarkDrawable = if (content.bookmarkIndex != content.currentPage) {
 			ContextCompat.getDrawable(context, R.drawable.ic_bookmark_border_24dp)

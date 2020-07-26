@@ -4,13 +4,22 @@ import java.io.Serializable
 
 sealed class ComicsWidgetState : Serializable
 
-object Initial: ComicsWidgetState()
+object Initial : ComicsWidgetState()
 object Loading : ComicsWidgetState()
 object Failed : ComicsWidgetState()
 
 data class Content(
-	val issues: List<ComicsPageModel>,
+	val issues: MutableList<ComicsPageUiModel>,
 	val currentPage: Int,
 	val isInFullscreen: Boolean,
 	val bookmarkIndex: Int
 ) : ComicsWidgetState()
+
+data class ComicsPageUiModel(
+	val comicsPageModel: ComicsPageModel,
+	val state: State = State.Loading
+) : Serializable {
+	enum class State {
+		Failed, Loading, Content
+	}
+}

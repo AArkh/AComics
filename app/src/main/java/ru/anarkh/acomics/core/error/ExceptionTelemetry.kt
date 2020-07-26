@@ -1,6 +1,7 @@
 package ru.anarkh.acomics.core.error
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import ru.anarkh.acomics.BuildConfig
 import java.net.ConnectException
 
 class ExceptionTelemetry(
@@ -8,7 +9,7 @@ class ExceptionTelemetry(
 ) {
 
 	fun recordException(throwable: Throwable) {
-		if (throwable is ConnectException) {
+		if (BuildConfig.DEBUG || throwable is ConnectException) {
 			return
 		}
 		firebaseCrashlytics.recordException(throwable)

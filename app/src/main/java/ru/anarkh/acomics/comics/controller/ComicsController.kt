@@ -14,7 +14,6 @@ import ru.anarkh.acomics.core.coroutines.ObservableScope
 import ru.anarkh.acomics.core.coroutines.ObserverBuilder
 import ru.anarkh.acomics.core.error.ExceptionTelemetry
 import ru.anarkh.acomics.core.state.SavedBoolean
-import ru.anarkh.acomics.core.state.SavedSerializable
 import ru.anarkh.acomics.core.state.StateRegistry
 import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemWebModel
 import ru.anarkh.acomics.main.favorite.model.FavoriteEntity
@@ -29,6 +28,7 @@ class ComicsController(
 	private val widget: ComicsWidget,
 	private val repo: ComicsRepository,
 	private val favoritesRepository: FavoritesRepository,
+	private val stateContainer: ComicsStateContainer,
 	private val coroutineScope: ObservableScope,
 	private val exceptionTelemetry: ExceptionTelemetry,
 	private val context: Context,
@@ -37,18 +37,16 @@ class ComicsController(
 	private val router: ComicsRouter
 ) {
 
-	private val state = SavedSerializable<ComicsWidgetState>(catalogId, Initial)
 	private val wasAddedToFavorites = SavedBoolean("was_saved_to_favorites", false)
 
 	init {
-		stateRegistry.register(state)
 		stateRegistry.register(wasAddedToFavorites)
 		initController()
 		initAsyncObservers()
 		initWidget()
 
-		val currentState = state.value ?: Initial
-		if (state.value is Initial) {
+		val currentState = stateContainer.state
+		if (currentState is Initial) {
 			loadComics()
 		}
 		widget.updateState(currentState)
@@ -67,7 +65,7 @@ class ComicsController(
 
 	private fun initWidget() {
 		widget.setOnPageChangeListener { pageIndex: Int ->
-			val currentState = state.value as? Content ?: return@setOnPageChangeListener
+			val currentState = stateContainer.state as? Content ?: return@setOnPageChangeListener
 			updateState(currentState.copy(currentPage = pageIndex))
 		}
 		widget.onRetryClickListener {
@@ -75,27 +73,35 @@ class ComicsController(
 			loadComics()
 		}
 		widget.onLeftButtonClickListener {
-			val currentState = state.value as? Content ?: return@onLeftButtonClickListener
+			val currentState = stateContainer.state as? Content ?: return@onLeftButtonClickListener
 			if (currentState.currentPage <= 0) {
 				return@onLeftButtonClickListener
 			}
 			updateState(currentState.copy(currentPage = currentState.currentPage.dec()))
+			widget.scrollToPage(currentState.currentPage.dec())
 		}
 		widget.onRightButtonClickListener {
-			val currentState = state.value as? Content ?: return@onRightButtonClickListener
+			val currentState = stateContainer.state as? Content ?: return@onRightButtonClickListener
 			if (currentState.currentPage >= currentState.issues.lastIndex) {
 				return@onRightButtonClickListener
 			}
 			updateState(currentState.copy(currentPage = currentState.currentPage.inc()))
+			widget.scrollToPage(currentState.currentPage.inc())
 		}
 		widget.onSingleClickListener = {
-			val currentState = state.value as? Content
+			val currentState = stateContainer.state as? Content
 			if (currentState != null) {
 				updateState(currentState.copy(isInFullscreen = !currentState.isInFullscreen))
 			}
 		}
+		widget.onImageLoadedListener = { page: Int ->
+			updatePageToState(page, ComicsPageUiModel.State.Content)
+		}
+		widget.onImageLoadFailedListener = { page: Int ->
+			updatePageToState(page, ComicsPageUiModel.State.Failed)
+		}
 		widget.onAddToBookmarksClickListener {
-			val currentState = state.value as? Content ?: return@onAddToBookmarksClickListener
+			val currentState = stateContainer.state as? Content ?: return@onAddToBookmarksClickListener
 			coroutineScope.runObservable(UPDATE_BOOKMARK_KEY) {
 				val model = favoritesRepository.getFavoriteById(catalogId)
 				if (model == null) {
@@ -137,6 +143,7 @@ class ComicsController(
 			}
 			.onSuccess { content: Content ->
 				updateState(content)
+				widget.scrollToPage(content.currentPage)
 			}
 			.build()
 		coroutineScope.addObserver(observer)
@@ -145,7 +152,7 @@ class ComicsController(
 				exceptionTelemetry.recordException(it)
 			}
 			.onSuccess { bookmarkedPageIndex: Int ->
-				val currentState = state.value as? Content ?: return@onSuccess
+				val currentState = stateContainer.state as? Content ?: return@onSuccess
 				updateState(currentState.copy(bookmarkIndex = bookmarkedPageIndex))
 			}
 			.build()
@@ -156,6 +163,9 @@ class ComicsController(
 		coroutineScope.runObservable(catalogId) {
 			val bookmarkIndex = favoritesRepository.getFavoriteById(catalogId)?.readPages ?: -1
 			val pages = repo.getComicsPages(catalogId)
+				.mapTo(ArrayList()) { comicsPageModel: ComicsPageModel ->
+					return@mapTo ComicsPageUiModel(comicsPageModel)
+				}
 			var currentPage = 0
 			if (pages.isNotEmpty() && bookmarkIndex >= 0) {
 				currentPage = min(pages.lastIndex, bookmarkIndex)
@@ -165,8 +175,20 @@ class ComicsController(
 	}
 
 	private fun updateState(newState: ComicsWidgetState) {
-		state.value = newState
+		stateContainer.state = newState
 		widget.updateState(newState)
+	}
+
+	private fun updatePageToState(page: Int, pageState: ComicsPageUiModel.State) {
+		val currentState = stateContainer.state as? Content
+		if (currentState != null) {
+			val newList = currentState.issues.mapTo(ArrayList(currentState.issues.size)) {
+				return@mapTo if (it.comicsPageModel.page == page) {
+					it.copy(state = pageState)
+				} else it
+			}
+			updateState(currentState.copy(issues = newList))
+		}
 	}
 
 	private suspend fun notifyNewFavoriteHasBeenAdded() {
