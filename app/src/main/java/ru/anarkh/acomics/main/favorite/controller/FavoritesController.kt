@@ -6,12 +6,12 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import ru.anarkh.acomics.core.coroutines.ObservableScope
 import ru.anarkh.acomics.core.coroutines.ObserverBuilder
+import ru.anarkh.acomics.core.db.FavoriteEntity
 import ru.anarkh.acomics.core.error.ExceptionTelemetry
 import ru.anarkh.acomics.core.state.SavedSerializable
 import ru.anarkh.acomics.core.state.StateRegistry
 import ru.anarkh.acomics.main.catalog.CatalogRouter
 import ru.anarkh.acomics.main.catalog.controller.TOGGLE_FAVORITE_KEY
-import ru.anarkh.acomics.main.favorite.model.FavoriteEntity
 import ru.anarkh.acomics.main.favorite.model.FavoritesRepository
 import ru.anarkh.acomics.main.favorite.widget.*
 

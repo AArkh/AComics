@@ -2,8 +2,6 @@ package ru.anarkh.acomics.core.db
 
 import androidx.annotation.WorkerThread
 import androidx.room.*
-import ru.anarkh.acomics.main.favorite.model.FAVORITES_TABLE
-import ru.anarkh.acomics.main.favorite.model.FavoriteEntity
 
 @Dao
 interface FavoritesDao {

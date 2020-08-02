@@ -1,6 +1,6 @@
 package ru.anarkh.acomics.main.favorite.widget
 
-import ru.anarkh.acomics.main.favorite.model.FavoriteEntity
+import ru.anarkh.acomics.core.db.FavoriteEntity
 import java.io.Serializable
 
 sealed class FavoritesState : Serializable

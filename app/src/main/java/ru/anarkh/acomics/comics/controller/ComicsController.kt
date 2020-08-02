@@ -3,6 +3,7 @@ package ru.anarkh.acomics.comics.controller
 import android.content.Context
 import android.widget.Toast
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.anarkh.acomics.R
 import ru.anarkh.acomics.comics.ComicsRouter
@@ -12,11 +13,12 @@ import ru.anarkh.acomics.comics.widget.ComicsWidget
 import ru.anarkh.acomics.core.BackButtonController
 import ru.anarkh.acomics.core.coroutines.ObservableScope
 import ru.anarkh.acomics.core.coroutines.ObserverBuilder
+import ru.anarkh.acomics.core.db.BookmarkType
+import ru.anarkh.acomics.core.db.FavoriteEntity
 import ru.anarkh.acomics.core.error.ExceptionTelemetry
 import ru.anarkh.acomics.core.state.SavedBoolean
 import ru.anarkh.acomics.core.state.StateRegistry
 import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemWebModel
-import ru.anarkh.acomics.main.favorite.model.FavoriteEntity
 import ru.anarkh.acomics.main.favorite.model.FavoritesRepository
 import kotlin.math.min
 
@@ -66,7 +68,21 @@ class ComicsController(
 	private fun initWidget() {
 		widget.setOnPageChangeListener { pageIndex: Int ->
 			val currentState = stateContainer.state as? Content ?: return@setOnPageChangeListener
-			updateState(currentState.copy(currentPage = pageIndex))
+			val isBookmarkFollowing = currentState.bookmarkType == BookmarkType.FOLLOWING
+			val bookmarkIndex = if (isBookmarkFollowing) {
+				pageIndex
+			} else currentState.bookmarkIndex
+			updateState(
+				currentState.copy(
+					currentPage = pageIndex,
+					bookmarkIndex = bookmarkIndex
+				)
+			)
+			if (isBookmarkFollowing) {
+				coroutineScope.launch {
+					updateLastPage()
+				}
+			}
 		}
 		widget.onRetryClickListener {
 			updateState(Loading)
@@ -101,7 +117,9 @@ class ComicsController(
 			updatePageToState(page, ComicsPageUiModel.State.Failed)
 		}
 		widget.onAddToBookmarksClickListener {
-			val currentState = stateContainer.state as? Content ?: return@onAddToBookmarksClickListener
+			val currentState: Content = stateContainer.state
+				as? Content
+				?: return@onAddToBookmarksClickListener
 			coroutineScope.runObservable(UPDATE_BOOKMARK_KEY) {
 				val model = favoritesRepository.getFavoriteById(catalogId)
 				if (model == null) {
@@ -114,17 +132,38 @@ class ComicsController(
 						totalPages = comicsItemWebModel.totalPages,
 						readPages = currentState.currentPage,
 						title = comicsItemWebModel.title,
-						description = comicsItemWebModel.description
+						description = comicsItemWebModel.description,
+						bookmarkType = BookmarkType.FOLLOWING
 					)
 					favoritesRepository.update(newFavorite)
+					stateContainer.state = currentState.copy(
+						bookmarkType = BookmarkType.FOLLOWING
+					)
 					notifyNewFavoriteHasBeenAdded()
 				} else {
 					val isCurrentPage = model.readPages == currentState.currentPage
 					if (isCurrentPage) {
-						favoritesRepository.update(model.copy(readPages = -1))
-						return@runObservable -1
+						if (currentState.bookmarkType == BookmarkType.FOLLOWING) {
+							favoritesRepository.update(
+								model.copy(bookmarkType = BookmarkType.SIMPLE)
+							)
+							stateContainer.state = currentState.copy(
+								bookmarkType = BookmarkType.SIMPLE
+							)
+						} else {
+							favoritesRepository.update(model.copy(readPages = -1))
+							return@runObservable -1
+						}
 					} else {
-						favoritesRepository.update(model.copy(readPages = currentState.currentPage))
+						favoritesRepository.update(
+							model.copy(
+								readPages = currentState.currentPage,
+								bookmarkType = BookmarkType.FOLLOWING
+							)
+						)
+						stateContainer.state = currentState.copy(
+							bookmarkType = BookmarkType.FOLLOWING
+						)
 					}
 				}
 				return@runObservable currentState.currentPage
@@ -161,8 +200,9 @@ class ComicsController(
 
 	private fun loadComics() {
 		coroutineScope.runObservable(catalogId) {
-			val bookmarkIndex = favoritesRepository.getFavoriteById(catalogId)?.readPages ?: -1
-			val pages = repo.getComicsPages(catalogId)
+			val favoriteEntity: FavoriteEntity? = favoritesRepository.getFavoriteById(catalogId)
+			val bookmarkIndex: Int = favoriteEntity?.readPages ?: -1
+			val pages: MutableList<ComicsPageUiModel> = repo.getComicsPages(catalogId)
 				.mapTo(ArrayList()) { comicsPageModel: ComicsPageModel ->
 					return@mapTo ComicsPageUiModel(comicsPageModel)
 				}
@@ -170,7 +210,13 @@ class ComicsController(
 			if (pages.isNotEmpty() && bookmarkIndex >= 0) {
 				currentPage = min(pages.lastIndex, bookmarkIndex)
 			}
-			return@runObservable Content(pages, currentPage, false, bookmarkIndex)
+			return@runObservable Content(
+				pages,
+				currentPage,
+				false,
+				bookmarkIndex,
+				favoriteEntity?.bookmarkType ?: BookmarkType.SIMPLE
+			)
 		}
 	}
 
@@ -199,6 +245,19 @@ class ComicsController(
 				R.string.comics_new_favorite_added_message,
 				Toast.LENGTH_SHORT
 			).show()
+		}
+	}
+
+	private suspend fun updateLastPage() {
+		withContext(Dispatchers.IO) {
+			val favoriteEntity: FavoriteEntity = favoritesRepository.getFavoriteById(catalogId)
+				?: return@withContext
+			val currentState: Content = stateContainer.state
+				as? Content
+				?: return@withContext
+			favoritesRepository.update(
+				favoriteEntity.copy(readPages = currentState.currentPage)
+			)
 		}
 	}
 }

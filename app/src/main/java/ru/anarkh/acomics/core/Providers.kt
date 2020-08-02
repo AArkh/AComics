@@ -12,6 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.anarkh.acomics.BuildConfig
 import ru.anarkh.acomics.core.db.AppDatabase
+import ru.anarkh.acomics.core.db.migration.MigrationV1V2
 import ru.anarkh.acomics.main.favorite.model.FavoritesRepository
 import java.net.Inet4Address
 import java.net.InetAddress
@@ -22,6 +23,7 @@ object Providers {
 	fun init(context: Context) {
 		val appContext = context.applicationContext
 		appDatabase = Room.databaseBuilder(appContext, AppDatabase::class.java, "app_database.db")
+			.addMigrations(MigrationV1V2())
 			.build()
 	}
 

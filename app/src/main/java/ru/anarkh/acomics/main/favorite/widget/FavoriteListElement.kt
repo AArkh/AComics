@@ -12,9 +12,9 @@ import kotlinx.android.synthetic.main.catalog_item.view.image
 import kotlinx.android.synthetic.main.catalog_item.view.title
 import kotlinx.android.synthetic.main.favorite_item.view.*
 import ru.anarkh.acomics.R
+import ru.anarkh.acomics.core.db.FavoriteEntity
 import ru.anarkh.acomics.core.list.BaseListElement
 import ru.anarkh.acomics.main.catalog.util.FixedLocaleQuantityStringParser
-import ru.anarkh.acomics.main.favorite.model.FavoriteEntity
 
 class FavoriteListElement(
 	private val quantityStringParser: FixedLocaleQuantityStringParser

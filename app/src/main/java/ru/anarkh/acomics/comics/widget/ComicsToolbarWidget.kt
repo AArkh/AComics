@@ -2,6 +2,7 @@ package ru.anarkh.acomics.comics.widget
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.graphics.drawable.Drawable
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
@@ -11,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import ru.anarkh.acomics.R
 import ru.anarkh.acomics.comics.model.Content
+import ru.anarkh.acomics.core.db.BookmarkType
 
 class ComicsToolbarWidget(
 	private val toolbar: Toolbar
@@ -44,9 +46,17 @@ class ComicsToolbarWidget(
 	fun showIssueTitle(content: Content) {
 		toolbar.title = content.issues[content.currentPage].comicsPageModel.issueName
 		val context = toolbar.context
-		val bookmarkDrawable = if (content.bookmarkIndex != content.currentPage) {
-			ContextCompat.getDrawable(context, R.drawable.ic_bookmark_border_24dp)
-		} else ContextCompat.getDrawable(context, R.drawable.ic_bookmark_24dp)
+		val bookmarkDrawable: Drawable? = when {
+			content.bookmarkIndex != content.currentPage -> {
+				ContextCompat.getDrawable(context, R.drawable.ic_bookmark_border_24dp)
+			}
+			content.bookmarkType == BookmarkType.FOLLOWING -> {
+				ContextCompat.getDrawable(context, R.drawable.ic_stalking_bookmark_24dp)
+			}
+			else -> {
+				ContextCompat.getDrawable(context, R.drawable.ic_bookmark_24dp)
+			}
+		}
 		bookmarkItem.icon = bookmarkDrawable
 	}
 

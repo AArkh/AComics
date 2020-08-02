@@ -1,9 +1,9 @@
 package ru.anarkh.acomics.main.favorite.widget
 
 import androidx.recyclerview.widget.DiffUtil
+import ru.anarkh.acomics.core.db.FavoriteEntity
 import ru.anarkh.acomics.core.list.convenience.LoadingElement
 import ru.anarkh.acomics.core.list.convenience.LoadingFailedElement
-import ru.anarkh.acomics.main.favorite.model.FavoriteEntity
 
 class FavoriteItemDiffsValidator : DiffUtil.ItemCallback<Any>() {
 

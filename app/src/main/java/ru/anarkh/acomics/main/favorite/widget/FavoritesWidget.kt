@@ -3,10 +3,10 @@ package ru.anarkh.acomics.main.favorite.widget
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ru.anarkh.acomics.core.db.FavoriteEntity
 import ru.anarkh.acomics.core.list.MultipleVHListAdapter
 import ru.anarkh.acomics.main.catalog.util.FixedLocaleQuantityStringParser
 import ru.anarkh.acomics.main.catalog.widget.CatalogLoadingWidget
-import ru.anarkh.acomics.main.favorite.model.FavoriteEntity
 
 class FavoritesWidget(
 	private val noFavoritesWidget: CatalogLoadingWidget,

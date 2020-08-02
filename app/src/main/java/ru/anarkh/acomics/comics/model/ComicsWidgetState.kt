@@ -12,7 +12,8 @@ data class Content(
 	val issues: MutableList<ComicsPageUiModel>,
 	val currentPage: Int,
 	val isInFullscreen: Boolean,
-	val bookmarkIndex: Int
+	val bookmarkIndex: Int,
+	val bookmarkType: Int
 ) : ComicsWidgetState()
 
 data class ComicsPageUiModel(

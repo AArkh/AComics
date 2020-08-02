@@ -1,6 +1,8 @@
 package ru.anarkh.acomics.main.favorite.model
 
 import androidx.annotation.WorkerThread
+import ru.anarkh.acomics.core.db.BookmarkType
+import ru.anarkh.acomics.core.db.FavoriteEntity
 import ru.anarkh.acomics.core.db.FavoritesDao
 import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemWebModel
 
@@ -30,7 +32,8 @@ class FavoritesRepository(
 				model.totalPages,
 				0,
 				model.title,
-				model.description
+				model.description,
+				BookmarkType.FOLLOWING
 			)
 			dao.insert(entry)
 		}
