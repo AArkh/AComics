@@ -6,6 +6,8 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.format.DateFormat
 import android.text.style.ForegroundColorSpan
+import android.view.MenuItem
+import android.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.facebook.drawee.backends.pipeline.Fresco
@@ -26,6 +28,7 @@ class CatalogComicsListElement(
 
 	var onItemClickListener: ((webModel: CatalogComicsItemWebModel) -> Unit)? = null
 	var onFavoriteClickListener: ((model: CatalogComicsItemUiModel) -> Unit)? = null
+	var onReportClickListener: ((model: CatalogComicsItemUiModel) -> Unit)? = null
 
 	override fun onBind(holder: RecyclerView.ViewHolder, position: Int, model: CatalogComicsItemUiModel) {
 		val context = holder.itemView.context
@@ -56,6 +59,7 @@ class CatalogComicsListElement(
 			R.drawable.ic_favorite_border_24dp
 		}
 		holder.itemView.add_to_favorites_item.setImageResource(favoriteIconRes)
+		holder.setUpMenu(model, context)
 	}
 
 	private fun formRatingText(model: CatalogComicsItemUiModel, context: Context): SpannableString {
@@ -101,5 +105,23 @@ class CatalogComicsListElement(
 			model.totalPages,
 			model.totalPages
 		) else context.getText(R.string.catalog_item_no_updates) as String
+	}
+
+	private fun RecyclerView.ViewHolder.setUpMenu(
+		model: CatalogComicsItemUiModel,
+		context: Context
+	) {
+		itemView.menu.setOnClickListener {
+			val popupMenu = PopupMenu(context, itemView.menu)
+			popupMenu.inflate(R.menu.catalog_item_menu)
+			popupMenu.setOnMenuItemClickListener { item: MenuItem ->
+				if (item.itemId == R.id.report_item) {
+					onReportClickListener?.invoke(model)
+					return@setOnMenuItemClickListener true
+				}
+				return@setOnMenuItemClickListener false
+			}
+			popupMenu.show()
+		}
 	}
 }

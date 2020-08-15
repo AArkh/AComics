@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:fresco="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/container"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:gravity="center_vertical"
@@ -9,21 +10,42 @@
 	android:paddingLeft="16dp"
 	android:paddingTop="12dp"
 	android:paddingRight="16dp"
-	android:id="@+id/container"
-	tools:ignore="RtlHardcoded"
+	android:background="@drawable/ripple"
+	tools:ignore="RtlHardcoded,ContentDescription"
 	>
 
-	<TextView
-		android:id="@+id/title"
-		android:layout_width="wrap_content"
+	<FrameLayout
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="8dp"
-		android:ellipsize="end"
-		android:maxLines="1"
-		android:textSize="16sp"
-		android:textStyle="bold"
-		tools:text="Ава и её Демон [Ava's Demon] (перевод) "
-		/>
+		>
+
+		<TextView
+			android:id="@+id/title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_marginRight="20dp"
+			android:ellipsize="end"
+			android:maxLines="1"
+			android:textSize="16sp"
+			android:textStyle="bold"
+			tools:text="Ава и её Демон [Ava's Demon] (перевод) "
+			/>
+
+		<TextView
+			android:id="@+id/menu"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="right"
+			android:background="?selectableItemBackgroundBorderless"
+			android:gravity="center"
+			android:paddingLeft="8dp"
+			android:paddingRight="8dp"
+			android:text="@string/catalog_item_menu"
+			android:textAppearance="?android:textAppearanceLarge"
+			/>
+	</FrameLayout>
 
 	<LinearLayout
 		android:layout_width="match_parent"
@@ -36,10 +58,10 @@
 			android:layout_width="112dp"
 			android:layout_height="56dp"
 			android:layout_marginTop="4dp"
-			fresco:roundedCornerRadius="4dp"
 			fresco:failureImage="@drawable/catalog_stub"
 			fresco:failureImageScaleType="centerCrop"
 			fresco:placeholderImage="@color/gray_disabled"
+			fresco:roundedCornerRadius="4dp"
 			/>
 
 		<TextView
@@ -132,10 +154,9 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="right|center_vertical"
+			android:background="?selectableItemBackgroundBorderless"
 			android:padding="6dp"
 			android:src="@drawable/ic_favorite_border_24dp"
-			android:background="?selectableItemBackgroundBorderless"
-			tools:ignore="ContentDescription"
 			/>
 	</FrameLayout>
 

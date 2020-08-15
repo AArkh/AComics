@@ -84,6 +84,9 @@ class CatalogController(
 				return@runObservable favoritesRepository.toggleFavorite(model.webModel)
 			}
 		}
+		widget.onReportComicsClick { model: CatalogComicsItemUiModel ->
+			router.openReport(model.title)
+		}
 		widget.onSortIconClick {
 			sortDialogWidget.show()
 		}

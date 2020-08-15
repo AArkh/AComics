@@ -127,6 +127,10 @@ class CatalogWidget(
 		comicsListElement.onFavoriteClickListener = listener
 	}
 
+	fun onReportComicsClick(listener: (model: CatalogComicsItemUiModel) -> Unit) {
+		comicsListElement.onReportClickListener = listener
+	}
+
 	fun onSortIconClick(listener: (() -> Unit)) {
 		sortListElement.onSortIconClickListener = listener
 	}

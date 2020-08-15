@@ -9,6 +9,8 @@
 	<string name="catalog_item_rating">Рейтинг:</string>
 	<string name="catalog_item_no_updates">Нет выпусков</string>
 	<string name="catalog_item_no_subs">Нет подписчиков</string>
+	<string name="catalog_item_menu">&#8942;</string>
+	<string name="catalog_item_menu_report">Пожаловаться</string>
 
 	<string name="catalog_filter_title">Настройки выдачи</string>
 	<string name="catalog_no_data_retry_loading_text">ПОВТОРИТЬ</string>
