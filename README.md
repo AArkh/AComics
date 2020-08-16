@@ -40,6 +40,6 @@
 
 * [ ] Добавить типобезопасность в ObservableScope и Observer.
 * [ ] Пережать ресурсы. Лого 4200х1200, серьезно?
-* [ ] Правила портала, term of use, возможность жалобы на user generated content.
+* [x] Правила портала, term of use, возможность жалобы на user generated content.
 * [x] Убрать getViewType из BaseListElement, ибо зачем оно там?
 * [ ] Заменить BigImageView на самописное решение и выпилить костыли, связанные с BigImageViewExt#shouldReset
