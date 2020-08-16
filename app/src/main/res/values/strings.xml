@@ -3,6 +3,7 @@
 
 	<string name="navbar_feed_item">Лента</string>
 	<string name="navbar_favorites_item">Избранное</string>
+	<string name="navbar_info_item">Информация</string>
 
 	<string name="catalog_menu_search_title">Поиск</string>
 	<string name="catalog_menu_search_hint">Название комикса</string>
@@ -39,6 +40,11 @@
 	<string name="favorites_no_pages_to_read">Нечего читать =_=</string>
 	<string name="favorites_no_new_issues">Не читано</string>
 	<string name="favorites_no_data">Что-то пошло совсем не так о_о</string>
+
+	<string name="info_about_application">О приложении</string>
+	<string name="info_about_acomics">Правила портала</string>
+	<string name="info_terms_and_conditions">Term and Conditions</string>
+	<string name="info_privacy_policy">Privacy Policy</string>
 
 	<string name="comics_index">%s из %s</string>
 	<string name="comics_toolbar_loading">Загрузка</string>

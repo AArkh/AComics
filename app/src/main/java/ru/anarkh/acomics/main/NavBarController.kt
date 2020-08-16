@@ -12,5 +12,8 @@ class NavBarController(
 		widget.favoritesItemClickListener = {
 			router.openFavorites()
 		}
+		widget.infoItemClickListener = {
+			router.openInfo()
+		}
 	}
 }

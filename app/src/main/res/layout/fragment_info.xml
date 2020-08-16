@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	>
+
+	<include layout="@layout/toolbar_with_logo" />
+
+	<TextView
+		android:id="@+id/about_app"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/ripple"
+		android:padding="16dp"
+		android:text="@string/info_about_application"
+		android:textSize="16sp"
+		android:textStyle="bold"
+		/>
+
+	<TextView
+		android:id="@+id/about_acomics"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/ripple"
+		android:padding="16dp"
+		android:text="@string/info_about_acomics"
+		android:textSize="16sp"
+		android:textStyle="bold"
+		/>
+
+	<TextView
+		android:id="@+id/terms_and_conditions"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/ripple"
+		android:padding="16dp"
+		android:text="@string/info_terms_and_conditions"
+		android:textSize="16sp"
+		android:textStyle="bold"
+		/>
+
+	<TextView
+		android:id="@+id/privacy_policy"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/ripple"
+		android:padding="16dp"
+		android:text="@string/info_privacy_policy"
+		android:textSize="16sp"
+		android:textStyle="bold"
+		/>
+</LinearLayout>
