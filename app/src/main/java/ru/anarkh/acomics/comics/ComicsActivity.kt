@@ -77,6 +77,7 @@ class ComicsActivity : DefaultActivity() {
 		)
 		val repo = ComicsRepository(Providers.retrofit.create(AComicsIssuesService::class.java))
 		val stateContainer = ViewModelProvider(this).get(ComicsStateContainer::class.java)
+		val exceptionTelemetry = ExceptionTelemetry(FirebaseCrashlytics.getInstance())
 		ComicsController(
 			comicsModel,
 			catalogId,
@@ -85,11 +86,11 @@ class ComicsActivity : DefaultActivity() {
 			Providers.favoriteRepository,
 			stateContainer,
 			coroutineScope,
-			ExceptionTelemetry(FirebaseCrashlytics.getInstance()),
+			exceptionTelemetry,
 			this,
 			stateRegistry,
 			backButtonController,
-			ComicsRouter(this)
+			ComicsRouter(this, exceptionTelemetry)
 		)
 	}
 }

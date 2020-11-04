@@ -1,5 +1,6 @@
 package ru.anarkh.acomics.comics.widget.page
 
+import android.content.Context
 import android.content.res.Resources
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,7 @@ import ru.anarkh.acomics.core.list.BaseListElement
 import ru.anarkh.acomics.core.list.MultipleVHListAdapter
 
 class ComicsPageListItem(
+	context: Context,
 	resources: Resources
 ) : BaseListElement<ComicsPageUiModel>(R.layout.comics_page_item) {
 
@@ -20,7 +22,7 @@ class ComicsPageListItem(
 	private val viewPool = RecyclerView.RecycledViewPool()
 	private val imageListItem = ComicsPageImageListItem(resources)
 	private val loadingListItem = ComicsPageLoadingItem()
-	private val uploaderCommentListItem = ComicsPageUploaderCommentListItem()
+	private val uploaderCommentListItem = ComicsPageUploaderCommentListItem(context)
 	private val commentListItem = ComicsPageCommentListItem()
 
 	override fun onBind(holder: RecyclerView.ViewHolder, position: Int, model: ComicsPageUiModel) {
@@ -68,5 +70,9 @@ class ComicsPageListItem(
 	fun setOnPageLoadFailedListener(listener: ((page: Int) -> Unit)) {
 		loadingListItem.failedListener = listener
 		imageListItem.onFailureListener = listener
+	}
+
+	fun setClickedHyperlinkListener(listener: (clickedLink: String) -> Unit) {
+		uploaderCommentListItem.clickedHyperlinkListener = listener
 	}
 }

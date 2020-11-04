@@ -7,7 +7,6 @@ import retrofit2.http.Query
 import ru.anarkh.acomics.comics.model.ComicsPageModel
 import ru.anarkh.acomics.main.catalog.model.CatalogComicsItemWebModel
 
-
 interface AComicsCatalogService {
 	@GET("/search")
 	fun catalogList(

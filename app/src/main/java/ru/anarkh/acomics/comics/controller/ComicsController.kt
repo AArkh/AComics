@@ -116,6 +116,9 @@ class ComicsController(
 		widget.onImageLoadFailedListener = { page: Int ->
 			updatePageToState(page, ComicsPageUiModel.State.Failed)
 		}
+		widget.setClickedHyperlinkListener { clickedLink: String ->
+			router.openBrowser(clickedLink)
+		}
 		widget.onAddToBookmarksClickListener {
 			val currentState: Content = stateContainer.state
 				as? Content

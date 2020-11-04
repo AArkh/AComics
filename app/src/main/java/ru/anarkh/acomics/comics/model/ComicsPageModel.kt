@@ -7,7 +7,7 @@ data class ComicsPageModel(
 	val comicsTitle: String,
 	val imageUrl: String,
 	val issueName: String?,
-	val issueDate: Long?, // fixme Должно начать приходить unix время, как в комментах.
+	val issueDate: Long?,
 	val uploaderData: UploaderData,
 	val comments: List<Comment>
 ) : Serializable

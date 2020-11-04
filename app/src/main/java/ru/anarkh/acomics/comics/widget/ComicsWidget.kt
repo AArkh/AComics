@@ -18,7 +18,7 @@ class ComicsWidget(
 	var onImageLoadFailedListener: ((page: Int) -> Unit)? = null
 
 	private val adapter: MultipleVHListAdapter
-	private val pageItem = ComicsPageListItem(viewPager.resources)
+	private val pageItem = ComicsPageListItem(viewPager.context, viewPager.resources)
 
 	init {
 		adapter = MultipleVHListAdapter(
@@ -106,6 +106,10 @@ class ComicsWidget(
 		} else {
 			viewPager.currentItem = page
 		}
+	}
+
+	fun setClickedHyperlinkListener(listener: (clickedLink: String) -> Unit) {
+		pageItem.setClickedHyperlinkListener(listener)
 	}
 
 	/**

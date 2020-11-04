@@ -15,7 +15,6 @@ import ru.anarkh.acomics.core.db.AppDatabase
 import ru.anarkh.acomics.core.db.migration.MigrationV1V2
 import ru.anarkh.acomics.main.favorite.model.FavoritesRepository
 import java.net.Inet4Address
-import java.net.InetAddress
 
 object Providers {
 
@@ -41,14 +40,19 @@ object Providers {
 
 	private lateinit var appDatabase: AppDatabase
 
-	private fun getOkHttpClient(): OkHttpClient {
+	fun getOkHttpClient(): OkHttpClient {
 		return OkHttpClient.Builder()
 			.dns { hostname: String ->
-				if (BuildConfig.DEBUG && hostname.contains("emptydomain.ru")) {
-					// Для работы с эмулятором.
-					val address: InetAddress = Inet4Address.getByName("194.87.146.71")
-					mutableListOf(address)
-				} else Dns.SYSTEM.lookup(hostname)
+				if (!BuildConfig.DEBUG) {
+					return@dns Dns.SYSTEM.lookup(hostname)
+				}
+				return@dns when {
+					hostname.contains("emptydomain.ru") ->
+						mutableListOf(Inet4Address.getByName("10.0.2.2")) // remote 194.87.146.71
+					hostname.contains("acomics.ru") ->
+						mutableListOf(Inet4Address.getByName("88.198.58.142"))
+					else -> Dns.SYSTEM.lookup(hostname)
+				}
 			}
 			.addInterceptor {
 				if (BuildConfig.DEBUG) {
